@@ -45,8 +45,9 @@
 #sg .routine{list-style:none;margin:0;padding:0}
 #sg .row{border-top:1px solid var(--line)}
 #sg .row:last-child{border-bottom:1px solid var(--line)}
-#sg .rowlink{display:grid;grid-template-columns:34px 96px 1fr;gap:6px 20px;align-items:center;padding:22px 0;text-decoration:none;color:inherit}
-#sg .num{width:34px;height:34px;border-radius:50%;background:var(--moss);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500}
+#sg .rowlink{position:relative;display:grid;grid-template-columns:96px 1fr;gap:6px 20px;align-items:center;padding:22px 0;text-decoration:none;color:inherit}
+#sg .rowlink>*{position:relative;z-index:1}
+#sg .rowlink>.num{position:absolute;z-index:0;left:0;top:50%;transform:translateY(-50%);width:96px;text-align:center;font-size:96px;line-height:1;font-weight:800;color:rgba(38,42,38,.22);pointer-events:none;user-select:none;font-variant-numeric:tabular-nums}
 #sg .rimg{display:block}
 #sg .rimg img{display:block;width:100%;height:auto;max-height:120px;object-fit:contain;mix-blend-mode:multiply;filter:brightness(1.05) contrast(1.02)}
 #sg .rimg span{display:block;font-size:11px;color:var(--soft)}
@@ -55,7 +56,7 @@
 #sg .hint{font-size:12px;color:var(--soft);margin:-4px 0 10px;max-width:56ch}
 #sg .warn{font-size:13px;margin:0 0 10px;padding:10px 14px;border-radius:12px;background:var(--blush);border-left:3px solid #b5654f;max-width:56ch}
 #sg .warn{margin:0}
-#sg .extra{margin:-6px 0 24px 170px;max-width:56ch}
+#sg .extra{margin:-6px 0 24px 116px;max-width:56ch}
 #sg .extra[hidden]{display:none}
 #sg .altlink{display:flex;align-items:center;gap:12px;margin-top:12px;text-decoration:none;color:inherit}
 #sg .aimg{width:44px;flex:none;display:block}
@@ -102,10 +103,10 @@
 #sg .preview img{width:100%;display:block;border-radius:12px;border:1px solid var(--line)}
 #sg .preview a{display:inline-block;margin-top:10px;font-size:14px;color:var(--ink)}
 #sg .copybox{width:100%;max-width:560px;height:170px;font:inherit;font-size:13px;margin-top:12px;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
-@media (max-width:520px){#sg .rimg img{max-height:95px}#sg .extra{margin-left:134px}#sg .rowlink{grid-template-columns:30px 76px 1fr;gap:6px 14px}#sg .num{width:30px;height:30px}}
+@media (max-width:520px){#sg .rimg img{max-height:95px}#sg .extra{margin-left:90px}#sg .rowlink{grid-template-columns:76px 1fr;gap:6px 14px}#sg .rowlink>.num{width:76px;font-size:76px}}
 @media (prefers-reduced-motion:reduce){#sg *{transition:none!important}}
 </style>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;800&display=swap">
 
 <h2>Uschi's Skincare Guide</h2>
 <p class="intro"><b>Ich hab hier wat janz Spezielles. Nur für dich &lt;3</b><br>Garantiert ohne L'Oréal, Neutrogena und ähnliche große Kosmetikhäuser</p>
