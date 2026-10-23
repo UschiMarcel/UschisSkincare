@@ -25,7 +25,7 @@
       "feuchtigkeit"
     ],
     "zeit": "abends",
-    "preis": 14,35
+    "preis": "14,35"
   },
   {
     "link": "https://www.dm.de/p/d/1630606/balea-peeling-cleanser-beauty-expert",
@@ -41,7 +41,7 @@
       "akne",
       "falten"
     ],
-    "preis": 4,25,
+    "preis": "4,25",
     "konflikt": [
       "Retinol / Anti-Aging"
     ]
@@ -58,7 +58,7 @@
       "empfindlich",
       "feuchtigkeit"
     ],
-    "preis": 3,95
+    "preis": "3,95"
   },
   {
     "link": "https://www.dm.de/p/d/1306226/geek-und-gorgeous-toner-101-liquid-hydration",
@@ -73,7 +73,7 @@
       "feuchtigkeit",
       "fettig"
     ],
-    "preis": 8,35
+    "preis": "8,35"
   },
   {
     "link": "https://www.dm.de/p/d/1630366/balea-peeling-toner-beauty-expert",
@@ -90,7 +90,7 @@
       "pigment"
     ],
     "zeit": "abends",
-    "preis": 6,45,
+    "preis": "6,45",
     "konflikt": [
       "Retinol / Anti-Aging"
     ]
@@ -111,7 +111,7 @@
       "falten"
     ],
     "zeit": "morgens",
-    "preis": 12,35,
+    "preis": "12,35",
     "konflikt": [
       "Retinol / Anti-Aging"
     ]
@@ -128,7 +128,7 @@
       "poren"
     ],
     "zeit": "abends",
-    "preis": 12,85,
+    "preis": "12,85",
     "erfahrung": ["anfaenger"]
   },
   {
@@ -146,7 +146,7 @@
       "poren"
     ],
     "zeit": "abends",
-    "preis": 18,35,
+    "preis": "18,35",
     "erfahrung": ["erfahren"]
   },
   {
@@ -165,7 +165,7 @@
       "poren"
     ],
     "zeit": "abends",
-    "preis": 22,35,
+    "preis": "22,35",
     "erfahrung": ["fortgeschritten"]
   },
   {
@@ -182,7 +182,7 @@
       "feuchtigkeit"
     ],
     "zeit": "abends",
-    "preis": 10,35
+    "preis": "10,35"
   },
   {
     "link": "https://www.dm.de/p/d/3131974/geek-und-gorgeous-gesichtscreme-sonnenschutz-101-zero-feel-lsf-50",
@@ -194,7 +194,7 @@
       "pigment",
       "falten"
     ],
-    "preis": 12,35
+    "preis": "12,35"
   },
   {
     "link": "https://www.dm.de/p/d/1678418/l-oreal-paris-revitalift-gesichtsfluid-revitalift-clinical-vitamin-c-lsf-50",
@@ -205,20 +205,21 @@
       "pigment",
       "falten"
     ],
-    "preis": 14,95
+    "preis": "14,95"
   },
   {
     "link": "https://www.shop-apotheke.com/arzneimittel/2137594/cordes-vas-creme.htm",
     "bild": "https://cdn.shop-apotheke.com/images/650x0/D02/137/594/D02137594-p10.webp",
     "name": "Cordes VAS Creme",
     "schritt": "Retinol / Anti-Aging",
+    "hinweis": "Sehr hoch wirksam und sollte nicht ohne Rücksprache mit Artzt oder Apotheker eingesetzt werden. Nie ohne Sonnencreme raus gehen.",
     "beschreibung": "Verschreibungspflichtiges Arzneimittel. Nur nach ärztlicher Beratung. Das ist die ultimative Endstufe was Retinol und Anti-Aging angeht.",
     "tags": [
       "akne"
     ],
     "zeit": "abends",
     "aktiv": true,
-    "preis": 19,50,
+    "preis": "19,50",
     "erfahrung": ["experte"]
   }
 ]
