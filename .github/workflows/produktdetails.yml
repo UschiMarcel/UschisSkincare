@@ -1,0 +1,41 @@
+name: Produktdetails aktualisieren
+
+on:
+  push:
+    paths:
+      - "produkte/*.json"
+      - "scripts/fetch_details.py"
+  schedule:
+    - cron: "0 5 * * 1"   # jeden Montag
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: produktdetails
+  cancel-in-progress: false
+
+jobs:
+  details:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Playwright installieren
+        run: |
+          pip install playwright
+          playwright install --with-deps chromium
+      - name: Details holen
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python scripts/fetch_details.py ${{ github.event_name == 'push' && '--nur-neue' || '' }}
+      - name: Änderungen speichern
+        run: |
+          git config user.name "Skincare Guide Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add produkte/_auto-details.json
+          git diff --cached --quiet || git commit -m "Produktdetails aktualisiert"
+          git push
