@@ -497,9 +497,9 @@ var BUD=null,budTimer=null;
 function budgetMax(){
  var sum=0;
  STEPS.forEach(function(s){var m=0;PRODUCTS.forEach(function(p){if(p.step===s.k&&p.price!=null&&p.price>m)m=p.price});sum+=m});
- return Math.max(10,Math.ceil(sum/10)*10);
+ return Math.max(5,Math.ceil(sum));
 }
-function budgetLabel(){$("sg-bval").textContent=selB==null?"kein Limit":"bis "+selB+" €"}
+function budgetLabel(){$("sg-bval").textContent=selB==null?"kein Limit":"bis "+fmt(selB)}
 function renderBudget(){
  var box=$("sg-budget"),h=$("sg-bh"),has=hasPrices()&&tab==="routine";
  box.hidden=!has;h.hidden=!has;
@@ -509,14 +509,14 @@ function renderBudget(){
  if(!BUD||BUD.max!==M){
   box.innerHTML="";
   var inp=document.createElement("input");
-  inp.type="range";inp.min="10";inp.max=String(M);inp.step="5";
+  inp.type="range";inp.min="1";inp.max=String(M);inp.step="0.5";
   inp.setAttribute("aria-label","Maximales Budget der Routine");
   inp.oninput=function(){
    var v=Number(inp.value);selB=v>=M?null:v;budgetLabel();
    clearTimeout(budTimer);budTimer=setTimeout(render,150);
   };
   var lb=document.createElement("div");lb.className="blabels";
-  lb.innerHTML="<span>10 €</span><span>kein Limit</span>";
+  lb.innerHTML="<span>1 €</span><span>kein Limit</span>";
   box.appendChild(inp);box.appendChild(lb);
   BUD={max:M,inp:inp};
  }
@@ -529,7 +529,7 @@ function selLine(d){
  var c=selC.length?selC.map(function(k){return CONCERNS[k]}).join(", "):"Basic";
  var l="Hauttyp: "+TYPES[selT]+"  |  Themen: "+c+(lvlRel?"  |  Erfahrung: "+LEVELS[selL]:"");
  if(d&&hasPrices()){
-  if(selB!=null)l+="  |  Budget: bis "+selB+" €";
+  if(selB!=null)l+="  |  Budget: bis "+fmt(selB);
   l+="  |  Gesamtkosten: "+fmt(planTotal(d));
  }
  return l;
