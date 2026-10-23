@@ -137,6 +137,7 @@ var STEPS=[
  {k:"Serum",when:["am","pm"],max:2},
  {k:"Retinol / Anti-Aging",when:["pm"],max:1,hint:"Langsam einführen, nicht am selben Abend mit Peelings kombinieren und tagsüber Sonnenschutz tragen. Nicht in Schwangerschaft und Stillzeit anwenden."},
  {k:"Creme",base:true,when:["am","pm"],max:1},
+ {k:"Salbe",onlyHit:true,when:["pm"],max:1},
  {k:"Sonnenschutz",base:true,when:["am"],max:1}
 ];
 var TYPES={alle:"Alle",trocken:"Trocken",fettig:"Fettig",mischhaut:"Mischhaut",empfindlich:"Empfindlich",normal:"Normal"};
@@ -194,7 +195,7 @@ function listFiles(){
   })
   .catch(fallback);
 }
-var SA={"peeling":"Peeling","aha":"Peeling","aha-peeling":"Peeling","reinigung":"Reinigungs-Cleanser","reinigung-cleanser":"Reinigungs-Cleanser","cleanser":"Reinigungs-Cleanser","reinigungs-öle":"Reinigungs-Öle","reinigungsöle":"Reinigungs-Öle","reinigungsöl":"Reinigungs-Öle","reinigungs-oele":"Reinigungs-Öle","reinigungsoel":"Reinigungs-Öle","öl":"Reinigungs-Öle","oel":"Reinigungs-Öle","balsam":"Reinigungs-Öle","reinigungsbalsam":"Reinigungs-Öle","retinol":"Retinol / Anti-Aging","retinal":"Retinol / Anti-Aging","anti-aging":"Retinol / Anti-Aging","anti aging":"Retinol / Anti-Aging","retinol/anti-aging":"Retinol / Anti-Aging"};
+var SA={"salbe":"Salbe","salben":"Salbe","peeling":"Peeling","aha":"Peeling","aha-peeling":"Peeling","reinigung":"Reinigungs-Cleanser","reinigung-cleanser":"Reinigungs-Cleanser","cleanser":"Reinigungs-Cleanser","reinigungs-öle":"Reinigungs-Öle","reinigungsöle":"Reinigungs-Öle","reinigungsöl":"Reinigungs-Öle","reinigungs-oele":"Reinigungs-Öle","reinigungsoel":"Reinigungs-Öle","öl":"Reinigungs-Öle","oel":"Reinigungs-Öle","balsam":"Reinigungs-Öle","reinigungsbalsam":"Reinigungs-Öle","retinol":"Retinol / Anti-Aging","retinal":"Retinol / Anti-Aging","anti-aging":"Retinol / Anti-Aging","anti aging":"Retinol / Anti-Aging","retinol/anti-aging":"Retinol / Anti-Aging"};
 function stepName(v){
  var st=String(v||"").trim();
  st=SA[st.toLowerCase()]||st;
