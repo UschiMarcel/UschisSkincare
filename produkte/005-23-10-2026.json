@@ -20,17 +20,5 @@
     "konflikt": ["Retinol / Anti-Aging"],
     "hinweis": "Nicht länger als 4 Wochen am Stück anwenden, nicht an Augen und Schleimhäute bringen. Am nächsten Morgen unbedingt Sonnenschutz mit mindestens LSF 30 tragen. In Schwangerschaft und Stillzeit vorher ärztlichen Rat einholen.",
     "preis": "3,99"
-  },
-  {
-    "link": "https://www.rossmann.de/de/pflege-und-duft-isana-niacinamid-serum/p/4305615951430",
-    "bild": "https://www.rossmann.de/media-neu/115/MAM_11534376/MAM_11534376_SHOP_IMAGE_2.0.png?",
-    "name": "Isana Niacinamid Serum",
-    "schritt": "Serum",
-    "beschreibung": "Serum mit 10 % Niacinamid für ein ebenmäßigeres, klareres Hautbild und feinere Poren.",
-    "tags": ["akne", "poren", "pigment"],
-    "hinweis": "Morgens danach Sonnenschutz mit mindestens LSF 30 auftragen. Nicht in Schwangerschaft und Stillzeit anwenden.",
-    "preis": "5,49",
-    "konflikt": ["normal", "mischhaut"]
-    "aktiv": "false"
   }
 ]
