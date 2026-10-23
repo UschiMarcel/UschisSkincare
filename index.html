@@ -137,6 +137,8 @@
 #sg .tag{font-size:12px;padding:3px 11px;border-radius:999px;background:var(--blush)}
 /* Speichern */
 #sg .savebar{display:flex;flex-wrap:wrap;gap:10px;margin:32px 0 0}
+#sg .btn svg{flex:none}
+#sg .savebar .btn:first-child{display:inline-flex;align-items:center;gap:9px}
 #sg .btn{font:inherit;font-size:14px;padding:11px 22px;border-radius:999px;border:1px solid var(--moss);background:var(--moss);color:#fff;cursor:pointer;transition:opacity .2s}
 #sg .btn:hover{opacity:.85}
 #sg .btn.ghost{background:transparent;color:var(--ink)}
@@ -655,7 +657,8 @@ function saveBar(){
  var box=document.createElement("div");
  var bar=document.createElement("div");bar.className="savebar";
  var area=document.createElement("div");
- var b1=document.createElement("button");b1.type="button";b1.className="btn";b1.textContent="Als Bild speichern";
+ var b1=document.createElement("button");b1.type="button";b1.className="btn";
+ b1.innerHTML='<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10.5l5 5 5-5M5 20h14"/></svg><span>Als Bild speichern</span>';
  var b2=document.createElement("button");b2.type="button";b2.className="btn ghost";b2.textContent="Als Text kopieren";
  b1.onclick=function(){saveImage(area)};
  b2.onclick=function(){saveText(area)};
