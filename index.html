@@ -23,6 +23,22 @@
 #sg .tab{font:inherit;font-size:16px;background:none;border:0;border-bottom:2px solid transparent;padding:12px 0;margin-bottom:-1px;color:var(--soft);cursor:pointer;transition:color .2s,border-color .2s}
 #sg .tab:hover{color:var(--ink)}
 #sg .tab[aria-selected="true"]{color:var(--ink);font-weight:500;border-bottom-color:var(--moss)}
+/* Produkt-Detailseite */
+#sg.indetail .tabs,#sg.indetail h3,#sg.indetail .chips,#sg.indetail .budget,#sg.indetail #sg-lnote,#sg.indetail #sg-tip,#sg.indetail .intro{display:none!important}
+#sg .back{font:inherit;font-size:14px;background:none;border:0;padding:4px 0;margin:0 0 24px;color:var(--soft);cursor:pointer}
+#sg .back:hover{color:var(--ink)}
+#sg .dgrid{display:grid;grid-template-columns:minmax(200px,340px) 1fr;gap:36px;align-items:start}
+#sg .dimg img{display:block;width:100%;height:auto;max-height:440px;object-fit:contain;mix-blend-mode:multiply;filter:brightness(1.05) contrast(1.02)}
+#sg .dimg span{font-size:13px;color:var(--soft)}
+#sg .dname{font-weight:500;font-size:clamp(24px,3.4vw,34px);line-height:1.2;margin:2px 0 12px}
+#sg .dtags{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 16px}
+#sg .dnote{font-size:15px;margin:0 0 16px;max-width:60ch}
+#sg .dh{font-weight:500;font-size:15px;margin:22px 0 6px}
+#sg .dtext{font-size:14px;line-height:1.6;color:var(--soft);white-space:pre-line;max-width:60ch;margin:0}
+#sg .dsrc{font-size:12px;color:var(--soft);margin:22px 0 0}
+#sg .dbtn{display:inline-block;margin-top:22px;text-decoration:none}
+#sg .dsim{display:flex;flex-direction:column;gap:4px}
+@media (max-width:640px){#sg .dgrid{grid-template-columns:1fr;gap:20px}#sg .dimg{max-width:240px}}
 /* Darkmode */
 #sg{position:relative}
 #sg .themebtn{position:absolute;top:clamp(14px,3vw,34px);right:clamp(14px,3vw,34px);width:42px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;padding:0;transition:border-color .2s}
@@ -34,8 +50,8 @@
 #sg[data-theme="dark"] .warn{border-left-color:#c97a63}
 #sg[data-theme="dark"] .tip{background:rgba(127,150,110,.14)}
 /* Im Darkmode bekommen Produktfotos eine helle Fläche, weil der Multiply-Effekt dunkle Produkte unsichtbar machen würde. */
-#sg[data-theme="dark"] .img img,#sg[data-theme="dark"] .rimg img,#sg[data-theme="dark"] .aimg img{mix-blend-mode:normal;filter:none}
-#sg[data-theme="dark"] .img img,#sg[data-theme="dark"] .rimg img,#sg[data-theme="dark"] .aimg img{background:#f1f2ed;border-radius:12px;padding:6px}
+#sg[data-theme="dark"] .img img,#sg[data-theme="dark"] .rimg img,#sg[data-theme="dark"] .aimg img,#sg[data-theme="dark"] .dimg img{mix-blend-mode:normal;filter:none}
+#sg[data-theme="dark"] .img img,#sg[data-theme="dark"] .rimg img,#sg[data-theme="dark"] .aimg img,#sg[data-theme="dark"] .dimg img{background:#f1f2ed;border-radius:12px;padding:6px}
 #sg[data-theme="dark"] .rowlink>.num{color:rgba(233,236,230,.16)}
 #sg .chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px}
 #sg .chip{font:inherit;font-size:14px;padding:9px 18px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;transition:background .2s,color .2s,border-color .2s}
@@ -236,7 +252,7 @@ function norm(r){
  var z=[].concat(r.zeit||[]).join(" ").toLowerCase(),when=null;
  if(z){when=[];if(z.indexOf("morgen")>-1)when.push("am");if(z.indexOf("abend")>-1)when.push("pm");if(!when.length)when=null}
  return{
-  url:r.link,old:(function(v){if(v===undefined||v===null||v==="")return null;var n=parseFloat(String(v).replace(",","."));return isNaN(n)?null:n})(r.preis_alt),price:(function(v){if(v===undefined||v===null||v==="")return null;var n=parseFloat(String(v).replace(",","."));return isNaN(n)?null:n})(r.preis),name:r.name||"",info:String(r.hinweis||"").trim(),step:st,when:when,levels:lv.length?lv:null,conflict:[].concat(r.konflikt||[]).map(stepName),note:r.beschreibung||"",img:r.bild||"",
+  url:r.link,old:(function(v){if(v===undefined||v===null||v==="")return null;var n=parseFloat(String(v).replace(",","."));return isNaN(n)?null:n})(r.preis_alt),price:(function(v){if(v===undefined||v===null||v==="")return null;var n=parseFloat(String(v).replace(",","."));return isNaN(n)?null:n})(r.preis),name:r.name||"",info:String(r.hinweis||"").trim(),use:String(r.anwendung||"").trim(),det:String(r.details||"").trim(),ing:[].concat(r.inhaltsstoffe||[]).join(", ").trim(),step:st,when:when,levels:lv.length?lv:null,conflict:[].concat(r.konflikt||[]).map(stepName),note:r.beschreibung||"",img:r.bild||"",
   types:tags.filter(function(t){return t!=="alle"&&TYPES[t]}),
   concerns:tags.filter(function(t,i,a){return CONCERNS[t]&&a.indexOf(t)===i}).concat(st==="Retinol / Anti-Aging"&&tags.indexOf("antiaging")<0?["antiaging"]:[])
  };
@@ -253,7 +269,13 @@ function mergeFiles(files){
    map[k].link=k;
   });
  });
- return order.map(function(k){return map[k]}).filter(function(r){return r.aktiv!==false}).map(norm);
+ var list=order.map(function(k){return map[k]}).filter(function(r){return r.aktiv!==false}).map(norm),seen={};
+ list.forEach(function(p){
+  var b=String(p.url).split(/[?#]/)[0].replace(/\/+$/,"").split("/").pop().toLowerCase().replace(/[^a-z0-9-]+/g,"-").replace(/^-+|-+$/g,"")||"produkt",k=b,n=1;
+  while(seen[k]){n++;k=b+"-"+n}
+  seen[k]=1;p.slug=k;
+ });
+ return list;
 }
 var ERRORS=[];
 function errText(e){var m=(e&&e.message)||String(e);return/^\d+$/.test(m)?"Datei nicht erreichbar (HTTP "+m+")":m}
@@ -267,7 +289,20 @@ function loadProducts(done){
     return[];
    });
   }));
- }).then(function(files){done(mergeFiles(files))},function(e){ERRORS.push("Dateiliste: "+errText(e));done([])});
+ }).then(function(files){
+  var list=mergeFiles(files);
+  /* Automatisch geholte Produktdetails (Anwendung, Inhaltsstoffe, Zusammenfassung). Von Hand eingetragene Felder haben Vorrang. */
+  return getJSON(baseUrl()+CFG.ordner+"/_auto-details.json?t="+Math.floor(Date.now()/60000)).catch(function(){return{}}).then(function(auto){
+   list.forEach(function(p){
+    var a=auto&&auto[p.url];if(!a)return;
+    if(!p.use&&a.anwendung)p.use=String(a.anwendung);
+    if(!p.det&&a.details)p.det=String(a.details);
+    if(!p.ing&&a.inhaltsstoffe)p.ing=[].concat(a.inhaltsstoffe).join(", ");
+    p.src=a.quelle||"";p.stand=a.stand||"";
+   });
+   done(list);
+  });
+ },function(e){ERRORS.push("Dateiliste: "+errText(e));done([])});
 }
 /* Mit ?debug hinter der Adresse zeigt die Seite Dateifehler an. */
 var DEBUG=/[?&]debug/.test(location.search);
@@ -813,7 +848,7 @@ function renderRoutine(out){
  rows.forEach(function(r,i){
   var p=r.x.p,li=document.createElement("li");li.className="row";
   var tags=r.x.hit.map(function(c){return '<span class="tag">'+esc(CONCERNS[c])+'</span>'}).join("");
-  li.innerHTML='<a class="rowlink" href="'+esc(p.url)+'" target="_blank" rel="noopener sponsored"><div class="num">'+(i+1)+'</div><div class="rimg"><span>Bild wird geladen</span></div><div><div class="step">'+esc(r.s.k)+'</div><p class="name">'+esc(p.name||"")+'</p><p class="note">'+esc(p.note)+'</p>'+(p.info?infoHtml(p.info):'')+(r.s.hint?infoHtml(r.s.hint):'')+(tags?'<div class="tags">'+tags+'</div>':'')+'<span class="go">Zum Produkt</span>'+priceHtml(p)+'</div></a><div class="extra" hidden><p class="warn"></p><div class="alt"></div></div><details class="altmenu" hidden><summary></summary><div class="altlist"></div></details>';
+  li.innerHTML='<a class="rowlink" href="#produkt='+esc(p.slug)+'"><div class="num">'+(i+1)+'</div><div class="rimg"><span>Bild wird geladen</span></div><div><div class="step">'+esc(r.s.k)+'</div><p class="name">'+esc(p.name||"")+'</p><p class="note">'+esc(p.note)+'</p>'+(p.info?infoHtml(p.info):'')+(r.s.hint?infoHtml(r.s.hint):'')+(tags?'<div class="tags">'+tags+'</div>':'')+'<span class="go">Details</span>'+priceHtml(p)+'</div></a><div class="extra" hidden><p class="warn"></p><div class="alt"></div></div><details class="altmenu" hidden><summary></summary><div class="altlist"></div></details>';
   ol.appendChild(li);
   meta(p,function(m){fillImage(li.querySelector(".rimg"),m);li.querySelector(".name").textContent=m.name||"Produkt ansehen"});
   var sim=similarAlts(rows,i);
@@ -822,7 +857,7 @@ function renderRoutine(out){
    am.querySelector("summary").textContent="Alternativen ("+sim.length+")";
    var lst=am.querySelector(".altlist");
    sim.forEach(function(q){
-    var a=document.createElement("a");a.className="altlink";a.href=q.url;a.target="_blank";a.rel="noopener sponsored";
+    var a=document.createElement("a");a.className="altlink";a.href="#produkt="+q.slug;
     a.innerHTML='<span class="aimg"><span>…</span></span><span><span class="aname"></span>'+(q.price!=null?'<span class="aprice">'+priceText(q).trim().replace(/^\(|\)$/g,"")+'</span>':"")+'</span>';
     lst.appendChild(a);
     meta(q,function(m){fillImage(a.querySelector(".aimg"),m);a.querySelector(".aname").textContent=m.name||"Produkt ansehen"});
@@ -837,7 +872,7 @@ function renderRoutine(out){
    })});
    if(ap){
     var al=li.querySelector(".alt");
-    al.innerHTML='<a class="altlink" href="'+esc(ap.url)+'" target="_blank" rel="noopener sponsored"><span class="aimg"><span>…</span></span><span><span class="alabel">Alternative</span><span class="aname"></span></span></a>';
+    al.innerHTML='<a class="altlink" href="#produkt='+esc(ap.slug)+'"><span class="aimg"><span>…</span></span><span><span class="alabel">Alternative</span><span class="aname"></span></span></a>';
     meta(ap,function(m){fillImage(al.querySelector(".aimg"),m);al.querySelector(".aname").textContent=m.name||"Produkt ansehen"});
    }
   }
@@ -854,15 +889,71 @@ function renderProducts(out){
  if(!list.length){out.innerHTML='<p class="empty">Dafür gibt es noch keine Empfehlung. Wähle ein anderes Thema.</p>';return}
  var grid=document.createElement("div");grid.className="grid";
  list.forEach(function(p){
-  var a=document.createElement("a");a.className="card";a.href=p.url;a.target="_blank";a.rel="noopener sponsored";
-  a.innerHTML='<div class="img"><span>Bild wird geladen</span></div><div class="step">'+esc(p.step)+lvlHtml(p)+'</div><p class="name">'+esc(p.name||"")+'</p><p class="note">'+esc(p.note)+'</p>'+cardTags(p)+(p.info?infoHtml(p.info):'')+'<span class="go">Zum Produkt</span>'+priceHtml(p);
+  var a=document.createElement("a");a.className="card";a.href="#produkt="+p.slug;
+  a.innerHTML='<div class="img"><span>Bild wird geladen</span></div><div class="step">'+esc(p.step)+lvlHtml(p)+'</div><p class="name">'+esc(p.name||"")+'</p><p class="note">'+esc(p.note)+'</p>'+cardTags(p)+(p.info?infoHtml(p.info):'')+'<span class="go">Details</span>'+priceHtml(p);
   grid.appendChild(a);
   meta(p,function(m){fillImage(a.querySelector(".img"),m);a.querySelector(".name").textContent=m.name||"Produkt ansehen"});
  });
  out.appendChild(grid);
 }
 
+/* ---------- Produkt-Detailseite ---------- */
+var curSlug=null,lastY=0;
+function findSlug(sl){for(var i=0;i<PRODUCTS.length;i++)if(PRODUCTS[i].slug===sl)return PRODUCTS[i];return null}
+function readHash(){var m=location.hash.match(/^#produkt=([^&]+)/);curSlug=m?decodeURIComponent(m[1]):null}
+function leaveDetail(){
+ try{history.replaceState(null,"",location.pathname+location.search)}catch(e){location.hash=""}
+ readHash();render();window.scrollTo(0,lastY);
+}
+function renderDetail(out,p){
+ document.title=(p.name||"Produkt")+" – Uschi's Skincare Guide";
+ var wrap=document.createElement("div");
+ var tags=(p.types||[]).map(function(k){return'<span class="tag">'+esc(TYPES[k])+'</span>'}).concat((p.concerns||[]).map(function(k){return'<span class="tag">'+esc(CONCERNS[k])+'</span>'})).join("");
+ var h='<button class="back" type="button">← Zurück</button><div class="dgrid"><div class="dimg"><span>Bild wird geladen</span></div><div class="dbody">'
+  +'<div class="step">'+esc(p.step)+lvlHtml(p)+'</div><h2 class="dname">'+esc(p.name||"")+'</h2>'
+  +(tags?'<div class="dtags">'+tags+'</div>':'')
+  +(p.note?'<p class="dnote">'+esc(p.note)+'</p>':'')
+  +(p.info?infoHtml(p.info):'')
+  +(p.det?'<h4 class="dh">Details</h4><p class="dtext">'+esc(p.det)+'</p>':'')
+  +(p.use?'<h4 class="dh">Anwendung</h4><p class="dtext">'+esc(p.use)+'</p>':'')
+  +(p.ing?'<h4 class="dh">Inhaltsstoffe</h4><p class="dtext">'+esc(p.ing)+'</p>':'')
+  +(p.price!=null?'<p class="dnote" style="margin-top:20px">'+priceHtml(p).replace('class="price"','class="price" style="margin-left:0"')+'</p>':'')
+  +'<a class="btn dbtn" href="'+esc(p.url)+'" target="_blank" rel="noopener sponsored">Zum Produkt</a>'
+  +((p.stand||p.src)?'<p class="dsrc">Angaben'+(p.src?' von '+esc(p.src):'')+(p.stand?', Stand '+esc(p.stand):'')+'. Bitte vor der Anwendung auch die Packungsangaben beachten.</p>':'')
+  +'<div id="sg-dsim"></div></div></div>';
+ wrap.innerHTML=h;
+ out.appendChild(wrap);
+ wrap.querySelector(".back").onclick=leaveDetail;
+ meta(p,function(m){fillImage(wrap.querySelector(".dimg"),m);var n=wrap.querySelector(".dname");if(!p.name)n.textContent=m.name||"Produkt";});
+ var sim=PRODUCTS.filter(function(q){return q.step===p.step&&q.url!==p.url}).slice(0,3);
+ if(sim.length){
+  var box=wrap.querySelector("#sg-dsim");box.innerHTML='<h4 class="dh">Ähnliche Produkte</h4><div class="dsim"></div>';
+  var lst=box.querySelector(".dsim");
+  sim.forEach(function(q){
+   var a=document.createElement("a");a.className="altlink";a.href="#produkt="+q.slug;
+   a.innerHTML='<span class="aimg"><span>…</span></span><span><span class="aname"></span>'+(q.price!=null?'<span class="aprice" style="display:block;font-size:12px;color:var(--soft)">'+esc(fmt(q.price))+'</span>':"")+'</span>';
+   lst.appendChild(a);
+   meta(q,function(m){fillImage(a.querySelector(".aimg"),m);a.querySelector(".aname").textContent=m.name||q.name||"Produkt ansehen"});
+  });
+ }
+}
+window.addEventListener("hashchange",function(){
+ var was=curSlug;readHash();
+ if(curSlug&&!was)lastY=window.scrollY||0;
+ render();
+ window.scrollTo(0,curSlug?0:lastY);
+});
+
 function render(){
+ var dpr=null;
+ if(curSlug&&!loading){dpr=findSlug(curSlug);if(!dpr){curSlug=null}}
+ $("sg").classList.toggle("indetail",!!(curSlug&&(loading||dpr)));
+ if(curSlug&&(loading||dpr)){
+  var dout=$("sg-out");dout.innerHTML="";
+  if(loading)dout.innerHTML='<p class="empty">Produkte werden geladen …</p>';else renderDetail(dout,dpr);
+  return;
+ }
+ document.title="Uschi's Skincare Guide";
  try{localStorage.setItem("sg-sel",JSON.stringify({t:selT,c:selC,m:time,l:selL,b:selB}))}catch(e){}
  var tb=$("sg-tabs");tb.innerHTML="";
  Object.keys(TABS).forEach(function(k){
@@ -909,6 +1000,7 @@ $("sg-theme").onclick=function(){
 };
 try{window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",function(){if(!themeSel)applyTheme()})}catch(e){}
 applyTheme();
+readHash();
 render();
 loadProducts(function(list){PRODUCTS=list;loading=false;render()});
 })();
