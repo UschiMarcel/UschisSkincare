@@ -254,7 +254,7 @@ function emptyHtml(){
  return '<p class="empty">'+(ERRORS.length?"Die Produktliste konnte nicht vollständig geladen werden.":"Es sind noch keine Produkte hinterlegt.")+'</p>';
 }
 
-var RET="Retinol / Anti-Aging";
+var RET="Retinol / Anti-Aging",DROPPED=[];
 /* Override: Mit dem Thema "Anti Aging" gilt für den Retinol-Schritt der Hauttyp nicht als Ausschluss. */
 function typeFits(p){return selT==="alle"||!p.types||!p.types.length||p.types.indexOf(selT)>-1}
 function typeOk(p){
@@ -403,7 +403,7 @@ function warnText(names){
 function missingBase(rows,t){
  var mk=selC.indexOf("makeup")>-1,oil=rows.some(function(r){return r.s.oil});
  return STEPS.filter(function(s){
-  if(!s.base||s.when.indexOf(t)<0)return false;
+  if(!s.base||s.when.indexOf(t)<0||DROPPED.indexOf(s.k)>-1)return false;
   if(s.repl&&hydrating(rows))return false;
   if(s.cleanser&&t==="pm"&&oil&&!mk)return false;
   return !rows.some(function(r){return r.s.k===s.k});
@@ -448,7 +448,12 @@ function buildPlan(){
      if(ok)cand({t:"swap",p:p,q:q,cost:Math.max(0,hits(p).length-hits(q).length),save:price(p)-q.price});
     });
     var sd=STEPS.filter(function(x){return x.k===p.step})[0];
-    if(sd&&!sd.base&&price(p)>0)cand({t:"drop",p:p,cost:hits(p).length+3,save:price(p)});
+    /* Mit Anti Aging bleibt das Retinol im Budget-Fall erhalten, dafür darf notfalls die Creme entfallen. */
+    var aa=selC.indexOf("antiaging")>-1;
+    if(sd&&price(p)>0){
+     if(!sd.base&&!(aa&&sd.k===RET))cand({t:"drop",p:p,cost:hits(p).length+3,save:price(p)});
+     else if(aa&&sd.repl)cand({t:"drop",p:p,cost:hits(p).length+4,save:price(p)});
+    }
    })});
    if(!best)break;
    var org=info.origin[best.p.url]||best.p;
@@ -735,6 +740,7 @@ function renderRoutine(out){
  });
  wrap.appendChild(tg);
  var plan=buildPlan(),rows=plan.d[time],covered=[];
+ DROPPED=Object.keys(plan.info.moves).map(function(k){return plan.info.moves[k]}).filter(function(m){return!m.now}).map(function(m){return m.orig.step});
  ["am","pm"].forEach(function(k){plan.d[k].forEach(function(r){covered=covered.concat(r.x.hit)})});
  if(!rows.length){var e=document.createElement("p");e.className="empty";e.textContent="Für diese Auswahl gibt es noch keine Produkte. Probiere einen anderen Hauttyp oder andere Themen.";wrap.appendChild(e);out.appendChild(wrap);return}
  var rd=retDisclaimer(plan.d);
