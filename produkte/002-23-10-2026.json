@@ -215,7 +215,12 @@
     "hinweis": "Sehr hoch wirksam und sollte nicht ohne Rücksprache mit Artzt oder Apotheker eingesetzt werden. Nie ohne Sonnencreme raus gehen.",
     "beschreibung": "Verschreibungspflichtiges Arzneimittel. Nur nach ärztlicher Beratung. Das ist die ultimative Endstufe was Retinol und Anti-Aging angeht.",
     "tags": [
-      "akne"
+      "fettig",
+      "akne",
+      "trocken",
+      "falten",
+      "pigment",
+      "poren"
     ],
     "zeit": "abends",
     "aktiv": true,
