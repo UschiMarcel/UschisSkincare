@@ -69,7 +69,12 @@
 #sg .dt:focus-visible{outline:2px solid var(--moss);outline-offset:3px}
 #sg #sg-lnote{margin-top:-14px}
 #sg .price{margin-left:14px;font-size:14px;color:var(--soft)}
+#sg .price del{color:var(--soft)}
+#sg .price b{color:var(--ink);font-weight:500}
+#sg .off{font-size:12px;background:var(--blush);color:var(--ink);border-radius:999px;padding:1px 8px;margin-left:4px}
 #sg .card .price{display:block;margin:6px 0 0}
+#sg .dbg{font-size:13px;max-width:62ch;margin:0 0 28px;padding:12px 16px;border:1px dashed var(--moss);border-radius:12px}
+#sg .dbg ul{margin:6px 0 0;padding-left:18px}
 #sg .budget{max-width:420px;margin:0 0 28px}
 #sg .budget[hidden]{display:none}
 #sg .budget input[type=range]{width:100%;accent-color:var(--moss);margin:4px 0}
@@ -190,7 +195,7 @@ function norm(r){
  var z=[].concat(r.zeit||[]).join(" ").toLowerCase(),when=null;
  if(z){when=[];if(z.indexOf("morgen")>-1)when.push("am");if(z.indexOf("abend")>-1)when.push("pm");if(!when.length)when=null}
  return{
-  url:r.link,price:(function(v){if(v===undefined||v===null||v==="")return null;var n=parseFloat(String(v).replace(",","."));return isNaN(n)?null:n})(r.preis),name:r.name||"",info:String(r.hinweis||"").trim(),step:st,when:when,levels:lv.length?lv:null,conflict:[].concat(r.konflikt||[]).map(stepName),note:r.beschreibung||"",img:r.bild||"",
+  url:r.link,old:(function(v){if(v===undefined||v===null||v==="")return null;var n=parseFloat(String(v).replace(",","."));return isNaN(n)?null:n})(r.preis_alt),price:(function(v){if(v===undefined||v===null||v==="")return null;var n=parseFloat(String(v).replace(",","."));return isNaN(n)?null:n})(r.preis),name:r.name||"",info:String(r.hinweis||"").trim(),step:st,when:when,levels:lv.length?lv:null,conflict:[].concat(r.konflikt||[]).map(stepName),note:r.beschreibung||"",img:r.bild||"",
   types:tags.filter(function(t){return t!=="alle"&&TYPES[t]}),
   concerns:tags.filter(function(t){return CONCERNS[t]})
  };
@@ -371,7 +376,15 @@ function missingBase(rows,t){
 function fmt(n){try{return n.toLocaleString("de-DE",{style:"currency",currency:"EUR"})}catch(e){return n.toFixed(2).replace(".",",")+" €"}}
 function price(p){return p.price==null?0:p.price}
 function hasPrices(){return PRODUCTS.some(function(p){return p.price!=null})}
-function priceHtml(p){return p.price!=null?'<span class="price">'+fmt(p.price)+'</span>':''}
+function priceHtml(p){
+ if(p.price==null)return"";
+ if(p.old!=null&&p.old>p.price)return'<span class="price"><del>'+fmt(p.old)+'</del> <b>'+fmt(p.price)+'</b> <span class="off">−'+Math.round((1-p.price/p.old)*100)+' %</span></span>';
+ return'<span class="price">'+fmt(p.price)+'</span>';
+}
+function priceText(p){
+ if(p.price==null)return"";
+ return" ("+fmt(p.price)+(p.old!=null&&p.old>p.price?" statt "+fmt(p.old):"")+")";
+}
 function planTotal(d){
  var seen={},sum=0;
  ["am","pm"].forEach(function(k){d[k].forEach(function(r){var u=r.x.p.url;if(!seen[u]){seen[u]=1;sum+=price(r.x.p)}})});
@@ -380,7 +393,7 @@ function planTotal(d){
 /* Liegt die Routine über dem Budget, werden Produkte durch günstigere Alternativen desselben Schritts ersetzt
    (mit möglichst wenig Verlust bei den Themen). Reicht das nicht, entfallen optionale Schritte. Basis-Schritte bleiben. */
 function buildPlan(){
- var d={am:buildRows("am"),pm:buildRows("pm")},info={swaps:0,drops:0,over:false},guard=0;
+ var d={am:buildRows("am"),pm:buildRows("pm")},info={swaps:0,drops:0,over:false,origin:{},moves:{}},guard=0;
  if(selB!=null&&hasPrices()){
   while(planTotal(d)>selB&&guard++<80){
    var best=null,seen={};
@@ -400,15 +413,19 @@ function buildPlan(){
     if(sd&&!sd.base&&price(p)>0)cand({t:"drop",p:p,cost:hits(p).length+3,save:price(p)});
    })});
    if(!best)break;
+   var org=info.origin[best.p.url]||best.p;
+   var tm=["am","pm"].filter(function(k){return d[k].some(function(r){return r.x.p.url===best.p.url})});
    if(best.t==="swap"){
     ["am","pm"].forEach(function(k){d[k].forEach(function(r){if(r.x.p.url===best.p.url)r.x={p:best.q,hit:hits(best.q)}})});
-    info.swaps++;
+    info.origin[best.q.url]=org;
+    info.moves[org.url]={orig:org,now:best.q,times:tm};
    }else{
     ["am","pm"].forEach(function(k){d[k]=d[k].filter(function(r){return r.x.p.url!==best.p.url})});
-    info.drops++;
+    info.moves[org.url]={orig:org,now:null,times:tm};
    }
   }
   info.over=planTotal(d)>selB;
+  Object.keys(info.moves).forEach(function(k){if(info.moves[k].now)info.swaps++;else info.drops++});
  }
  return{d:d,info:info};
 }
@@ -426,6 +443,34 @@ function costHtml(plan){
   if(plan.info.over)h+=" Mit diesem Budget ist keine vollständige Routine möglich, die günstigste Zusammenstellung kostet "+fmt(tot)+".";
  }
  return h;
+}
+/* Debug-Ansicht (?debug): was wegen des Budgets ersetzt oder gestrichen wurde */
+function debugBox(plan){
+ var box=document.createElement("div");box.className="dbg";
+ var L=Object.keys(plan.info.moves).map(function(k){return plan.info.moves[k]});
+ if(!L.length){
+  box.innerHTML="<b>Debug: Budget</b><br>"+(selB==null?"Kein Budget gesetzt, keine Anpassungen.":"Keine Anpassung nötig, die Routine liegt im Budget.");
+  return box;
+ }
+ box.innerHTML="<b>Debug: Anpassungen wegen Budget</b><br>Namen werden geladen …";
+ var byUrl={},u=[],names={},n=0;
+ L.forEach(function(e){[e.orig,e.now].forEach(function(p){if(p&&!byUrl[p.url]){byUrl[p.url]=p;u.push(p.url)}})});
+ function fill(){
+  var h="<b>Debug: Anpassungen wegen Budget (bis "+esc(fmt(selB))+")</b><ul>";
+  L.forEach(function(e){
+   var when=e.times.map(function(k){return TIMES[k]}).join(" und ");
+   var now=e.now?hits(e.now):[];
+   var lost=hits(e.orig).filter(function(c){return now.indexOf(c)<0}).map(function(c){return CONCERNS[c]});
+   var save=price(e.orig)-(e.now?price(e.now):0);
+   h+="<li><b>"+(e.now?"Ersetzt":"Gestrichen")+"</b> ("+esc(e.orig.step)+", "+esc(when)+"): Ursprünglich "+esc(names[e.orig.url])+" ("+esc(fmt(price(e.orig)))+")"
+    +(e.now?", jetzt "+esc(names[e.now.url])+" ("+esc(fmt(price(e.now)))+")":", ohne Ersatz")
+    +". Spart "+esc(fmt(save))+"."+(lost.length?" Nicht mehr abgedeckt: "+esc(lost.join(", "))+".":"")+"</li>";
+  });
+  h+="</ul>"+(plan.info.over?"Das Budget wird trotzdem überschritten, es gibt keine weitere Einsparung.":"");
+  box.innerHTML=h;
+ }
+ u.forEach(function(url){meta(byUrl[url],function(m){names[url]=m.name||byUrl[url].name||url;if(++n===u.length)fill()})});
+ return box;
 }
 /* Regler für das Budget (erscheint erst, wenn Produkte einen Preis haben) */
 var BUD=null,budTimer=null;
@@ -502,7 +547,7 @@ function saveText(area){
    if(!d[k].length)return;
    t+="\n"+TIMES[k]+"\n";
    d[k].forEach(function(r,i){
-    t+=(i+1)+". "+r.s.k+": "+r.name+(r.x.p.price!=null?" ("+fmt(r.x.p.price)+")":"")+" – "+r.x.p.url+"\n";
+    t+=(i+1)+". "+r.s.k+": "+r.name+priceText(r.x.p)+" – "+r.x.p.url+"\n";
     if(r.x.p.info)t+="   Hinweis: "+r.x.p.info+"\n";
     var cr=conflictRows(d[k],i);
     if(cr.length){
@@ -647,6 +692,7 @@ function renderRoutine(out){
   wrap.appendChild(s2);
  }
  if(hasPrices()){var cp=document.createElement("p");cp.className="sum";cp.innerHTML=costHtml(plan);wrap.appendChild(cp)}
+ if(DEBUG&&hasPrices())wrap.appendChild(debugBox(plan));
  var ol=document.createElement("ol");ol.className="routine";
  rows.forEach(function(r,i){
   var p=r.x.p,li=document.createElement("li");li.className="row";
