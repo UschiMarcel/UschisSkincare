@@ -533,7 +533,7 @@ function renderRoutine(out){
  rows.forEach(function(r,i){
   var p=r.x.p,li=document.createElement("li");li.className="row";
   var tags=r.x.hit.map(function(c){return '<span class="tag">'+esc(CONCERNS[c])+'</span>'}).join("");
-  li.innerHTML='<a class="rowlink" href="'+esc(p.url)+'" target="_blank" rel="noopener sponsored"><div class="num">'+(i+1)+'</div><div class="rimg"><span>Bild wird geladen</span></div><div><div class="step">'+esc(r.s.k)+'</div><p class="name">'+esc(p.name||"")+'</p><p class="note">'+esc(p.note)+'</p>'+(p.info?infoHtml(p.info):'')+(r.s.hint?'<p class="hint">'+esc(r.s.hint)+'</p>':'')+(tags?'<div class="tags">'+tags+'</div>':'')+'<span class="go">Zum Produkt</span></div></a><div class="extra" hidden><p class="warn"></p><div class="alt"></div></div>';
+  li.innerHTML='<a class="rowlink" href="'+esc(p.url)+'" target="_blank" rel="noopener sponsored"><div class="num">'+(i+1)+'</div><div class="rimg"><span>Bild wird geladen</span></div><div><div class="step">'+esc(r.s.k)+'</div><p class="name">'+esc(p.name||"")+'</p><p class="note">'+esc(p.note)+'</p>'+(p.info?infoHtml(p.info):'')+(r.s.hint?infoHtml(r.s.hint):'')+(tags?'<div class="tags">'+tags+'</div>':'')+'<span class="go">Zum Produkt</span></div></a><div class="extra" hidden><p class="warn"></p><div class="alt"></div></div>';
   ol.appendChild(li);
   meta(p,function(m){fillImage(li.querySelector(".rimg"),m);li.querySelector(".name").textContent=m.name||"Produkt ansehen"});
   var others=conflictRows(rows,i);
