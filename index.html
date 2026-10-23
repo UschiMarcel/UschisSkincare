@@ -5,9 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Uschi's Skincare Guide</title>
 <style>html,body{margin:0;background:#eceee9}</style>
+<meta name="color-scheme" content="light dark">
 </head>
 <body>
 <div id="sg">
+<button class="themebtn" id="sg-theme" type="button" aria-label="Zwischen hellem und dunklem Modus wechseln"></button>
 <style>
 #sg{--bg:#eceee9;--paper:#f8f8f5;--ink:#262a26;--soft:#6c736b;--moss:#58654f;--blush:#e6d6d0;--line:#d5d9d1;
   font-family:'Montserrat',system-ui,sans-serif;color:var(--ink);background:var(--bg);padding:clamp(20px,6vw,88px);max-width:1040px;margin:0 auto;box-sizing:border-box;line-height:1.55}
@@ -21,6 +23,17 @@
 #sg .tab{font:inherit;font-size:16px;background:none;border:0;border-bottom:2px solid transparent;padding:12px 0;margin-bottom:-1px;color:var(--soft);cursor:pointer;transition:color .2s,border-color .2s}
 #sg .tab:hover{color:var(--ink)}
 #sg .tab[aria-selected="true"]{color:var(--ink);font-weight:500;border-bottom-color:var(--moss)}
+/* Darkmode */
+#sg{position:relative}
+#sg .themebtn{position:absolute;top:clamp(14px,3vw,34px);right:clamp(14px,3vw,34px);width:42px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;padding:0;transition:border-color .2s}
+#sg .themebtn:hover{border-color:var(--moss)}
+#sg[data-theme="dark"]{--bg:#151815;--paper:#1e231e;--ink:#e9ece6;--soft:#9ba596;--moss:#6b7e5c;--blush:#332c28;--line:#2f362f}
+#sg[data-theme="dark"] .info{background:#1d2c38;border-left-color:#5b8fb3}
+#sg[data-theme="dark"] .info svg{color:#8fc0e3}
+#sg[data-theme="dark"] .lvl{background:#1d2c38;color:#9cc7e6}
+#sg[data-theme="dark"] .warn{border-left-color:#c97a63}
+#sg[data-theme="dark"] .tip{background:rgba(127,150,110,.14)}
+#sg[data-theme="dark"] .rowlink>.num{color:rgba(233,236,230,.16)}
 #sg .chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px}
 #sg .chip{font:inherit;font-size:14px;padding:9px 18px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;transition:background .2s,color .2s,border-color .2s}
 #sg .chip:hover{border-color:var(--moss)}
@@ -831,6 +844,25 @@ function render(){
  if(tab==="routine")renderRoutine(out);else renderProducts(out);
  var eb=errBox();if(eb)out.insertBefore(eb,out.firstChild);
 }
+/* Darkmode: folgt der Geräteeinstellung, der Schalter oben rechts überschreibt sie (wird im Browser gemerkt). */
+var themeSel=null;
+try{themeSel=localStorage.getItem("sg-theme")}catch(e){}
+function sysDark(){try{return window.matchMedia("(prefers-color-scheme: dark)").matches}catch(e){return false}}
+function curTheme(){return themeSel==="dark"||themeSel==="light"?themeSel:(sysDark()?"dark":"light")}
+function applyTheme(){
+ var t=curTheme(),bg=t==="dark"?"#151815":"#eceee9";
+ $("sg").setAttribute("data-theme",t);
+ document.documentElement.style.background=bg;document.body.style.background=bg;
+ var b=$("sg-theme");b.innerHTML=t==="dark"?ICON.am:ICON.pm;
+ b.title=t==="dark"?"Heller Modus":"Dunkler Modus";
+}
+$("sg-theme").onclick=function(){
+ themeSel=curTheme()==="dark"?"light":"dark";
+ try{localStorage.setItem("sg-theme",themeSel)}catch(e){}
+ applyTheme();
+};
+try{window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",function(){if(!themeSel)applyTheme()})}catch(e){}
+applyTheme();
 render();
 loadProducts(function(list){PRODUCTS=list;loading=false;render()});
 })();
