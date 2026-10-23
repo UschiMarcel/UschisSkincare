@@ -135,7 +135,7 @@
       "pigment",
       "poren"
     ],
-    "zeit": "abends"
+    "zeit": "abends",
     "erfahrung": ["erfahren"]
   },
   {
@@ -153,7 +153,7 @@
       "pigment",
       "poren"
     ],
-    "zeit": "abends"
+    "zeit": "abends",
     "erfahrung": ["fortgeschritten"]
   },
   {
@@ -201,7 +201,7 @@
       "akne"
     ],
     "zeit": "abends",
-    "aktiv": true
+    "aktiv": true,
     "erfahrung": ["experte"]
   }
 ]
