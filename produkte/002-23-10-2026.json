@@ -118,6 +118,7 @@
       "poren"
     ],
     "zeit": "abends"
+    "erfahrung": ["anfaenger"]
   },
   {
     "link": "https://www.dm.de/p/d/1459264/geek-und-gorgeous-gesichtsserum-101-a-game-10-0-1-prozent-retinal",
@@ -134,6 +135,7 @@
       "poren"
     ],
     "zeit": "abends"
+    "erfahrung": ["erfahren"]
   },
   {
     "link": "https://www.dm.de/p/d/2978218/geek-und-gorgeous-gesichtsserum-101-a-game-20-0-2-prozent-retinal",
@@ -151,6 +153,7 @@
       "poren"
     ],
     "zeit": "abends"
+    "erfahrung": ["fortgeschritten"]
   },
   {
     "link": "https://www.dm.de/p/d/1306263/geek-und-gorgeous-gesichtscreme-101-happier-barrier",
@@ -189,6 +192,7 @@
   },
   {
     "link": "https://www.shop-apotheke.com/arzneimittel/2137594/cordes-vas-creme.htm",
+    "bild": "https://cdn.shop-apotheke.com/images/650x0/D02/137/594/D02137594-p10.webp"
     "name": "Cordes VAS Creme",
     "schritt": "Retinol / Anti-Aging",
     "beschreibung": "Verschreibungspflichtiges Arzneimittel. Nur nach ärztlicher Beratung. Das ist die ultimative Endstufe was Retinol und Anti-Aging angeht.",
@@ -197,5 +201,6 @@
     ],
     "zeit": "abends",
     "aktiv": true
+    "erfahrung": ["experte"]
   }
 ]
