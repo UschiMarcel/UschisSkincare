@@ -197,13 +197,30 @@ function mergeFiles(files){
  });
  return order.map(function(k){return map[k]}).filter(function(r){return r.aktiv!==false}).map(norm);
 }
+var ERRORS=[];
+function errText(e){var m=(e&&e.message)||String(e);return/^\d+$/.test(m)?"Datei nicht erreichbar (HTTP "+m+")":m}
 function loadProducts(done){
  listFiles().then(function(names){
   var t=Math.floor(Date.now()/60000);
   return Promise.all(names.map(function(n){
-   return getJSON(baseUrl()+CFG.ordner+"/"+encodeURIComponent(n)+"?t="+t).catch(function(){return[]});
+   return getJSON(baseUrl()+CFG.ordner+"/"+encodeURIComponent(n)+"?t="+t).catch(function(e){
+    ERRORS.push(n+": "+errText(e));
+    try{console.error("Produktdatei fehlerhaft: "+n,e)}catch(x){}
+    return[];
+   });
   }));
- }).then(function(files){done(mergeFiles(files))},function(){done([])});
+ }).then(function(files){done(mergeFiles(files))},function(e){ERRORS.push("Dateiliste: "+errText(e));done([])});
+}
+/* Mit ?debug hinter der Adresse zeigt die Seite Dateifehler an. */
+var DEBUG=/[?&]debug/.test(location.search);
+function errBox(){
+ if(!DEBUG||!ERRORS.length)return null;
+ var d=document.createElement("div");d.className="warn";d.style.margin="0 0 28px";
+ d.innerHTML="<b>Fehler in den Produktdateien:</b><br>"+ERRORS.map(esc).join("<br>");
+ return d;
+}
+function emptyHtml(){
+ return '<p class="empty">'+(ERRORS.length?"Die Produktliste konnte nicht vollständig geladen werden.":"Es sind noch keine Produkte hinterlegt.")+'</p>';
 }
 
 function typeOk(p){
@@ -437,7 +454,7 @@ function drawImage(area,d){
 
 function renderRoutine(out){
  if(loading){out.innerHTML='<p class="empty">Produkte werden geladen …</p>';return}
- if(!PRODUCTS.length){out.innerHTML='<p class="empty">Es sind noch keine Produkte hinterlegt.</p>';return}
+ if(!PRODUCTS.length){out.innerHTML=emptyHtml();return}
  var wrap=document.createElement("div");
  var tg=document.createElement("div");tg.className="daytoggle";tg.setAttribute("role","group");tg.setAttribute("aria-label","Tageszeit");
  ["am","pm"].forEach(function(k){
@@ -490,7 +507,7 @@ function renderRoutine(out){
 /* Alle Produkte (gefiltert) */
 function renderProducts(out){
  if(loading){out.innerHTML='<p class="empty">Produkte werden geladen …</p>';return}
- if(!PRODUCTS.length){out.innerHTML='<p class="empty">Es sind noch keine Produkte hinterlegt.</p>';return}
+ if(!PRODUCTS.length){out.innerHTML=emptyHtml();return}
  var list=PRODUCTS.filter(function(p){return typeOk(p)&&(!selC.length||hits(p).length>0)});
  list.sort(function(a,b){return hits(b).length-hits(a).length});
  if(!list.length){out.innerHTML='<p class="empty">Dafür gibt es noch keine Empfehlung. Wähle ein anderes Thema.</p>';return}
@@ -526,6 +543,7 @@ function render(){
  if(TIPS[selT]){tip.hidden=false;tip.innerHTML="<b>"+TIPS[selT][0]+"</b>"+TIPS[selT][1]}else tip.hidden=true;
  var out=$("sg-out");out.innerHTML="";
  if(tab==="routine")renderRoutine(out);else renderProducts(out);
+ var eb=errBox();if(eb)out.insertBefore(eb,out.firstChild);
 }
 render();
 loadProducts(function(list){PRODUCTS=list;loading=false;render()});
