@@ -74,7 +74,11 @@
 #sg .price b{color:var(--ink);font-weight:500}
 #sg .off{font-size:12px;background:var(--blush);color:var(--ink);border-radius:999px;padding:1px 8px;margin-left:4px}
 #sg .card .price{display:block;margin:6px 0 0}
-#sg .dbg{font-size:13px;max-width:62ch;margin:0 0 28px;padding:12px 16px;border:1px dashed var(--moss);border-radius:12px}
+#sg .dbg{font-size:13px;max-width:62ch;margin:0 0 28px;padding:12px 16px;border:1px solid var(--line);border-radius:12px}
+#sg .dbg summary{cursor:pointer;font-size:14px;font-weight:500}
+#sg .dbg summary:focus-visible{outline:2px solid var(--moss);outline-offset:3px}
+#sg .dbg .dbgbody{margin-top:10px}
+#sg .dbg a{color:inherit}
 #sg .dbg ul{margin:6px 0 0;padding-left:18px}
 #sg .budget{max-width:420px;margin:0 0 28px}
 #sg .budget[hidden]{display:none}
@@ -451,30 +455,34 @@ function costHtml(plan){
  }
  return h;
 }
-/* Debug-Ansicht (?debug): was wegen des Budgets ersetzt oder gestrichen wurde */
+/* Ausklappbares Menü: was wegen des Budgets ersetzt oder gestrichen wurde */
 function debugBox(plan){
- var box=document.createElement("div");box.className="dbg";
  var L=Object.keys(plan.info.moves).map(function(k){return plan.info.moves[k]});
  if(!L.length){
-  box.innerHTML="<b>Debug: Budget</b><br>"+(selB==null?"Kein Budget gesetzt, keine Anpassungen.":"Keine Anpassung nötig, die Routine liegt im Budget.");
-  return box;
+  if(!DEBUG)return null;
+  var d0=document.createElement("div");d0.className="dbg";
+  d0.innerHTML="<b>Debug: Budget</b><br>"+(selB==null?"Kein Budget gesetzt, keine Anpassungen.":"Keine Anpassung nötig, die Routine liegt im Budget.");
+  return d0;
  }
- box.innerHTML="<b>Debug: Anpassungen wegen Budget</b><br>Namen werden geladen …";
+ var box=document.createElement("details");box.className="dbg";
+ function setBody(h){box.innerHTML='<summary>Aber welche sind denn nicht dabei?</summary><div class="dbgbody">'+h+'</div>'}
+ setBody("Namen werden geladen …");
  var byUrl={},u=[],names={},n=0;
  L.forEach(function(e){[e.orig,e.now].forEach(function(p){if(p&&!byUrl[p.url]){byUrl[p.url]=p;u.push(p.url)}})});
+ function link(p){return'<a href="'+esc(p.url)+'" target="_blank" rel="noopener sponsored">'+esc(names[p.url])+'</a>'}
  function fill(){
-  var h="<b>Debug: Anpassungen wegen Budget (bis "+esc(fmt(selB))+")</b><ul>";
+  var h="Wegen deines Budgets (bis "+esc(fmt(selB))+") habe ich Folgendes angepasst:<ul>";
   L.forEach(function(e){
    var when=e.times.map(function(k){return TIMES[k]}).join(" und ");
    var now=e.now?hits(e.now):[];
    var lost=hits(e.orig).filter(function(c){return now.indexOf(c)<0}).map(function(c){return CONCERNS[c]});
    var save=price(e.orig)-(e.now?price(e.now):0);
-   h+="<li><b>"+(e.now?"Ersetzt":"Gestrichen")+"</b> ("+esc(e.orig.step)+", "+esc(when)+"): Ursprünglich "+esc(names[e.orig.url])+" ("+esc(fmt(price(e.orig)))+")"
-    +(e.now?", jetzt "+esc(names[e.now.url])+" ("+esc(fmt(price(e.now)))+")":", ohne Ersatz")
+   h+="<li><b>"+(e.now?"Ersetzt":"Gestrichen")+"</b> ("+esc(e.orig.step)+", "+esc(when)+"): Ursprünglich "+link(e.orig)+" ("+esc(fmt(price(e.orig)))+")"
+    +(e.now?", jetzt "+link(e.now)+" ("+esc(fmt(price(e.now)))+")":", ohne Ersatz")
     +". Spart "+esc(fmt(save))+"."+(lost.length?" Nicht mehr abgedeckt: "+esc(lost.join(", "))+".":"")+"</li>";
   });
   h+="</ul>"+(plan.info.over?"Das Budget wird trotzdem überschritten, es gibt keine weitere Einsparung.":"");
-  box.innerHTML=h;
+  setBody(h);
  }
  u.forEach(function(url){meta(byUrl[url],function(m){names[url]=m.name||byUrl[url].name||url;if(++n===u.length)fill()})});
  return box;
@@ -709,7 +717,7 @@ function renderRoutine(out){
   wrap.appendChild(s2);
  }
  if(hasPrices()){var cp=document.createElement("p");cp.className="sum";cp.innerHTML=costHtml(plan);wrap.appendChild(cp)}
- if(DEBUG&&hasPrices())wrap.appendChild(debugBox(plan));
+ if(hasPrices()){var nb=debugBox(plan);if(nb)wrap.appendChild(nb)}
  var ol=document.createElement("ol");ol.className="routine";
  rows.forEach(function(r,i){
   var p=r.x.p,li=document.createElement("li");li.className="row";
