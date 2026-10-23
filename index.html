@@ -133,10 +133,10 @@ var STEPS=[
  {k:"Reinigungs-Öle",base:true,oil:true,when:["pm"],max:1},
  {k:"Reinigungs-Cleanser",base:true,cleanser:true,when:["am","pm"],max:1},
  {k:"Peeling",onlyHit:true,allHits:true,when:["pm"],max:1},
- {k:"Toner",when:["am","pm"],max:1},
- {k:"Serum",when:["am","pm"],max:2},
+ {k:"Toner",when:["am","pm"],max:1,layer:2},
+ {k:"Serum",when:["am","pm"],max:2,layer:3},
  {k:"Retinol / Anti-Aging",when:["pm"],max:1,hint:"Langsam einführen, nicht am selben Abend mit Peelings kombinieren und tagsüber Sonnenschutz tragen. Nicht in Schwangerschaft und Stillzeit anwenden."},
- {k:"Creme",base:true,when:["am","pm"],max:1},
+ {k:"Creme",base:true,repl:true,when:["am","pm"],max:1},
  {k:"Salbe",onlyHit:true,when:["pm"],max:1},
  {k:"Sonnenschutz",base:true,when:["am"],max:1}
 ];
@@ -345,10 +345,16 @@ function pick(s,t,skip){
  while(chosen.length<s.max&&pool.length){
   pool.sort(function(a,b){return gain(b)-gain(a)||b.hit.length-a.hit.length});
   var best=pool.shift();
-  if(chosen.length&&gain(best)===0)break;
+  if(chosen.length&&gain(best)===0){pool.unshift(best);break}
   chosen.push(best);covered=covered.concat(best.hit);
  }
+/* Bei Feuchtigkeit dürfen mehrere feuchtigkeitsspendende Toner und Seren kombiniert werden (s.layer = Obergrenze). */
+ if(s.layer&&selC.indexOf("feuchtigkeit")>-1)pool.forEach(function(x){if(chosen.length<s.layer&&chosen.indexOf(x)<0&&x.hit.indexOf("feuchtigkeit")>-1)chosen.push(x)});
  return chosen;
+}
+/* Ein feuchtigkeitsspendender Toner oder ein Serum ersetzt die Creme. */
+function hydrating(rows){
+ return rows.some(function(r){return(r.s.k==="Toner"||r.s.k==="Serum")&&r.x.p.concerns&&r.x.p.concerns.indexOf("feuchtigkeit")>-1});
 }
 function buildRows(t){
  var rows=[],mk=selC.indexOf("makeup")>-1,oil=false;
@@ -360,6 +366,7 @@ function buildRows(t){
   if(s.cleanser&&t==="pm"&&oil&&!mk)return;
   pk.forEach(function(x){rows.push({s:s,x:x,t:t})});
  });
+ if(hydrating(rows))rows=rows.filter(function(r){return!r.s.repl});
  return rows;
 }
 /* Konflikte: "konflikt" enthält Schrittnamen oder Produkt-Links. Die Warnung erscheint bei beiden Produkten. */
@@ -388,6 +395,7 @@ function missingBase(rows,t){
  var mk=selC.indexOf("makeup")>-1,oil=rows.some(function(r){return r.s.oil});
  return STEPS.filter(function(s){
   if(!s.base||s.when.indexOf(t)<0)return false;
+  if(s.repl&&hydrating(rows))return false;
   if(s.cleanser&&t==="pm"&&oil&&!mk)return false;
   return !rows.some(function(r){return r.s.k===s.k});
  }).map(function(s){return s.k});
