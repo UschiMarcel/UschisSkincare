@@ -79,6 +79,9 @@
 #sg .budget[hidden]{display:none}
 #sg .budget input[type=range]{width:100%;accent-color:var(--moss);margin:4px 0}
 #sg .blabels{display:flex;justify-content:space-between;font-size:12px;color:var(--soft)}
+#sg .chips[hidden]{display:none}
+#sg .tag.on{background:var(--moss);color:#fff}
+#sg .tag.lv{font-size:10.5px;padding:2px 9px}
 #sg .tags{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
 #sg .tag{font-size:12px;padding:3px 11px;border-radius:999px;background:var(--blush)}
 /* Speichern */
@@ -105,7 +108,7 @@
 <div class="chips" id="sg-types"></div>
 <h3>Meine Themen<small>mehrere möglich</small></h3>
 <div class="chips" id="sg-concerns"></div>
-<h3>Meine Erfahrung<small>mit Wirkstoffen wie Retinal</small></h3>
+<h3 id="sg-lh">Meine Erfahrung<small>mit Wirkstoffen wie Retinal</small></h3>
 <div class="chips" id="sg-levels"></div>
 <p class="sum" id="sg-lnote" hidden></p>
 <h3 id="sg-bh" hidden>Mein Budget<small id="sg-bval"></small></h3>
@@ -120,7 +123,7 @@ var PRODUCTS=[],loading=true;
 /* Reihenfolge der Routine. base:true = Basis-Schritt, kommt immer vor. when = morgens/abends, max = Produkte pro Schritt. */
 var STEPS=[
  {k:"Reinigungs-Öle",base:true,oil:true,when:["pm"],max:1},
- {k:"Reinigungs-Cleanser",base:true,cleanser:true,when:["am","pm"],max:1},
+ {k:"Reinigung-Cleanser",base:true,cleanser:true,when:["am","pm"],max:1},
  {k:"Toner",when:["am","pm"],max:1},
  {k:"Serum",when:["am","pm"],max:2},
  {k:"Retinol / Anti-Aging",when:["pm"],max:1,hint:"Langsam einführen, nicht am selben Abend mit Peelings kombinieren und tagsüber Sonnenschutz tragen. Nicht in Schwangerschaft und Stillzeit anwenden."},
@@ -181,7 +184,7 @@ function listFiles(){
   })
   .catch(fallback);
 }
-var SA={"reinigung":"Reinigungs-Cleanser","cleanser":"Reinigungs-Cleanser","reinigungs-öle":"Reinigungs-Öle","reinigungsöle":"Reinigungs-Öle","reinigungsöl":"Reinigungs-Öle","reinigungs-oele":"Reinigungs-Öle","reinigungsoel":"Reinigungs-Öle","öl":"Reinigungs-Öle","oel":"Reinigungs-Öle","balsam":"Reinigungs-Öle","reinigungsbalsam":"Reinigungs-Öle","retinol":"Retinol / Anti-Aging","retinal":"Retinol / Anti-Aging","anti-aging":"Retinol / Anti-Aging","anti aging":"Retinol / Anti-Aging","retinol/anti-aging":"Retinol / Anti-Aging"};
+var SA={"reinigung":"Reinigung-Cleanser","cleanser":"Reinigung-Cleanser","reinigungs-öle":"Reinigungs-Öle","reinigungsöle":"Reinigungs-Öle","reinigungsöl":"Reinigungs-Öle","reinigungs-oele":"Reinigungs-Öle","reinigungsoel":"Reinigungs-Öle","öl":"Reinigungs-Öle","oel":"Reinigungs-Öle","balsam":"Reinigungs-Öle","reinigungsbalsam":"Reinigungs-Öle","retinol":"Retinol / Anti-Aging","retinal":"Retinol / Anti-Aging","anti-aging":"Retinol / Anti-Aging","anti aging":"Retinol / Anti-Aging","retinol/anti-aging":"Retinol / Anti-Aging"};
 function stepName(v){
  var st=String(v||"").trim();
  st=SA[st.toLowerCase()]||st;
@@ -241,7 +244,7 @@ function emptyHtml(){
 }
 
 function typeOk(p){
- return(selT==="alle"||!p.types||!p.types.length||p.types.indexOf(selT)>-1)&&(!p.levels||p.levels.indexOf(selL)>-1);
+ return(selT==="alle"||!p.types||!p.types.length||p.types.indexOf(selT)>-1)&&(tab==="produkte"||!p.levels||p.levels.indexOf(selL)>-1);
 }
 function hits(p){return selC.filter(function(c){return p.concerns&&p.concerns.indexOf(c)>-1})}
 
@@ -481,7 +484,7 @@ function budgetMax(){
 }
 function budgetLabel(){$("sg-bval").textContent=selB==null?"kein Limit":"bis "+selB+" €"}
 function renderBudget(){
- var box=$("sg-budget"),h=$("sg-bh"),has=hasPrices();
+ var box=$("sg-budget"),h=$("sg-bh"),has=hasPrices()&&tab==="routine";
  box.hidden=!has;h.hidden=!has;
  if(!has)return;
  var M=budgetMax();
@@ -660,6 +663,14 @@ function drawImage(area,d){
  area.innerHTML='<p class="savemsg">Deine Routine als Bild. Am Handy das Bild gedrückt halten und speichern, am Computer rechte Maustaste oder der Link darunter.</p><div class="preview"><img alt="Meine Skincare Routine" src="'+url+'"><a href="'+url+'" download="skincare-routine.png">Bild herunterladen</a></div>';
 }
 
+/* Tags eines Produkts (Reiter "Alle Produkte"): gewählte Filter sind hervorgehoben, die Erfahrung steht klein dahinter */
+function cardTags(p){
+ var h="";
+ (p.types||[]).forEach(function(k){h+='<span class="tag'+(k===selT?' on':'')+'">'+esc(TYPES[k])+'</span>'});
+ (p.concerns||[]).forEach(function(k){h+='<span class="tag'+(selC.indexOf(k)>-1?' on':'')+'">'+esc(CONCERNS[k])+'</span>'});
+ (p.levels||[]).forEach(function(k){h+='<span class="tag lv" title="Empfohlene Erfahrung">'+esc(LEVELS[k])+'</span>'});
+ return h?'<div class="tags">'+h+'</div>':'';
+}
 function infoHtml(t){
  return '<p class="info"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.5v.01"/></svg><span>'+esc(t)+'</span></p>';
 }
@@ -727,7 +738,7 @@ function renderProducts(out){
  var grid=document.createElement("div");grid.className="grid";
  list.forEach(function(p){
   var a=document.createElement("a");a.className="card";a.href=p.url;a.target="_blank";a.rel="noopener sponsored";
-  a.innerHTML='<div class="img"><span>Bild wird geladen</span></div><div class="step">'+esc(p.step)+'</div><p class="name">'+esc(p.name||"")+'</p><p class="note">'+esc(p.note)+'</p>'+(p.info?infoHtml(p.info):'')+'<span class="go">Zum Produkt</span>'+priceHtml(p);
+  a.innerHTML='<div class="img"><span>Bild wird geladen</span></div><div class="step">'+esc(p.step)+'</div><p class="name">'+esc(p.name||"")+'</p><p class="note">'+esc(p.note)+'</p>'+cardTags(p)+(p.info?infoHtml(p.info):'')+'<span class="go">Zum Produkt</span>'+priceHtml(p);
   grid.appendChild(a);
   meta(p,function(m){fillImage(a.querySelector(".img"),m);a.querySelector(".name").textContent=m.name||"Produkt ansehen"});
  });
@@ -750,8 +761,10 @@ function render(){
   render();
  });
  mkChips($("sg-levels"),pairs(LEVELS),function(k){return k===selL},function(k){selL=k;render()});
+ var onP=tab==="produkte";
+ $("sg-lh").hidden=onP;$("sg-levels").hidden=onP;
  var ln=$("sg-lnote");
- if(selL==="experte"){ln.hidden=false;ln.textContent="Im Experten-Modus sind Warnhinweise und Alternativen ausgeblendet."}else ln.hidden=true;
+ if(selL==="experte"&&!onP){ln.hidden=false;ln.textContent="Im Experten-Modus sind Warnhinweise und Alternativen ausgeblendet."}else ln.hidden=true;
  renderBudget();
  var tip=$("sg-tip");
  if(TIPS[selT]){tip.hidden=false;tip.innerHTML="<b>"+TIPS[selT][0]+"</b>"+TIPS[selT][1]}else tip.hidden=true;
