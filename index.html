@@ -465,11 +465,7 @@ function costHtml(plan){
 /* Ausklappbares Menü: was wegen des Budgets ersetzt oder gestrichen wurde */
 function debugBox(plan){
  var L=Object.keys(plan.info.moves).map(function(k){return plan.info.moves[k]});
- if(!L.length){
-  var d0=document.createElement("details");d0.className="dbg";
-  d0.innerHTML='<summary>Aber welche sind denn nicht dabei?</summary><div class="dbgbody">'+(selB==null?"Du hast kein Budget gesetzt, deshalb ist nichts weggelassen worden. Stelle oben unter „Dein Budget“ einen Betrag ein, dann zeige ich dir hier, welche Produkte ersetzt oder gestrichen wurden.":"Es musste nichts weggelassen werden, die Routine liegt in deinem Budget.")+'</div>';
-  return d0;
- }
+ if(!L.length)return null;
  var box=document.createElement("details");box.className="dbg";
  function setBody(h){box.innerHTML='<summary>Aber welche sind denn nicht dabei?</summary><div class="dbgbody">'+h+'</div>'}
  setBody("Namen werden geladen …");
