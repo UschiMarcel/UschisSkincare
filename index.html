@@ -49,6 +49,7 @@
 #sg .rimg{aspect-ratio:4/5;background:var(--paper);border-radius:96px 96px 10px 10px;overflow:hidden;display:flex;align-items:center;justify-content:center}
 #sg .rimg img{width:100%;height:100%;object-fit:contain;padding:12%;mix-blend-mode:multiply}
 #sg .rimg span{font-size:11px;color:var(--soft);padding:8px;text-align:center}
+#sg .hint{font-size:12px;color:var(--soft);margin:-4px 0 10px;max-width:56ch}
 #sg .tags{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
 #sg .tag{font-size:12px;padding:3px 11px;border-radius:999px;background:var(--blush)}
 /* Speichern */
@@ -87,6 +88,7 @@ var STEPS=[
  {k:"Reinigung",base:true,when:["am","pm"],max:1},
  {k:"Toner",when:["am","pm"],max:1},
  {k:"Serum",when:["am","pm"],max:2},
+ {k:"Retinol / Anti-Aging",when:["pm"],max:1,hint:"Langsam einführen, nicht am selben Abend mit Peelings kombinieren und tagsüber Sonnenschutz tragen. Nicht in Schwangerschaft und Stillzeit anwenden."},
  {k:"Creme",base:true,when:["am","pm"],max:1},
  {k:"Sonnenschutz",base:true,when:["am"],max:1}
 ];
@@ -140,12 +142,20 @@ function listFiles(){
   })
   .catch(fallback);
 }
+var SA={"retinol":"Retinol / Anti-Aging","retinal":"Retinol / Anti-Aging","anti-aging":"Retinol / Anti-Aging","anti aging":"Retinol / Anti-Aging","retinol/anti-aging":"Retinol / Anti-Aging"};
+function stepName(v){
+ var st=String(v||"").trim();
+ st=SA[st.toLowerCase()]||st;
+ STEPS.forEach(function(x){if(x.k.toLowerCase()===st.toLowerCase())st=x.k});
+ return st;
+}
 function norm(r){
  var tags=(r.tags||[]).map(function(t){t=String(t).toLowerCase().trim();return ALIAS[t]||t});
- var st=String(r.schritt||"").trim();
- STEPS.forEach(function(x){if(x.k.toLowerCase()===st.toLowerCase())st=x.k});
+ var st=stepName(r.schritt);
+ var z=[].concat(r.zeit||[]).join(" ").toLowerCase(),when=null;
+ if(z){when=[];if(z.indexOf("morgen")>-1)when.push("am");if(z.indexOf("abend")>-1)when.push("pm");if(!when.length)when=null}
  return{
-  url:r.link,name:r.name||"",step:st,note:r.beschreibung||"",img:r.bild||"",
+  url:r.link,name:r.name||"",step:st,when:when,conflict:[].concat(r.konflikt||[]).map(stepName),note:r.beschreibung||"",img:r.bild||"",
   types:tags.filter(function(t){return t!=="alle"&&TYPES[t]}),
   concerns:tags.filter(function(t){return CONCERNS[t]})
  };
@@ -208,8 +218,9 @@ function mkChips(el,items,isOn,cb){
 function pairs(map){return Object.keys(map).map(function(k){return [k,map[k]]})}
 
 /* Routine zusammenstellen */
-function pick(s){
- var pool=PRODUCTS.filter(function(p){return p.step===s.k&&typeOk(p)}).map(function(p){return{p:p,hit:hits(p)}});
+function pick(s,t,skip){
+ skip=skip||[];
+ var pool=PRODUCTS.filter(function(p){return p.step===s.k&&typeOk(p)&&(!p.when||p.when.indexOf(t)>-1)&&!(p.conflict||[]).some(function(c){return skip.indexOf(c)>-1})}).map(function(p){return{p:p,hit:hits(p)}});
  if(selC.length&&!s.base)pool=pool.filter(function(x){return x.hit.length>0});
  var chosen=[],covered=[];
  function gain(x){return x.hit.filter(function(c){return covered.indexOf(c)<0}).length}
@@ -222,12 +233,24 @@ function pick(s){
  return chosen;
 }
 function buildRows(t){
- var rows=[];
+ var rows=[],i;
  STEPS.forEach(function(s){
   if(s.when.indexOf(t)<0)return;
-  pick(s).forEach(function(x){rows.push({s:s,x:x})});
+  pick(s,t).forEach(function(x){rows.push({s:s,x:x})});
  });
+ /* Produkte mit "konflikt" entfallen, wenn der genannte Schritt in dieser Routine vorkommt */
+ var present=rows.map(function(r){return r.s.k});
+ if(rows.some(function(r){return(r.x.p.conflict||[]).some(function(c){return present.indexOf(c)>-1})})){
+  rows=[];
+  STEPS.forEach(function(s){
+   if(s.when.indexOf(t)<0)return;
+   pick(s,t,present).forEach(function(x){rows.push({s:s,x:x})});
+  });
+ }
  return rows;
+}
+function missingBase(rows,t){
+ return STEPS.filter(function(s){return s.base&&s.when.indexOf(t)>-1&&!rows.some(function(r){return r.s.k===s.k})}).map(function(s){return s.k});
 }
 
 /* ---------- Routine speichern ---------- */
@@ -368,15 +391,20 @@ function renderRoutine(out){
   var ok=selC.filter(function(c){return covered.indexOf(c)>-1}).map(function(c){return CONCERNS[c]});
   var s=document.createElement("p");s.className="sum";
   s.innerHTML=(ok.length?"Diese Routine deckt <b>"+esc(ok.join(", "))+"</b> ab. ":"")+(miss.length?"Dafür habe ich noch kein passendes Produkt: <b>"+esc(miss.join(", "))+"</b>.":"");
+  var mb=missingBase(rows,time);
+  if(mb.length)s.innerHTML+=" Für deinen Hauttyp fehlt mir noch ein Produkt für: <b>"+esc(mb.join(", "))+"</b>.";
   wrap.appendChild(s);
  }else{
-  var s2=document.createElement("p");s2.className="sum";s2.textContent="Wähle oben ein oder mehrere Themen, dann passt sich die Routine an.";wrap.appendChild(s2);
+  var s2=document.createElement("p");s2.className="sum";s2.textContent="Wähle oben ein oder mehrere Themen, dann passt sich die Routine an.";
+  var mb2=missingBase(rows,time);
+  if(mb2.length)s2.textContent+=" Für deinen Hauttyp fehlt mir noch ein Produkt für: "+mb2.join(", ")+".";
+  wrap.appendChild(s2);
  }
  var ol=document.createElement("ol");ol.className="routine";
  rows.forEach(function(r,i){
   var p=r.x.p,li=document.createElement("li");li.className="row";
   var tags=r.x.hit.map(function(c){return '<span class="tag">'+esc(CONCERNS[c])+'</span>'}).join("");
-  li.innerHTML='<a class="rowlink" href="'+esc(p.url)+'" target="_blank" rel="noopener sponsored"><div class="num">'+(i+1)+'</div><div class="rimg"><span>Bild wird geladen</span></div><div><div class="step">'+esc(r.s.k)+'</div><p class="name">'+esc(p.name||"")+'</p><p class="note">'+esc(p.note)+'</p>'+(tags?'<div class="tags">'+tags+'</div>':'')+'<span class="go">Zum Produkt</span></div></a>';
+  li.innerHTML='<a class="rowlink" href="'+esc(p.url)+'" target="_blank" rel="noopener sponsored"><div class="num">'+(i+1)+'</div><div class="rimg"><span>Bild wird geladen</span></div><div><div class="step">'+esc(r.s.k)+'</div><p class="name">'+esc(p.name||"")+'</p><p class="note">'+esc(p.note)+'</p>'+(r.s.hint?'<p class="hint">'+esc(r.s.hint)+'</p>':'')+(tags?'<div class="tags">'+tags+'</div>':'')+'<span class="go">Zum Produkt</span></div></a>';
   ol.appendChild(li);
   meta(p,function(m){fillImage(li.querySelector(".rimg"),m);li.querySelector(".name").textContent=m.name||"Produkt ansehen"});
  });
