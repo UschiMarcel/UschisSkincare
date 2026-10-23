@@ -26,7 +26,7 @@
 #sg .chip:hover{border-color:var(--moss)}
 #sg .chip[aria-pressed="true"]{background:var(--moss);border-color:var(--moss);color:#fff}
 #sg .tab:focus-visible,#sg .chip:focus-visible,#sg .btn:focus-visible,#sg a:focus-visible{outline:2px solid var(--moss);outline-offset:3px}
-#sg .tip{background:var(--blush);border-radius:20px;padding:20px 24px;max-width:62ch;margin:6px 0 40px;font-size:14px}
+#sg .tip{background:rgba(88,101,79,.1);border-radius:20px;padding:20px 24px;max-width:62ch;margin:6px 0 40px;font-size:14px}
 #sg .tip b{font-weight:600;font-size:16px;display:block;margin-bottom:2px}
 #sg .sum{max-width:62ch;font-size:14px;color:var(--soft);margin:0 0 28px}
 #sg .sum b{color:var(--ink);font-weight:500}
@@ -254,14 +254,23 @@ function emptyHtml(){
  return '<p class="empty">'+(ERRORS.length?"Die Produktliste konnte nicht vollständig geladen werden.":"Es sind noch keine Produkte hinterlegt.")+'</p>';
 }
 
+var RET="Retinol / Anti-Aging";
+/* Override: Mit dem Thema "Anti Aging" gilt für den Retinol-Schritt der Hauttyp nicht als Ausschluss. */
+function typeFits(p){return selT==="alle"||!p.types||!p.types.length||p.types.indexOf(selT)>-1}
 function typeOk(p){
- return(selT==="alle"||!p.types||!p.types.length||p.types.indexOf(selT)>-1)&&(tab==="produkte"||ignoreLvl||!p.levels||p.levels.indexOf(selL)>-1);
+ return(typeFits(p)||(p.step===RET&&selC.indexOf("antiaging")>-1))&&(tab==="produkte"||ignoreLvl||!p.levels||p.levels.indexOf(selL)>-1);
 }
 /* Erfahrung wird nur abgefragt, wenn die Routine ein Produkt mit Erfahrungswert enthalten würde (egal welcher Stufe). */
 function levelRelevant(){
  ignoreLvl=true;
  try{return["am","pm"].some(function(t){return buildRows(t).some(function(r){return r.x.p.levels&&r.x.p.levels.length})})}
  finally{ignoreLvl=false}
+}
+/* Hinweistext, wenn wegen des Overrides ein Retinol-Produkt gezeigt wird, das für den Hauttyp eigentlich nicht vorgesehen ist. */
+function retDisclaimer(d){
+ if(selC.indexOf("antiaging")<0)return"";
+ var over=["am","pm"].some(function(k){return d[k].some(function(r){return r.s.k===RET&&!typeFits(r.x.p)})});
+ return over?"Dieses Retinol-Produkt ist für deinen Hauttyp eigentlich nicht vorgesehen. Hier ist Vorsicht geboten: Taste dich langsam heran, wende es anfangs nur selten an und halte gerne vorher mit mir Rücksprache.":"";
 }
 function hits(p){return selC.filter(function(c){return p.concerns&&p.concerns.indexOf(c)>-1})}
 
@@ -571,6 +580,7 @@ function saveText(area){
  var d=buildPlan().d;
  resolveBoth(d,function(){
   var t="Deine Skincare Routine\n"+selLine(d)+"\n";
+  var rdt=retDisclaimer(d);if(rdt)t+="Vorsicht: "+rdt+"\n";
   ["am","pm"].forEach(function(k){
    if(!d[k].length)return;
    t+="\n"+TIMES[k]+"\n";
@@ -628,6 +638,8 @@ function drawImage(area,d){
  y+=44;
  ctx.fillStyle=C.soft;ctx.font="400 20px "+F;
  y=wrapText(ctx,selLine(d),pad,y,W-2*pad,28,2);
+ var rdi=retDisclaimer(d);
+ if(rdi){ctx.fillStyle="#8a4b3d";ctx.font="400 18px "+F;y=wrapText(ctx,"Vorsicht: "+rdi,pad,y+14,W-2*pad,26,4)}
  ["am","pm"].forEach(function(k){
   var rows=d[k];if(!rows.length)return;
   y+=44;
@@ -725,6 +737,8 @@ function renderRoutine(out){
  var plan=buildPlan(),rows=plan.d[time],covered=[];
  ["am","pm"].forEach(function(k){plan.d[k].forEach(function(r){covered=covered.concat(r.x.hit)})});
  if(!rows.length){var e=document.createElement("p");e.className="empty";e.textContent="Für diese Auswahl gibt es noch keine Produkte. Probiere einen anderen Hauttyp oder andere Themen.";wrap.appendChild(e);out.appendChild(wrap);return}
+ var rd=retDisclaimer(plan.d);
+ if(rd){var rb=document.createElement("div");rb.className="warn";rb.style.margin="0 0 20px";rb.innerHTML="<b>Vorsicht:</b> "+esc(rd);wrap.insertBefore(rb,wrap.children[1]||null)}
  if(selC.length){
   var miss=selC.filter(function(c){return covered.indexOf(c)<0}).map(function(c){return CONCERNS[c]});
   var ok=selC.filter(function(c){return covered.indexOf(c)>-1}).map(function(c){return CONCERNS[c]});
