@@ -33,6 +33,9 @@
 #sg[data-theme="dark"] .lvl{background:#1d2c38;color:#9cc7e6}
 #sg[data-theme="dark"] .warn{border-left-color:#c97a63}
 #sg[data-theme="dark"] .tip{background:rgba(127,150,110,.14)}
+/* Im Darkmode bekommen Produktfotos eine helle Fläche, weil der Multiply-Effekt dunkle Produkte unsichtbar machen würde. */
+#sg[data-theme="dark"] .img img,#sg[data-theme="dark"] .rimg img,#sg[data-theme="dark"] .aimg img{mix-blend-mode:normal;filter:none}
+#sg[data-theme="dark"] .img img,#sg[data-theme="dark"] .rimg img,#sg[data-theme="dark"] .aimg img{background:#f1f2ed;border-radius:12px;padding:6px}
 #sg[data-theme="dark"] .rowlink>.num{color:rgba(233,236,230,.16)}
 #sg .chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px}
 #sg .chip{font:inherit;font-size:14px;padding:9px 18px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;transition:background .2s,color .2s,border-color .2s}
@@ -71,6 +74,16 @@
 #sg .warn{margin:0}
 #sg .extra{margin:-6px 0 24px 116px;max-width:56ch}
 #sg .extra[hidden]{display:none}
+#sg .altmenu{margin:-8px 0 22px 116px;max-width:56ch;font-size:13px}
+#sg .altmenu[hidden]{display:none}
+#sg .altmenu summary{cursor:pointer;color:var(--soft);font-size:13px;list-style:none;display:inline-flex;align-items:center;gap:6px}
+#sg .altmenu summary::-webkit-details-marker{display:none}
+#sg .altmenu summary::after{content:"+";font-size:15px;line-height:1}
+#sg .altmenu[open] summary::after{content:"\2212"}
+#sg .altmenu summary:hover{color:var(--ink)}
+#sg .altmenu .altlist{display:flex;flex-direction:column;gap:2px;margin-top:4px}
+#sg .altmenu .altlink{margin-top:8px}
+#sg .altmenu .aprice{display:block;font-size:12px;color:var(--soft)}
 #sg .altlink{display:flex;align-items:center;gap:12px;margin-top:12px;text-decoration:none;color:inherit}
 #sg .aimg{width:44px;flex:none;display:block}
 #sg .aimg img{display:block;width:100%;height:auto;max-height:55px;object-fit:contain;mix-blend-mode:multiply;filter:brightness(1.05) contrast(1.02)}
@@ -116,7 +129,7 @@
 #sg .preview img{width:100%;display:block;border-radius:12px;border:1px solid var(--line)}
 #sg .preview a{display:inline-block;margin-top:10px;font-size:14px;color:var(--ink)}
 #sg .copybox{width:100%;max-width:560px;height:170px;font:inherit;font-size:13px;margin-top:12px;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
-@media (max-width:520px){#sg .rimg img{max-height:95px}#sg .extra{margin-left:90px}#sg .rowlink{grid-template-columns:76px 1fr;gap:6px 14px}#sg .rowlink>.num{left:38px;font-size:110px}}
+@media (max-width:520px){#sg .rimg img{max-height:95px}#sg .extra{margin-left:90px}#sg .altmenu{margin-left:90px}#sg .rowlink{grid-template-columns:76px 1fr;gap:6px 14px}#sg .rowlink>.num{left:38px;font-size:110px}}
 @media (prefers-reduced-motion:reduce){#sg *{transition:none!important}}
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Archivo:wdth,wght@125,800&display=swap">
@@ -268,7 +281,7 @@ function emptyHtml(){
  return '<p class="empty">'+(ERRORS.length?"Die Produktliste konnte nicht vollständig geladen werden.":"Es sind noch keine Produkte hinterlegt.")+'</p>';
 }
 
-var RET="Retinol / Anti-Aging",DROPPED=[];
+var RET="Retinol / Anti-Aging",DROPPED=[],CURPLAN=null;
 /* Override: Mit dem Thema "Anti Aging" gilt für den Retinol-Schritt der Hauttyp nicht als Ausschluss. */
 function typeFits(p){return selT==="alle"||!p.types||!p.types.length||p.types.indexOf(selT)>-1}
 function typeOk(p){
@@ -410,6 +423,25 @@ function altFor(rows,i){
  });
  pool.sort(function(a,b){return hits(b).length-hits(a).length});
  return pool[0]||null;
+}
+/* Alternativen im Menü: gleicher Schritt, passt zu Hauttyp, Tageszeit und Themen, ähnliche Preisklasse (oder leicht darüber/darunter). */
+function similarAlts(rows,i){
+ var r=rows[i],p=r.x.p,used={},others=rows.filter(function(o,j){return j!==i}),exp=lvlRel&&selL==="experte";
+ ["am","pm"].forEach(function(k){(CURPLAN?CURPLAN[k]:rows).forEach(function(o){used[o.x.p.url]=1})});
+ var sd=STEPS.filter(function(x){return x.k===p.step})[0]||{};
+ var pool=PRODUCTS.filter(function(q){
+  if(q.step!==p.step||q.url===p.url||used[q.url]||!typeOk(q)||(q.when&&q.when.indexOf(r.t)<0))return false;
+  if(!exp&&others.some(function(o){return clash(q,o.x.p)}))return false;
+  if(sd.allHits&&!((q.concerns||[]).length&&q.concerns.every(function(c){return selC.indexOf(c)>-1})))return false;
+  if(selC.length&&!sd.base&&hits(q).length===0)return false;
+  if(p.price!=null&&q.price!=null&&Math.abs(q.price-p.price)>Math.max(3,p.price*0.5))return false;
+  return true;
+ });
+ pool.sort(function(a,b){
+  var d=hits(b).length-hits(a).length;if(d)return d;
+  return(a.price==null||p.price==null?9999:Math.abs(a.price-p.price))-(b.price==null||p.price==null?9999:Math.abs(b.price-p.price));
+ });
+ return pool.slice(0,4);
 }
 function warnText(names){
  return "Dieses Produkt ist in der Anwendung mit "+names.map(function(n){return"'"+n+"'"}).join(" und ")+" nicht empfehlenswert, da es die Haut stark strapazieren könnte. Halte hier gerne einmal mit mir Rücksprache :)";
@@ -754,6 +786,7 @@ function renderRoutine(out){
  });
  wrap.appendChild(tg);
  var plan=buildPlan(),rows=plan.d[time],covered=[];
+ CURPLAN=plan.d;
  DROPPED=Object.keys(plan.info.moves).map(function(k){return plan.info.moves[k]}).filter(function(m){return!m.now}).map(function(m){return m.orig.step});
  ["am","pm"].forEach(function(k){plan.d[k].forEach(function(r){covered=covered.concat(r.x.hit)})});
  if(!rows.length){var e=document.createElement("p");e.className="empty";e.textContent="Für diese Auswahl gibt es noch keine Produkte. Probiere einen anderen Hauttyp oder andere Themen.";wrap.appendChild(e);out.appendChild(wrap);return}
@@ -779,9 +812,21 @@ function renderRoutine(out){
  rows.forEach(function(r,i){
   var p=r.x.p,li=document.createElement("li");li.className="row";
   var tags=r.x.hit.map(function(c){return '<span class="tag">'+esc(CONCERNS[c])+'</span>'}).join("");
-  li.innerHTML='<a class="rowlink" href="'+esc(p.url)+'" target="_blank" rel="noopener sponsored"><div class="num">'+(i+1)+'</div><div class="rimg"><span>Bild wird geladen</span></div><div><div class="step">'+esc(r.s.k)+'</div><p class="name">'+esc(p.name||"")+'</p><p class="note">'+esc(p.note)+'</p>'+(p.info?infoHtml(p.info):'')+(r.s.hint?infoHtml(r.s.hint):'')+(tags?'<div class="tags">'+tags+'</div>':'')+'<span class="go">Zum Produkt</span>'+priceHtml(p)+'</div></a><div class="extra" hidden><p class="warn"></p><div class="alt"></div></div>';
+  li.innerHTML='<a class="rowlink" href="'+esc(p.url)+'" target="_blank" rel="noopener sponsored"><div class="num">'+(i+1)+'</div><div class="rimg"><span>Bild wird geladen</span></div><div><div class="step">'+esc(r.s.k)+'</div><p class="name">'+esc(p.name||"")+'</p><p class="note">'+esc(p.note)+'</p>'+(p.info?infoHtml(p.info):'')+(r.s.hint?infoHtml(r.s.hint):'')+(tags?'<div class="tags">'+tags+'</div>':'')+'<span class="go">Zum Produkt</span>'+priceHtml(p)+'</div></a><div class="extra" hidden><p class="warn"></p><div class="alt"></div></div><details class="altmenu" hidden><summary></summary><div class="altlist"></div></details>';
   ol.appendChild(li);
   meta(p,function(m){fillImage(li.querySelector(".rimg"),m);li.querySelector(".name").textContent=m.name||"Produkt ansehen"});
+  var sim=similarAlts(rows,i);
+  if(sim.length){
+   var am=li.querySelector(".altmenu");am.hidden=false;
+   am.querySelector("summary").textContent="Alternativen ("+sim.length+")";
+   var lst=am.querySelector(".altlist");
+   sim.forEach(function(q){
+    var a=document.createElement("a");a.className="altlink";a.href=q.url;a.target="_blank";a.rel="noopener sponsored";
+    a.innerHTML='<span class="aimg"><span>…</span></span><span><span class="aname"></span>'+(q.price!=null?'<span class="aprice">'+priceText(q).trim().replace(/^\(|\)$/g,"")+'</span>':"")+'</span>';
+    lst.appendChild(a);
+    meta(q,function(m){fillImage(a.querySelector(".aimg"),m);a.querySelector(".aname").textContent=m.name||"Produkt ansehen"});
+   });
+  }
   var others=conflictRows(rows,i);
   if(others.length){
    var ex=li.querySelector(".extra"),w=li.querySelector(".warn"),names=[],n=0,ap=altFor(rows,i);
