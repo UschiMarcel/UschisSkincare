@@ -676,6 +676,13 @@ function drawImage(area,d){
     if(r.alt)we=wrapText(ctx,"Alternative: "+r.alt.name,tx,we,maxW,24,2);
     bottom=we-24+6;
    }
+   /* Schreiblinie für handschriftliche Anwendungshinweise */
+   var wy=bottom+50;
+   ctx.fillStyle=C.soft;ctx.font="400 16px "+F;ctx.fillText("Anwendung:",tx,wy);
+   var lx=tx+ctx.measureText("Anwendung:").width+12;
+   ctx.strokeStyle=C.soft;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(lx,wy+3);ctx.lineTo(W-pad,wy+3);ctx.stroke();
+   ctx.lineWidth=1.5;
+   bottom=wy+3;
    y=bottom+30;
    ctx.strokeStyle=C.line;ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(W-pad,y);ctx.stroke();
    y+=32;
