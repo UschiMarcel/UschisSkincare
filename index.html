@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Uschi's Skincare-Guide</title>
+<title>Skincare Guide</title>
 <style>html,body{margin:0;background:#eceee9}</style>
 </head>
 <body>
@@ -81,7 +81,10 @@
 #sg .blabels{display:flex;justify-content:space-between;font-size:12px;color:var(--soft)}
 #sg .chips[hidden]{display:none}
 #sg .tag.on{background:var(--moss);color:#fff}
-#sg .tag.lv{font-size:10.5px;padding:2px 9px}
+#sg .card .step{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+#sg .lvl{font-size:11px;line-height:1.4;padding:2px 9px;border-radius:999px;background:#dcebf5;color:#2f5671}
+#sg .card .tag{background:transparent;border:1px solid var(--line)}
+#sg .card .tag.on{background:var(--moss);border-color:var(--moss);color:#fff}
 #sg .tags{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
 #sg .tag{font-size:12px;padding:3px 11px;border-radius:999px;background:var(--blush)}
 /* Speichern */
@@ -99,8 +102,8 @@
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap">
 
-<h2>Uschi's Skincare-Guide</h2>
-<p class="intro">Ich hab da wat janz spezielles für dich vorbereitet: Stelle dir aus meinen lieblings Produkten deine eigene Routine zusammen. Wähle deinen Hauttyp und ein oder mehrere Themen.</p>
+<h2>Skincare Guide</h2>
+<p class="intro">Stelle dir aus meinen Produkten deine eigene Routine zusammen. Wähle deinen Hauttyp und ein oder mehrere Themen.</p>
 
 <div class="tabs" role="tablist" id="sg-tabs"></div>
 
@@ -664,11 +667,13 @@ function drawImage(area,d){
 }
 
 /* Tags eines Produkts (Reiter "Alle Produkte"): gewählte Filter sind hervorgehoben, die Erfahrung steht klein dahinter */
+function lvlHtml(p){
+ return(p.levels||[]).map(function(k){return'<span class="lvl" title="Empfohlene Erfahrung">'+esc(LEVELS[k])+'</span>'}).join("");
+}
 function cardTags(p){
  var h="";
  (p.types||[]).forEach(function(k){h+='<span class="tag'+(k===selT?' on':'')+'">'+esc(TYPES[k])+'</span>'});
  (p.concerns||[]).forEach(function(k){h+='<span class="tag'+(selC.indexOf(k)>-1?' on':'')+'">'+esc(CONCERNS[k])+'</span>'});
- (p.levels||[]).forEach(function(k){h+='<span class="tag lv" title="Empfohlene Erfahrung">'+esc(LEVELS[k])+'</span>'});
  return h?'<div class="tags">'+h+'</div>':'';
 }
 function infoHtml(t){
@@ -738,7 +743,7 @@ function renderProducts(out){
  var grid=document.createElement("div");grid.className="grid";
  list.forEach(function(p){
   var a=document.createElement("a");a.className="card";a.href=p.url;a.target="_blank";a.rel="noopener sponsored";
-  a.innerHTML='<div class="img"><span>Bild wird geladen</span></div><div class="step">'+esc(p.step)+'</div><p class="name">'+esc(p.name||"")+'</p><p class="note">'+esc(p.note)+'</p>'+cardTags(p)+(p.info?infoHtml(p.info):'')+'<span class="go">Zum Produkt</span>'+priceHtml(p);
+  a.innerHTML='<div class="img"><span>Bild wird geladen</span></div><div class="step">'+esc(p.step)+lvlHtml(p)+'</div><p class="name">'+esc(p.name||"")+'</p><p class="note">'+esc(p.note)+'</p>'+cardTags(p)+(p.info?infoHtml(p.info):'')+'<span class="go">Zum Produkt</span>'+priceHtml(p);
   grid.appendChild(a);
   meta(p,function(m){fillImage(a.querySelector(".img"),m);a.querySelector(".name").textContent=m.name||"Produkt ansehen"});
  });
