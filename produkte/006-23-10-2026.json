@@ -1,15 +1,5 @@
 [
   {
-    "link": "https://www.rossmann.de/de/pflege-und-duft-isana-mildes-reinigungsoel/p/4305615941318",
-    "name": "Isana Mildes Reinigungsöl",
-    "schritt": "Reinigungs-Öle",
-    "beschreibung": "Mildes Reinigungsöl, das Make-up und Sonnenschutz löst. Ideal als erster Reinigungsschritt am Abend.",
-    "tags": ["trocken", "normal", "mischhaut", "feuchtigkeit", "makeup"],
-    "zeit": "abends",
-    "bild": "https://www.rossmann.de/media-neu/174/MAM_17470791/MAM_17470791_SHOP_IMAGE_2.0.png",
-    "preis": "2,49"
-  },
-  {
     "link": "https://www.dm.de/p/d/1332013/balea-reinigungscreme-beauty-expert-cleansing-balm",
     "name": "Balea Reinigungscreme Beauty Expert Cleansing Balm",
     "schritt": "Reinigungs-Öle",
@@ -18,7 +8,7 @@
     "zeit": "abends",
     "bild": "https://products.dm-static.com/images/f_auto,q_auto,c_fit,h_1200,w_1200/v1770425266/assets/pas/images/09bf2b3c-a9f5-4a89-a92c-379065b0a316/balea-reinigungscreme-beauty-expert-cleansing-balm",
     "preis": "4,95"
-  },
+  }, 
   {
     "link": "https://www.dm.de/p/d/1437541/balea-reinigungsoel-mit-arganoel",
     "name": "Balea Reinigungsöl mit Arganöl",
