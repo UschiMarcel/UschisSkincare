@@ -26,7 +26,7 @@
   },
   {
     "link": "https://www.dm.de/p/d/1630606/balea-peeling-cleanser-beauty-expert",
-    "bild": "https://products.dm-static.com/images/f_auto,q_auto,c_fit,h_1200,w_1200/v1749776770/assets/pas/images/45f29851-a307-42e9-a074-a38d35811c26/balea-peeling-toner-beauty-expert"
+    "bild": "https://products.dm-static.com/images/f_auto,q_auto,c_fit,h_1200,w_1200/v1749776770/assets/pas/images/45f29851-a307-42e9-a074-a38d35811c26/balea-peeling-toner-beauty-expert",
     "name": "Balea Peeling Cleanser Beauty Expert",
     "schritt": "Reinigung",
     "beschreibung": "Reinigung mit Peeling-Effekt für ein klareres, glatteres Hautbild.",
@@ -91,6 +91,7 @@
     "link": "https://www.dm.de/p/d/1306163/geek-und-gorgeous-gesichtsserum-101-c-glow-15-prozent-vitamin-c",
     "name": "Geek & Gorgeous C-Glow 15 % Vitamin C Gesichtsserum",
     "schritt": "Serum",
+    "hinweis": "Am besten im Kühlschrank lagern, dann bleibt das Vitamin C länger wirksam.",
     "beschreibung": "Vitamin-C-Serum für mehr Ausstrahlung und einen ebenmäßigeren Teint. Arbeitet Ebenfalls gegen Pigmentflechen und der Verminderung sichtbarer Poren",
     "tags": [
       "normal",
@@ -108,7 +109,7 @@
   },
   {
     "link": "https://www.dm.de/p/d/1306173/geek-und-gorgeous-gesichtsserum-101-a-game-5-0-05-prozent-retinal",
-    "bild": "https://products.dm-static.com/images/f_auto,q_auto,c_fit,h_1200,w_1200/v1791414217/assets/pas/images/a40a7000-06b6-479c-815c-35685db71519/geek-und-gorgeous-gesichtsserum-101-a-game-5-0-05-prozent-retinal"
+    "bild": "https://products.dm-static.com/images/f_auto,q_auto,c_fit,h_1200,w_1200/v1791414217/assets/pas/images/a40a7000-06b6-479c-815c-35685db71519/geek-und-gorgeous-gesichtsserum-101-a-game-5-0-05-prozent-retinal",
     "name": "Geek & Gorgeous A-Game 0,05 % Retinal Gesichtsserum",
     "schritt": "Retinol / Anti-Aging",
     "beschreibung": "Retinal-Serum in der niedrigsten der drei Stärken, passend für den Einstieg.",
@@ -139,7 +140,7 @@
   },
   {
     "link": "https://www.dm.de/p/d/2978218/geek-und-gorgeous-gesichtsserum-101-a-game-20-0-2-prozent-retinal",
-    "bild": "https://products.dm-static.com/images/f_auto,q_auto,c_fit,h_1200,w_1200/v1791413288/assets/pas/images/8e8a1ae1-6e18-475e-b95f-be514f56096a/geek-und-gorgeous-gesichtsserum-101-a-game-20-0-2-prozent-retinal"
+    "bild": "https://products.dm-static.com/images/f_auto,q_auto,c_fit,h_1200,w_1200/v1791413288/assets/pas/images/8e8a1ae1-6e18-475e-b95f-be514f56096a/geek-und-gorgeous-gesichtsserum-101-a-game-20-0-2-prozent-retinal",
     "name": "Geek & Gorgeous A-Game 0,2 % Retinal Gesichtsserum",
     "schritt": "Retinol / Anti-Aging",
     "beschreibung": "Retinal-Serum in der höchsten der drei Stärken für erfahrene Anwender.",
@@ -171,7 +172,7 @@
   },
   {
     "link": "https://www.dm.de/p/d/3131974/geek-und-gorgeous-gesichtscreme-sonnenschutz-101-zero-feel-lsf-50",
-    "bild": "https://products.dm-static.com/images/f_auto,q_auto,c_fit,h_1200,w_1200/v1791325886/assets/pas/images/7aa3f2a9-6252-4480-88d6-dd712acf4dd5/geek-und-gorgeous-gesichtscreme-sonnenschutz-101-zero-feel-lsf-50"
+    "bild": "https://products.dm-static.com/images/f_auto,q_auto,c_fit,h_1200,w_1200/v1791325886/assets/pas/images/7aa3f2a9-6252-4480-88d6-dd712acf4dd5/geek-und-gorgeous-gesichtscreme-sonnenschutz-101-zero-feel-lsf-50",
     "name": "Geek & Gorgeous Zero Feel Gesichtscreme Sonnenschutz LSF 50",
     "schritt": "Sonnenschutz",
     "beschreibung": "Leichter Sonnenschutz mit LSF 50, den man auf der Haut kaum spürt.",
@@ -192,7 +193,7 @@
   },
   {
     "link": "https://www.shop-apotheke.com/arzneimittel/2137594/cordes-vas-creme.htm",
-    "bild": "https://cdn.shop-apotheke.com/images/650x0/D02/137/594/D02137594-p10.webp"
+    "bild": "https://cdn.shop-apotheke.com/images/650x0/D02/137/594/D02137594-p10.webp",
     "name": "Cordes VAS Creme",
     "schritt": "Retinol / Anti-Aging",
     "beschreibung": "Verschreibungspflichtiges Arzneimittel. Nur nach ärztlicher Beratung. Das ist die ultimative Endstufe was Retinol und Anti-Aging angeht.",
