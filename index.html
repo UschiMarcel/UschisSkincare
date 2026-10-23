@@ -13,7 +13,8 @@
   font-family:'Montserrat',system-ui,sans-serif;color:var(--ink);background:var(--bg);padding:clamp(20px,6vw,88px);max-width:1040px;margin:0 auto;box-sizing:border-box;line-height:1.55}
 #sg *{box-sizing:border-box}
 #sg h2{font-weight:300;font-size:clamp(30px,5vw,54px);line-height:1.1;margin:0 0 16px;letter-spacing:-.02em}
-#sg .intro{max-width:50ch;color:var(--soft);margin:0 0 32px;font-size:15px}
+#sg .intro b{color:var(--ink);font-weight:600}
+#sg .intro{max-width:72ch;color:var(--soft);margin:0 0 32px;font-size:15px}
 #sg h3{font-weight:500;font-size:17px;margin:0 0 12px}
 #sg h3 small{font-weight:400;font-size:13px;color:var(--soft);margin-left:8px}
 #sg .tabs{display:flex;gap:30px;border-bottom:1px solid var(--line);margin:0 0 32px}
@@ -103,7 +104,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap">
 
 <h2>Uschi's Skincare Guide</h2>
-<p class="intro">Ich hab hier wat janz Spezielles. Nur für dich &lt;3</p>
+<p class="intro"><b>Ich hab hier wat janz Spezielles. Nur für dich &lt;3</b><br>Garantiert ohne L'Oréal, Neutrogena und ähnliche große Kosmetikhäuser</p>
 
 <div class="tabs" role="tablist" id="sg-tabs"></div>
 
@@ -140,7 +141,7 @@ var TIPS={
  fettig:["Fettige Haut","Leichte Gel-Texturen und ein sanfter Wirkstoff wie Niacinamid halten den Glanz im Zaum."],
  mischhaut:["Mischhaut","Pflege die T-Zone leicht und die Wangen etwas reichhaltiger."],
  empfindlich:["Empfindliche Haut","Wenige Produkte, keine Duftstoffe, neue Dinge einzeln und langsam einführen."],
- normal:["Normale Haut","Du hast viel Spielraum: Konzentriere dich auf Sonnenschutz und ein Serum für dein Thema."]
+ normal:["Normale Haut","Du hast viel Spielraum. Konzentriere dich auf Sonnenschutz und ein Serum für dein Thema."]
 };
 var TABS={routine:"Deine Routine",produkte:"Alle Produkte"};
 var TIMES={am:"Morgens",pm:"Abends"};
@@ -663,7 +664,7 @@ function drawImage(area,d){
  var out=document.createElement("canvas");out.width=W;out.height=H;
  out.getContext("2d").drawImage(cv,0,0);
  var url=out.toDataURL("image/png");
- area.innerHTML='<p class="savemsg">Deine Routine als Bild. Am Handy das Bild gedrückt halten und speichern, am Computer rechte Maustaste oder der Link darunter.</p><div class="preview"><img alt="Deine Skincare Routine" src="'+url+'"><a href="'+url+'" download="skincare-routine.png">Bild herunterladen</a></div>';
+ area.innerHTML='<p class="savemsg">Deine Routine als Bild. Am Handy hältst du das Bild gedrückt und speicherst es, am Computer nutzt du die rechte Maustaste oder den Link darunter.</p><div class="preview"><img alt="Deine Skincare Routine" src="'+url+'"><a href="'+url+'" download="skincare-routine.png">Bild herunterladen</a></div>';
 }
 
 /* Tags eines Produkts (Reiter "Alle Produkte"): gewählte Filter sind hervorgehoben, die Erfahrung steht klein dahinter */
