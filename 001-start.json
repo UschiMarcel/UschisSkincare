@@ -1,0 +1,106 @@
+[
+  {
+    "link": "https://www.example.com/produkt-1",
+    "name": "Beispiel: Reinigungsgel",
+    "schritt": "Reinigung",
+    "beschreibung": "Sanftes Gel, das überschüssigen Talg löst.",
+    "tags": [
+      "fettig",
+      "mischhaut",
+      "akne",
+      "poren"
+    ]
+  },
+  {
+    "link": "https://www.example.com/produkt-2",
+    "name": "Beispiel: Milde Reinigungsmilch",
+    "schritt": "Reinigung",
+    "beschreibung": "Cremige Reinigung ohne Duftstoffe.",
+    "tags": [
+      "trocken",
+      "empfindlich",
+      "normal",
+      "feuchtigkeit",
+      "roetungen"
+    ]
+  },
+  {
+    "link": "https://www.example.com/produkt-3",
+    "name": "Beispiel: Klärender Toner",
+    "schritt": "Toner",
+    "beschreibung": "Mit sanften Säuren für ein klareres Hautbild.",
+    "tags": [
+      "poren",
+      "akne"
+    ]
+  },
+  {
+    "link": "https://www.example.com/produkt-4",
+    "name": "Beispiel: Hyaluron-Serum",
+    "schritt": "Serum",
+    "beschreibung": "Hyaluron für ein praller wirkendes Hautbild.",
+    "tags": [
+      "trocken",
+      "normal",
+      "mischhaut",
+      "feuchtigkeit",
+      "falten"
+    ]
+  },
+  {
+    "link": "https://www.example.com/produkt-5",
+    "name": "Beispiel: Niacinamid-Serum",
+    "schritt": "Serum",
+    "beschreibung": "Niacinamid für ebenmäßigere Haut.",
+    "tags": [
+      "pigment",
+      "poren"
+    ]
+  },
+  {
+    "link": "https://www.example.com/produkt-6",
+    "name": "Beispiel: Beruhigendes Serum",
+    "schritt": "Serum",
+    "beschreibung": "Beruhigt gereizte Stellen.",
+    "tags": [
+      "empfindlich",
+      "normal",
+      "roetungen"
+    ]
+  },
+  {
+    "link": "https://www.example.com/produkt-7",
+    "name": "Beispiel: Beruhigende Creme",
+    "schritt": "Creme",
+    "beschreibung": "Reichhaltig, ohne Duftstoffe.",
+    "tags": [
+      "trocken",
+      "empfindlich",
+      "normal",
+      "roetungen",
+      "feuchtigkeit"
+    ]
+  },
+  {
+    "link": "https://www.example.com/produkt-8",
+    "name": "Beispiel: Gel-Creme",
+    "schritt": "Creme",
+    "beschreibung": "Leichtes Gel, zieht schnell ein.",
+    "tags": [
+      "fettig",
+      "mischhaut",
+      "akne",
+      "poren"
+    ]
+  },
+  {
+    "link": "https://www.example.com/produkt-9",
+    "name": "Beispiel: Sonnenfluid LSF 50",
+    "schritt": "Sonnenschutz",
+    "beschreibung": "Täglich getragen, der wichtigste Anti-Aging-Schritt.",
+    "tags": [
+      "pigment",
+      "falten"
+    ]
+  }
+]
