@@ -7,8 +7,8 @@
     "tags": [
       "normal",
       "mischhaut",
-      "fettig",
-      "poren"
+      "roetungen",
+      "trocken"
     ]
   },
   {
@@ -34,9 +34,9 @@
       "mischhaut",
       "fettig",
       "poren",
-      "akne"
+      "akne",
+      "falten"
     ],
-    "zeit": "abends",
     "konflikt": [
       "Retinol / Anti-Aging"
     ]
@@ -58,13 +58,14 @@
     "link": "https://www.dm.de/p/d/1306226/geek-und-gorgeous-toner-101-liquid-hydration",
     "name": "Geek & Gorgeous Liquid Hydration Toner",
     "schritt": "Toner",
-    "beschreibung": "Toner, der Feuchtigkeit gibt und die Haut auf die Pflege danach vorbereitet.",
+    "beschreibung": "Toner, der Feuchtigkeit gibt und die Haut auf die Pflege danach vorbereitet. Eine super alternative zu Cremen bei stark fettender Haut.",
     "tags": [
       "trocken",
       "normal",
       "mischhaut",
       "empfindlich",
-      "feuchtigkeit"
+      "feuchtigkeit",
+      "fettig"
     ]
   },
   {
@@ -89,16 +90,19 @@
     "link": "https://www.dm.de/p/d/1306163/geek-und-gorgeous-gesichtsserum-101-c-glow-15-prozent-vitamin-c",
     "name": "Geek & Gorgeous C-Glow 15 % Vitamin C Gesichtsserum",
     "schritt": "Serum",
-    "beschreibung": "Vitamin-C-Serum für mehr Ausstrahlung und einen ebenmäßigeren Teint.",
+    "beschreibung": "Vitamin-C-Serum für mehr Ausstrahlung und einen ebenmäßigeren Teint. Arbeitet Ebenfalls gegen Pigmentflechen und der Verminderung sichtbarer Poren",
     "tags": [
       "normal",
       "mischhaut",
       "fettig",
       "trocken",
       "pigment",
+      "poren",
       "falten"
     ],
     "zeit": "morgens"
+     "konflikt": [
+      "Retinol / Anti-Aging"
   },
   {
     "link": "https://www.dm.de/p/d/1306173/geek-und-gorgeous-gesichtsserum-101-a-game-5-0-05-prozent-retinal",
@@ -182,11 +186,11 @@
     "link": "https://www.shop-apotheke.com/arzneimittel/2137594/cordes-vas-creme.htm",
     "name": "Cordes VAS Creme",
     "schritt": "Retinol / Anti-Aging",
-    "beschreibung": "Verschreibungspflichtiges Arzneimittel gegen entzündliche Akne. Nur nach ärztlicher Beratung.",
+    "beschreibung": "Verschreibungspflichtiges Arzneimittel. Nur nach ärztlicher Beratung. Das ist die ultimative Endstufe was Retinol und Anti-Aging angeht.",
     "tags": [
       "akne"
     ],
     "zeit": "abends",
-    "aktiv": false
+    "aktiv": true
   }
 ]
