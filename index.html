@@ -258,7 +258,7 @@ var RET="Retinol / Anti-Aging";
 /* Override: Mit dem Thema "Anti Aging" gilt für den Retinol-Schritt der Hauttyp nicht als Ausschluss. */
 function typeFits(p){return selT==="alle"||!p.types||!p.types.length||p.types.indexOf(selT)>-1}
 function typeOk(p){
- return(typeFits(p)||(p.step===RET&&selC.indexOf("antiaging")>-1))&&(tab==="produkte"||ignoreLvl||!p.levels||p.levels.indexOf(selL)>-1);
+ return(typeFits(p)||(p.step==="Reinigungs-Öle"&&selT==="empfindlich")||(p.step===RET&&selC.indexOf("antiaging")>-1))&&(tab==="produkte"||ignoreLvl||!p.levels||p.levels.indexOf(selL)>-1);
 }
 /* Erfahrung wird nur abgefragt, wenn die Routine ein Produkt mit Erfahrungswert enthalten würde (egal welcher Stufe). */
 function levelRelevant(){
