@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Skincare Guide</title>
+<style>html,body{margin:0;background:#eceee9}</style>
+</head>
+<body>
+<!-- SKINCARE GUIDE mit Routine-Builder · Block für Adobe Portfolio (HTML-Embed) -->
+<div id="sg">
+<style>
+#sg{--bg:#eceee9;--paper:#f8f8f5;--ink:#262a26;--soft:#6c736b;--moss:#58654f;--blush:#e6d6d0;--line:#d5d9d1;
+  font-family:'Montserrat',system-ui,sans-serif;color:var(--ink);background:var(--bg);padding:clamp(24px,5vw,64px);box-sizing:border-box;line-height:1.55}
+#sg *{box-sizing:border-box}
+#sg h2{font-weight:300;font-size:clamp(30px,5vw,54px);line-height:1.1;margin:0 0 16px;letter-spacing:-.02em}
+#sg .intro{max-width:50ch;color:var(--soft);margin:0 0 32px;font-size:15px}
+#sg h3{font-weight:500;font-size:17px;margin:0 0 12px}
+#sg h3 small{font-weight:400;font-size:13px;color:var(--soft);margin-left:8px}
+#sg .tabs{display:flex;gap:30px;border-bottom:1px solid var(--line);margin:0 0 32px}
+#sg .tab{font:inherit;font-size:16px;background:none;border:0;border-bottom:2px solid transparent;padding:12px 0;margin-bottom:-1px;color:var(--soft);cursor:pointer;transition:color .2s,border-color .2s}
+#sg .tab:hover{color:var(--ink)}
+#sg .tab[aria-selected="true"]{color:var(--ink);font-weight:500;border-bottom-color:var(--moss)}
+#sg .chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px}
+#sg .chip{font:inherit;font-size:14px;padding:9px 18px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+#sg .chip:hover{border-color:var(--moss)}
+#sg .chip[aria-pressed="true"]{background:var(--moss);border-color:var(--moss);color:#fff}
+#sg .tab:focus-visible,#sg .chip:focus-visible,#sg .btn:focus-visible,#sg a:focus-visible{outline:2px solid var(--moss);outline-offset:3px}
+#sg .tip{background:var(--blush);border-radius:20px;padding:20px 24px;max-width:62ch;margin:6px 0 40px;font-size:14px}
+#sg .tip b{font-weight:600;font-size:16px;display:block;margin-bottom:2px}
+#sg .sum{max-width:62ch;font-size:14px;color:var(--soft);margin:0 0 28px}
+#sg .sum b{color:var(--ink);font-weight:500}
+/* Produkte-Raster */
+#sg .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:28px 22px}
+#sg .card{display:flex;flex-direction:column;text-decoration:none;color:inherit}
+#sg .img{aspect-ratio:4/5;background:var(--paper);border-radius:200px 200px 16px 16px;overflow:hidden;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+#sg .img img{width:100%;height:100%;object-fit:contain;padding:12%;mix-blend-mode:multiply}
+#sg .img span{font-size:13px;color:var(--soft);padding:20px;text-align:center}
+#sg .step{font-size:13px;color:var(--moss);margin-bottom:2px}
+#sg .name{font-weight:500;font-size:16px;line-height:1.3;margin:0 0 6px}
+#sg .note{font-size:14px;color:var(--soft);margin:0 0 10px}
+#sg .go{font-size:14px;border-bottom:1px solid var(--ink);align-self:flex-start;padding-bottom:1px}
+#sg .empty{color:var(--soft);padding:30px 0}
+/* Routine */
+#sg .routine{list-style:none;margin:0;padding:0;max-width:760px}
+#sg .row{border-top:1px solid var(--line)}
+#sg .row:last-child{border-bottom:1px solid var(--line)}
+#sg .rowlink{display:grid;grid-template-columns:34px 96px 1fr;gap:6px 20px;align-items:center;padding:22px 0;text-decoration:none;color:inherit}
+#sg .num{width:34px;height:34px;border-radius:50%;background:var(--moss);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500}
+#sg .rimg{aspect-ratio:4/5;background:var(--paper);border-radius:96px 96px 10px 10px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+#sg .rimg img{width:100%;height:100%;object-fit:contain;padding:12%;mix-blend-mode:multiply}
+#sg .rimg span{font-size:11px;color:var(--soft);padding:8px;text-align:center}
+#sg .tags{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+#sg .tag{font-size:12px;padding:3px 11px;border-radius:999px;background:var(--blush)}
+/* Speichern */
+#sg .savebar{display:flex;flex-wrap:wrap;gap:10px;margin:32px 0 0}
+#sg .btn{font:inherit;font-size:14px;padding:11px 22px;border-radius:999px;border:1px solid var(--moss);background:var(--moss);color:#fff;cursor:pointer;transition:opacity .2s}
+#sg .btn:hover{opacity:.85}
+#sg .btn.ghost{background:transparent;color:var(--ink)}
+#sg .savemsg{font-size:13px;color:var(--soft);margin:14px 0 0;max-width:62ch}
+#sg .preview{margin-top:18px;max-width:420px}
+#sg .preview img{width:100%;display:block;border-radius:12px;border:1px solid var(--line)}
+#sg .preview a{display:inline-block;margin-top:10px;font-size:14px;color:var(--ink)}
+#sg .copybox{width:100%;max-width:560px;height:170px;font:inherit;font-size:13px;margin-top:12px;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+@media (max-width:520px){#sg .rowlink{grid-template-columns:30px 76px 1fr;gap:6px 14px}#sg .num{width:30px;height:30px}}
+@media (prefers-reduced-motion:reduce){#sg *{transition:none!important}}
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap">
+
+<h2>Skincare Guide</h2>
+<p class="intro">Stelle dir aus meinen Produkten deine eigene Routine zusammen. Wähle deinen Hauttyp und ein oder mehrere Themen.</p>
+
+<div class="tabs" role="tablist" id="sg-tabs"></div>
+
+<h3>Mein Hauttyp</h3>
+<div class="chips" id="sg-types"></div>
+<h3>Meine Themen<small>mehrere möglich</small></h3>
+<div class="chips" id="sg-concerns"></div>
+<div class="tip" id="sg-tip" hidden></div>
+<div id="sg-out"></div>
+
+<script>
+(function(){
+/* ============ HIER PRODUKTE EINTRAGEN ============
+   Pro Produkt eine Zeile. Nur "url" ist Pflicht – Bild und Name holt sich der Guide selbst.
+   step:     Reinigung | Toner | Serum | Creme | Sonnenschutz   (genau so schreiben)
+   types:    trocken | fettig | mischhaut | empfindlich | normal   (leer = für alle)
+   concerns: akne | roetungen | falten | pigment | poren | feuchtigkeit
+   Optional: name:"…" und img:"https://…" überschreiben die automatischen Werte. */
+var PRODUCTS=[
+ {url:"https://www.example.com/produkt-1",step:"Reinigung",types:["fettig","mischhaut"],concerns:["akne","poren"],note:"Sanftes Gel, das überschüssigen Talg löst.",name:"Beispiel: Reinigungsgel"},
+ {url:"https://www.example.com/produkt-2",step:"Reinigung",types:["trocken","empfindlich","normal"],concerns:["feuchtigkeit","roetungen"],note:"Cremige Reinigung ohne Duftstoffe.",name:"Beispiel: Milde Reinigungsmilch"},
+ {url:"https://www.example.com/produkt-3",step:"Toner",types:[],concerns:["poren","akne"],note:"Mit sanften Säuren für ein klareres Hautbild.",name:"Beispiel: Klärender Toner"},
+ {url:"https://www.example.com/produkt-4",step:"Serum",types:["trocken","normal","mischhaut"],concerns:["feuchtigkeit","falten"],note:"Hyaluron für ein praller wirkendes Hautbild.",name:"Beispiel: Hyaluron-Serum"},
+ {url:"https://www.example.com/produkt-5",step:"Serum",types:[],concerns:["pigment","poren"],note:"Niacinamid für ebenmäßigere Haut.",name:"Beispiel: Niacinamid-Serum"},
+ {url:"https://www.example.com/produkt-6",step:"Serum",types:["empfindlich","normal"],concerns:["roetungen"],note:"Beruhigt gereizte Stellen.",name:"Beispiel: Beruhigendes Serum"},
+ {url:"https://www.example.com/produkt-7",step:"Creme",types:["trocken","empfindlich","normal"],concerns:["roetungen","feuchtigkeit"],note:"Reichhaltig, ohne Duftstoffe.",name:"Beispiel: Beruhigende Creme"},
+ {url:"https://www.example.com/produkt-8",step:"Creme",types:["fettig","mischhaut"],concerns:["akne","poren"],note:"Leichtes Gel, zieht schnell ein.",name:"Beispiel: Gel-Creme"},
+ {url:"https://www.example.com/produkt-9",step:"Sonnenschutz",types:[],concerns:["pigment","falten"],note:"Täglich getragen, der wichtigste Anti-Aging-Schritt.",name:"Beispiel: Sonnenfluid LSF 50"}
+];
+/* Reihenfolge der Routine. base:true = Basis-Schritt, kommt immer vor. when = morgens/abends, max = Produkte pro Schritt. */
+var STEPS=[
+ {k:"Reinigung",base:true,when:["am","pm"],max:1},
+ {k:"Toner",when:["am","pm"],max:1},
+ {k:"Serum",when:["am","pm"],max:2},
+ {k:"Creme",base:true,when:["am","pm"],max:1},
+ {k:"Sonnenschutz",base:true,when:["am"],max:1}
+];
+var TYPES={alle:"Alle",trocken:"Trocken",fettig:"Fettig",mischhaut:"Mischhaut",empfindlich:"Empfindlich",normal:"Normal"};
+var CONCERNS={akne:"Unreinheiten",roetungen:"Rötungen",falten:"Feine Linien",pigment:"Pigmentflecken",poren:"Große Poren",feuchtigkeit:"Feuchtigkeit"};
+var TIPS={
+ trocken:["Trockene Haut","Setze auf milde Reinigung und reichhaltige Cremes mit Lipiden und Hyaluron."],
+ fettig:["Fettige Haut","Leichte Gel-Texturen und ein sanfter Wirkstoff wie Niacinamid halten den Glanz im Zaum."],
+ mischhaut:["Mischhaut","Pflege die T-Zone leicht und die Wangen etwas reichhaltiger."],
+ empfindlich:["Empfindliche Haut","Wenige Produkte, keine Duftstoffe, neue Dinge einzeln und langsam einführen."],
+ normal:["Normale Haut","Du hast viel Spielraum: Konzentriere dich auf Sonnenschutz und ein Serum für dein Thema."]
+};
+var TABS={routine:"Meine Routine",produkte:"Alle Produkte"};
+var TIMES={am:"Morgens",pm:"Abends"};
+var tab="routine",selT="alle",selC=[],time="am",CACHE={};
+try{CACHE=JSON.parse(localStorage.getItem("sg-meta")||"{}")}catch(e){}
+/* letzte Auswahl dieses Besuchers wiederherstellen */
+try{var S=JSON.parse(localStorage.getItem("sg-sel")||"{}");
+ if(S.t&&TYPES[S.t])selT=S.t;
+ if(S.c&&S.c.filter)selC=S.c.filter(function(c){return CONCERNS[c]});
+ if(S.m&&TIMES[S.m])time=S.m}catch(e){}
+function save(){try{localStorage.setItem("sg-meta",JSON.stringify(CACHE))}catch(e){}}
+function esc(s){return String(s||"").replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function $(id){return document.getElementById(id)}
+
+function typeOk(p){return selT==="alle"||!p.types||!p.types.length||p.types.indexOf(selT)>-1}
+function hits(p){return selC.filter(function(c){return p.concerns&&p.concerns.indexOf(c)>-1})}
+
+/* Bild + Titel automatisch über microlink.io */
+function meta(p,done){
+ if(p.img&&p.name)return done({img:p.img,name:p.name});
+ var m=CACHE[p.url];
+ if(m)return done({img:p.img||m.img,name:p.name||m.name});
+ fetch("https://api.microlink.io/?url="+encodeURIComponent(p.url))
+  .then(function(r){return r.json()})
+  .then(function(j){
+   var d=(j&&j.data)||{};
+   var m={img:d.image&&d.image.url||"",name:d.title||""};
+   if(m.img||m.name){CACHE[p.url]=m;save()}
+   done({img:p.img||m.img,name:p.name||m.name});
+  })
+  .catch(function(){done({img:p.img||"",name:p.name||""})});
+}
+function fillImage(box,m){
+ if(m.img){box.innerHTML='<img alt="'+esc(m.name)+'" src="'+esc(m.img)+'" loading="lazy">';
+  box.querySelector("img").onerror=function(){box.innerHTML="<span>"+esc(m.name||"Produkt")+"</span>"}}
+ else box.innerHTML="<span>"+esc(m.name||"Produkt")+"</span>";
+}
+
+function mkChips(el,items,isOn,cb){
+ el.innerHTML="";
+ items.forEach(function(it){
+  var b=document.createElement("button");b.className="chip";b.type="button";b.textContent=it[1];
+  b.setAttribute("aria-pressed",String(isOn(it[0])));
+  b.onclick=function(){cb(it[0])};el.appendChild(b);
+ });
+}
+function pairs(map){return Object.keys(map).map(function(k){return [k,map[k]]})}
+
+/* Routine zusammenstellen */
+function pick(s){
+ var pool=PRODUCTS.filter(function(p){return p.step===s.k&&typeOk(p)}).map(function(p){return{p:p,hit:hits(p)}});
+ if(selC.length&&!s.base)pool=pool.filter(function(x){return x.hit.length>0});
+ var chosen=[],covered=[];
+ function gain(x){return x.hit.filter(function(c){return covered.indexOf(c)<0}).length}
+ while(chosen.length<s.max&&pool.length){
+  pool.sort(function(a,b){return gain(b)-gain(a)||b.hit.length-a.hit.length});
+  var best=pool.shift();
+  if(chosen.length&&gain(best)===0)break;
+  chosen.push(best);covered=covered.concat(best.hit);
+ }
+ return chosen;
+}
+function buildRows(t){
+ var rows=[];
+ STEPS.forEach(function(s){
+  if(s.when.indexOf(t)<0)return;
+  pick(s).forEach(function(x){rows.push({s:s,x:x})});
+ });
+ return rows;
+}
+
+/* ---------- Routine speichern ---------- */
+function selLine(){
+ var c=selC.length?selC.map(function(k){return CONCERNS[k]}).join(", "):"alle";
+ return "Hauttyp: "+TYPES[selT]+"  |  Themen: "+c;
+}
+function resolveNames(rows,cb){
+ var n=rows.length,i=0;
+ if(!n)return cb();
+ rows.forEach(function(r){meta(r.x.p,function(m){r.name=m.name||r.x.p.name||"Produkt";if(++i===n)cb()})});
+}
+function msg(area,t){area.innerHTML='<p class="savemsg">'+esc(t)+'</p>'}
+function saveBar(){
+ var box=document.createElement("div");
+ var bar=document.createElement("div");bar.className="savebar";
+ var area=document.createElement("div");
+ var b1=document.createElement("button");b1.type="button";b1.className="btn";b1.textContent="Als Bild speichern";
+ var b2=document.createElement("button");b2.type="button";b2.className="btn ghost";b2.textContent="Als Text kopieren";
+ b1.onclick=function(){saveImage(area)};
+ b2.onclick=function(){saveText(area)};
+ bar.appendChild(b1);bar.appendChild(b2);
+ box.appendChild(bar);box.appendChild(area);
+ return box;
+}
+function saveText(area){
+ var d={am:buildRows("am"),pm:buildRows("pm")};
+ resolveNames(d.am.concat(d.pm),function(){
+  var t="Meine Skincare Routine\n"+selLine()+"\n";
+  ["am","pm"].forEach(function(k){
+   if(!d[k].length)return;
+   t+="\n"+TIMES[k]+"\n";
+   d[k].forEach(function(r,i){t+=(i+1)+". "+r.s.k+": "+r.name+" – "+r.x.p.url+"\n"});
+  });
+  var done=function(){msg(area,"Routine kopiert. Du kannst sie jetzt irgendwo einfügen.")};
+  var fallback=function(){
+   area.innerHTML='<p class="savemsg">Automatisches Kopieren ist hier blockiert. Kopiere den Text von Hand:</p><textarea class="copybox" readonly></textarea>';
+   var ta=area.querySelector("textarea");ta.value=t;ta.focus();ta.select();
+  };
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(done,fallback);else fallback();
+ });
+}
+function saveImage(area){
+ msg(area,"Bild wird erstellt …");
+ var d={am:buildRows("am"),pm:buildRows("pm")};
+ resolveNames(d.am.concat(d.pm),function(){
+  var go=function(){try{drawImage(area,d)}catch(e){msg(area,"Das Bild konnte nicht erstellt werden. Nutze stattdessen „Als Text kopieren“.")}};
+  var f=["300 54px Montserrat","400 20px Montserrat","500 26px Montserrat"];
+  if(document.fonts&&document.fonts.load)Promise.all(f.map(function(x){return document.fonts.load(x)})).then(go,go);else go();
+ });
+}
+function wrapText(ctx,text,x,y,maxW,lh,maxLines){
+ var words=String(text||"").split(/\s+/),line="",lines=[];
+ words.forEach(function(w){
+  var t=line?line+" "+w:w;
+  if(ctx.measureText(t).width>maxW&&line){lines.push(line);line=w}else line=t;
+ });
+ if(line)lines.push(line);
+ if(lines.length>maxLines){
+  lines=lines.slice(0,maxLines);
+  var l=lines[maxLines-1];
+  while(l.length&&ctx.measureText(l+"…").width>maxW)l=l.slice(0,-1);
+  lines[maxLines-1]=l+"…";
+ }
+ lines.forEach(function(l,i){ctx.fillText(l,x,y+i*lh)});
+ return y+lines.length*lh;
+}
+function drawImage(area,d){
+ var W=1080,pad=72,tx=pad+68,maxW=W-pad-tx,F="Montserrat, system-ui, sans-serif";
+ var C={bg:"#eceee9",ink:"#262a26",soft:"#6c736b",moss:"#58654f",blush:"#e6d6d0",line:"#d5d9d1"};
+ var cv=document.createElement("canvas");cv.width=W;cv.height=7000;
+ var ctx=cv.getContext("2d");
+ ctx.fillStyle=C.bg;ctx.fillRect(0,0,W,7000);
+ var y=pad+54;
+ ctx.fillStyle=C.ink;ctx.font="300 54px "+F;ctx.fillText("Meine Skincare Routine",pad,y);
+ y+=44;
+ ctx.fillStyle=C.soft;ctx.font="400 20px "+F;
+ y=wrapText(ctx,selLine(),pad,y,W-2*pad,28,2);
+ ["am","pm"].forEach(function(k){
+  var rows=d[k];if(!rows.length)return;
+  y+=44;
+  ctx.fillStyle=C.ink;ctx.font="500 32px "+F;ctx.fillText(TIMES[k],pad,y);
+  y+=26;
+  ctx.strokeStyle=C.line;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(W-pad,y);ctx.stroke();
+  y+=32;
+  rows.forEach(function(r,i){
+   var top=y;
+   ctx.fillStyle=C.moss;ctx.beginPath();ctx.arc(pad+20,top+11,20,0,Math.PI*2);ctx.fill();
+   ctx.fillStyle="#fff";ctx.font="500 18px "+F;ctx.textAlign="center";ctx.textBaseline="middle";
+   ctx.fillText(String(i+1),pad+20,top+12);
+   ctx.textAlign="left";ctx.textBaseline="alphabetic";
+   ctx.fillStyle=C.moss;ctx.font="500 17px "+F;ctx.fillText(r.s.k,tx,top+16);
+   ctx.fillStyle=C.ink;ctx.font="500 26px "+F;
+   var yy=wrapText(ctx,r.name,tx,top+52,maxW,34,2);
+   var last=yy-34;
+   ctx.fillStyle=C.soft;ctx.font="400 19px "+F;
+   var yn=r.x.p.note?wrapText(ctx,r.x.p.note,tx,last+32,maxW,27,2):last;
+   var lastLine=r.x.p.note?yn-27:last;
+   var bottom=lastLine;
+   if(r.x.hit.length){
+    ctx.font="400 16px "+F;
+    var px=tx,py=lastLine+18;
+    r.x.hit.forEach(function(c){
+     var w=ctx.measureText(CONCERNS[c]).width+26;
+     if(px+w>W-pad){px=tx;py+=38}
+     ctx.fillStyle=C.blush;ctx.beginPath();
+     if(ctx.roundRect)ctx.roundRect(px,py,w,30,15);else ctx.rect(px,py,w,30);
+     ctx.fill();
+     ctx.fillStyle=C.ink;ctx.fillText(CONCERNS[c],px+13,py+21);
+     px+=w+8;
+    });
+    bottom=py+30;
+   }
+   y=bottom+30;
+   ctx.strokeStyle=C.line;ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(W-pad,y);ctx.stroke();
+   y+=32;
+  });
+ });
+ var H=Math.ceil(y+pad-10);
+ var out=document.createElement("canvas");out.width=W;out.height=H;
+ out.getContext("2d").drawImage(cv,0,0);
+ var url=out.toDataURL("image/png");
+ area.innerHTML='<p class="savemsg">Deine Routine als Bild. Am Handy das Bild gedrückt halten und speichern, am Computer rechte Maustaste oder der Link darunter.</p><div class="preview"><img alt="Meine Skincare Routine" src="'+url+'"><a href="'+url+'" download="skincare-routine.png">Bild herunterladen</a></div>';
+}
+
+function renderRoutine(out){
+ var wrap=document.createElement("div");
+ var tg=document.createElement("div");tg.className="chips";
+ mkChips(tg,pairs(TIMES),function(k){return k===time},function(k){time=k;render()});
+ wrap.appendChild(tg);
+ var rows=buildRows(time),covered=[];
+ rows.forEach(function(r){covered=covered.concat(r.x.hit)});
+ if(!rows.length){var e=document.createElement("p");e.className="empty";e.textContent="Für diese Auswahl gibt es noch keine Produkte. Probiere einen anderen Hauttyp oder andere Themen.";wrap.appendChild(e);out.appendChild(wrap);return}
+ if(selC.length){
+  var miss=selC.filter(function(c){return covered.indexOf(c)<0}).map(function(c){return CONCERNS[c]});
+  var ok=selC.filter(function(c){return covered.indexOf(c)>-1}).map(function(c){return CONCERNS[c]});
+  var s=document.createElement("p");s.className="sum";
+  s.innerHTML=(ok.length?"Diese Routine deckt <b>"+esc(ok.join(", "))+"</b> ab. ":"")+(miss.length?"Dafür habe ich noch kein passendes Produkt: <b>"+esc(miss.join(", "))+"</b>.":"");
+  wrap.appendChild(s);
+ }else{
+  var s2=document.createElement("p");s2.className="sum";s2.textContent="Wähle oben ein oder mehrere Themen, dann passt sich die Routine an.";wrap.appendChild(s2);
+ }
+ var ol=document.createElement("ol");ol.className="routine";
+ rows.forEach(function(r,i){
+  var p=r.x.p,li=document.createElement("li");li.className="row";
+  var tags=r.x.hit.map(function(c){return '<span class="tag">'+esc(CONCERNS[c])+'</span>'}).join("");
+  li.innerHTML='<a class="rowlink" href="'+esc(p.url)+'" target="_blank" rel="noopener sponsored"><div class="num">'+(i+1)+'</div><div class="rimg"><span>Bild wird geladen</span></div><div><div class="step">'+esc(r.s.k)+'</div><p class="name">'+esc(p.name||"")+'</p><p class="note">'+esc(p.note)+'</p>'+(tags?'<div class="tags">'+tags+'</div>':'')+'<span class="go">Zum Produkt</span></div></a>';
+  ol.appendChild(li);
+  meta(p,function(m){fillImage(li.querySelector(".rimg"),m);li.querySelector(".name").textContent=m.name||"Produkt ansehen"});
+ });
+ wrap.appendChild(ol);wrap.appendChild(saveBar());out.appendChild(wrap);
+}
+
+/* Alle Produkte (gefiltert) */
+function renderProducts(out){
+ var list=PRODUCTS.filter(function(p){return typeOk(p)&&(!selC.length||hits(p).length>0)});
+ list.sort(function(a,b){return hits(b).length-hits(a).length});
+ if(!list.length){out.innerHTML='<p class="empty">Dafür gibt es noch keine Empfehlung. Wähle ein anderes Thema.</p>';return}
+ var grid=document.createElement("div");grid.className="grid";
+ list.forEach(function(p){
+  var a=document.createElement("a");a.className="card";a.href=p.url;a.target="_blank";a.rel="noopener sponsored";
+  a.innerHTML='<div class="img"><span>Bild wird geladen</span></div><div class="step">'+esc(p.step)+'</div><p class="name">'+esc(p.name||"")+'</p><p class="note">'+esc(p.note)+'</p><span class="go">Zum Produkt</span>';
+  grid.appendChild(a);
+  meta(p,function(m){fillImage(a.querySelector(".img"),m);a.querySelector(".name").textContent=m.name||"Produkt ansehen"});
+ });
+ out.appendChild(grid);
+}
+
+function render(){
+ try{localStorage.setItem("sg-sel",JSON.stringify({t:selT,c:selC,m:time}))}catch(e){}
+ var tb=$("sg-tabs");tb.innerHTML="";
+ Object.keys(TABS).forEach(function(k){
+  var b=document.createElement("button");b.className="tab";b.type="button";b.setAttribute("role","tab");
+  b.setAttribute("aria-selected",String(k===tab));b.textContent=TABS[k];
+  b.onclick=function(){tab=k;render()};tb.appendChild(b);
+ });
+ mkChips($("sg-types"),pairs(TYPES),function(k){return k===selT},function(k){selT=k;render()});
+ var cItems=[["alle","Alle"]].concat(pairs(CONCERNS));
+ mkChips($("sg-concerns"),cItems,function(k){return k==="alle"?selC.length===0:selC.indexOf(k)>-1},function(k){
+  if(k==="alle")selC=[];
+  else{var i=selC.indexOf(k);if(i>-1)selC.splice(i,1);else selC.push(k)}
+  render();
+ });
+ var tip=$("sg-tip");
+ if(TIPS[selT]){tip.hidden=false;tip.innerHTML="<b>"+TIPS[selT][0]+"</b>"+TIPS[selT][1]}else tip.hidden=true;
+ var out=$("sg-out");out.innerHTML="";
+ if(tab==="routine")renderRoutine(out);else renderProducts(out);
+}
+render();
+})();
+</script>
+</div>
+
+</body>
+</html>
