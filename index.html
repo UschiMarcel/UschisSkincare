@@ -937,6 +937,14 @@ function renderDetail(out,p){
   });
  }
 }
+/* Klick neben die Detailansicht oder Esc führt zurück zur Übersicht. */
+document.addEventListener("click",function(e){
+ if(!curSlug||!$("sg").classList.contains("indetail"))return;
+ var t=e.target;
+ if(t&&t.closest&&t.closest(".dgrid,.themebtn,.back"))return;
+ leaveDetail();
+},true);
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&curSlug)leaveDetail()});
 window.addEventListener("hashchange",function(){
  var was=curSlug;readHash();
  if(curSlug&&!was)lastY=window.scrollY||0;
