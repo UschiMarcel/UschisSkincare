@@ -49,6 +49,8 @@
 #sg .rimg{aspect-ratio:4/5;background:var(--paper);border-radius:96px 96px 10px 10px;overflow:hidden;display:flex;align-items:center;justify-content:center}
 #sg .rimg img{width:100%;height:100%;object-fit:contain;padding:12%;mix-blend-mode:multiply}
 #sg .rimg span{font-size:11px;color:var(--soft);padding:8px;text-align:center}
+#sg .info{display:flex;gap:9px;align-items:flex-start;font-size:13px;line-height:1.45;margin:0 0 10px;padding:10px 14px;border-radius:12px;background:#dcebf5;border-left:3px solid #7fb0d3;max-width:56ch}
+#sg .info svg{flex:none;margin-top:1px;color:#3f6a8a}
 #sg .hint{font-size:12px;color:var(--soft);margin:-4px 0 10px;max-width:56ch}
 #sg .warn{font-size:13px;margin:0 0 10px;padding:10px 14px;border-radius:12px;background:var(--blush);border-left:3px solid #b5654f;max-width:56ch}
 #sg .warn{margin:0}
@@ -178,7 +180,7 @@ function norm(r){
  var z=[].concat(r.zeit||[]).join(" ").toLowerCase(),when=null;
  if(z){when=[];if(z.indexOf("morgen")>-1)when.push("am");if(z.indexOf("abend")>-1)when.push("pm");if(!when.length)when=null}
  return{
-  url:r.link,name:r.name||"",step:st,when:when,levels:lv.length?lv:null,conflict:[].concat(r.konflikt||[]).map(stepName),note:r.beschreibung||"",img:r.bild||"",
+  url:r.link,name:r.name||"",info:String(r.hinweis||"").trim(),step:st,when:when,levels:lv.length?lv:null,conflict:[].concat(r.konflikt||[]).map(stepName),note:r.beschreibung||"",img:r.bild||"",
   types:tags.filter(function(t){return t!=="alle"&&TYPES[t]}),
   concerns:tags.filter(function(t){return CONCERNS[t]})
  };
@@ -385,6 +387,7 @@ function saveText(area){
    t+="\n"+TIMES[k]+"\n";
    d[k].forEach(function(r,i){
     t+=(i+1)+". "+r.s.k+": "+r.name+" – "+r.x.p.url+"\n";
+    if(r.x.p.info)t+="   Hinweis: "+r.x.p.info+"\n";
     var cr=conflictRows(d[k],i);
     if(cr.length){
      t+="   Achtung: "+warnText(cr.map(function(o){return o.name}))+"\n";
@@ -471,6 +474,11 @@ function drawImage(area,d){
     });
     bottom=py+30;
    }
+   if(r.x.p.info){
+    ctx.fillStyle="#3f6a8a";ctx.font="400 17px "+F;
+    var iy=wrapText(ctx,"Hinweis: "+r.x.p.info,tx,bottom+26,maxW,24,3);
+    bottom=iy-24+6;
+   }
    var cr=conflictRows(rows,i);
    if(cr.length){
     ctx.fillStyle="#8a4b3d";ctx.font="400 17px "+F;
@@ -490,6 +498,9 @@ function drawImage(area,d){
  area.innerHTML='<p class="savemsg">Deine Routine als Bild. Am Handy das Bild gedrückt halten und speichern, am Computer rechte Maustaste oder der Link darunter.</p><div class="preview"><img alt="Meine Skincare Routine" src="'+url+'"><a href="'+url+'" download="skincare-routine.png">Bild herunterladen</a></div>';
 }
 
+function infoHtml(t){
+ return '<p class="info"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.5v.01"/></svg><span>'+esc(t)+'</span></p>';
+}
 function renderRoutine(out){
  if(loading){out.innerHTML='<p class="empty">Produkte werden geladen …</p>';return}
  if(!PRODUCTS.length){out.innerHTML=emptyHtml();return}
@@ -522,7 +533,7 @@ function renderRoutine(out){
  rows.forEach(function(r,i){
   var p=r.x.p,li=document.createElement("li");li.className="row";
   var tags=r.x.hit.map(function(c){return '<span class="tag">'+esc(CONCERNS[c])+'</span>'}).join("");
-  li.innerHTML='<a class="rowlink" href="'+esc(p.url)+'" target="_blank" rel="noopener sponsored"><div class="num">'+(i+1)+'</div><div class="rimg"><span>Bild wird geladen</span></div><div><div class="step">'+esc(r.s.k)+'</div><p class="name">'+esc(p.name||"")+'</p><p class="note">'+esc(p.note)+'</p>'+(r.s.hint?'<p class="hint">'+esc(r.s.hint)+'</p>':'')+(tags?'<div class="tags">'+tags+'</div>':'')+'<span class="go">Zum Produkt</span></div></a><div class="extra" hidden><p class="warn"></p><div class="alt"></div></div>';
+  li.innerHTML='<a class="rowlink" href="'+esc(p.url)+'" target="_blank" rel="noopener sponsored"><div class="num">'+(i+1)+'</div><div class="rimg"><span>Bild wird geladen</span></div><div><div class="step">'+esc(r.s.k)+'</div><p class="name">'+esc(p.name||"")+'</p><p class="note">'+esc(p.note)+'</p>'+(p.info?infoHtml(p.info):'')+(r.s.hint?'<p class="hint">'+esc(r.s.hint)+'</p>':'')+(tags?'<div class="tags">'+tags+'</div>':'')+'<span class="go">Zum Produkt</span></div></a><div class="extra" hidden><p class="warn"></p><div class="alt"></div></div>';
   ol.appendChild(li);
   meta(p,function(m){fillImage(li.querySelector(".rimg"),m);li.querySelector(".name").textContent=m.name||"Produkt ansehen"});
   var others=conflictRows(rows,i);
@@ -552,7 +563,7 @@ function renderProducts(out){
  var grid=document.createElement("div");grid.className="grid";
  list.forEach(function(p){
   var a=document.createElement("a");a.className="card";a.href=p.url;a.target="_blank";a.rel="noopener sponsored";
-  a.innerHTML='<div class="img"><span>Bild wird geladen</span></div><div class="step">'+esc(p.step)+'</div><p class="name">'+esc(p.name||"")+'</p><p class="note">'+esc(p.note)+'</p><span class="go">Zum Produkt</span>';
+  a.innerHTML='<div class="img"><span>Bild wird geladen</span></div><div class="step">'+esc(p.step)+'</div><p class="name">'+esc(p.name||"")+'</p><p class="note">'+esc(p.note)+'</p>'+(p.info?infoHtml(p.info):'')+'<span class="go">Zum Produkt</span>';
   grid.appendChild(a);
   meta(p,function(m){fillImage(a.querySelector(".img"),m);a.querySelector(".name").textContent=m.name||"Produkt ansehen"});
  });
