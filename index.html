@@ -80,23 +80,8 @@
 
 <script>
 (function(){
-/* ============ HIER PRODUKTE EINTRAGEN ============
-   Pro Produkt eine Zeile. Nur "url" ist Pflicht – Bild und Name holt sich der Guide selbst.
-   step:     Reinigung | Toner | Serum | Creme | Sonnenschutz   (genau so schreiben)
-   types:    trocken | fettig | mischhaut | empfindlich | normal   (leer = für alle)
-   concerns: akne | roetungen | falten | pigment | poren | feuchtigkeit
-   Optional: name:"…" und img:"https://…" überschreiben die automatischen Werte. */
-var PRODUCTS=[
- {url:"https://www.example.com/produkt-1",step:"Reinigung",types:["fettig","mischhaut"],concerns:["akne","poren"],note:"Sanftes Gel, das überschüssigen Talg löst.",name:"Beispiel: Reinigungsgel"},
- {url:"https://www.example.com/produkt-2",step:"Reinigung",types:["trocken","empfindlich","normal"],concerns:["feuchtigkeit","roetungen"],note:"Cremige Reinigung ohne Duftstoffe.",name:"Beispiel: Milde Reinigungsmilch"},
- {url:"https://www.example.com/produkt-3",step:"Toner",types:[],concerns:["poren","akne"],note:"Mit sanften Säuren für ein klareres Hautbild.",name:"Beispiel: Klärender Toner"},
- {url:"https://www.example.com/produkt-4",step:"Serum",types:["trocken","normal","mischhaut"],concerns:["feuchtigkeit","falten"],note:"Hyaluron für ein praller wirkendes Hautbild.",name:"Beispiel: Hyaluron-Serum"},
- {url:"https://www.example.com/produkt-5",step:"Serum",types:[],concerns:["pigment","poren"],note:"Niacinamid für ebenmäßigere Haut.",name:"Beispiel: Niacinamid-Serum"},
- {url:"https://www.example.com/produkt-6",step:"Serum",types:["empfindlich","normal"],concerns:["roetungen"],note:"Beruhigt gereizte Stellen.",name:"Beispiel: Beruhigendes Serum"},
- {url:"https://www.example.com/produkt-7",step:"Creme",types:["trocken","empfindlich","normal"],concerns:["roetungen","feuchtigkeit"],note:"Reichhaltig, ohne Duftstoffe.",name:"Beispiel: Beruhigende Creme"},
- {url:"https://www.example.com/produkt-8",step:"Creme",types:["fettig","mischhaut"],concerns:["akne","poren"],note:"Leichtes Gel, zieht schnell ein.",name:"Beispiel: Gel-Creme"},
- {url:"https://www.example.com/produkt-9",step:"Sonnenschutz",types:[],concerns:["pigment","falten"],note:"Täglich getragen, der wichtigste Anti-Aging-Schritt.",name:"Beispiel: Sonnenfluid LSF 50"}
-];
+/* Produkte kommen aus dem Ordner "produkte" im Repository (siehe loadProducts unten). */
+var PRODUCTS=[],loading=true;
 /* Reihenfolge der Routine. base:true = Basis-Schritt, kommt immer vor. when = morgens/abends, max = Produkte pro Schritt. */
 var STEPS=[
  {k:"Reinigung",base:true,when:["am","pm"],max:1},
@@ -126,6 +111,67 @@ try{var S=JSON.parse(localStorage.getItem("sg-sel")||"{}");
 function save(){try{localStorage.setItem("sg-meta",JSON.stringify(CACHE))}catch(e){}}
 function esc(s){return String(s||"").replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 function $(id){return document.getElementById(id)}
+
+/* ---------- Produkte aus Dateien laden ---------- */
+var CFG={ordner:"produkte"};
+var ALIAS={"unreinheiten":"akne","pickel":"akne","rötungen":"roetungen","feine linien":"falten","linien":"falten","pigmentflecken":"pigment","pigmentierung":"pigment","große poren":"poren","grosse poren":"poren"};
+function cmpName(a,b){return a.localeCompare(b,undefined,{numeric:true})}
+function baseUrl(){return location.origin+location.pathname.replace(/[^\/]*$/,"")}
+function getJSON(u){return fetch(u).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()})}
+function repoInfo(){
+ var m=location.hostname.match(/^([^.]+)\.github\.io$/i),p=location.pathname.split("/").filter(Boolean);
+ return m?{owner:m[1],repo:p[0]||(m[1]+".github.io")}:null;
+}
+function listFiles(){
+ var ck=null;
+ try{ck=JSON.parse(localStorage.getItem("sg-files")||"null")}catch(e){}
+ if(ck&&Date.now()-ck.t<120000)return Promise.resolve(ck.l);
+ var fallback=function(){
+  return getJSON(baseUrl()+CFG.ordner+"/dateien.json").catch(function(){return ck?ck.l:[]});
+ };
+ var ri=repoInfo();
+ if(!ri)return fallback();
+ return getJSON("https://api.github.com/repos/"+ri.owner+"/"+ri.repo+"/contents/"+CFG.ordner)
+  .then(function(a){
+   var l=a.filter(function(f){return f.type==="file"&&/\.json$/i.test(f.name)&&f.name.charAt(0)!=="_"&&f.name!=="dateien.json"})
+    .map(function(f){return f.name}).sort(cmpName);
+   try{localStorage.setItem("sg-files",JSON.stringify({t:Date.now(),l:l}))}catch(e){}
+   return l;
+  })
+  .catch(fallback);
+}
+function norm(r){
+ var tags=(r.tags||[]).map(function(t){t=String(t).toLowerCase().trim();return ALIAS[t]||t});
+ var st=String(r.schritt||"").trim();
+ STEPS.forEach(function(x){if(x.k.toLowerCase()===st.toLowerCase())st=x.k});
+ return{
+  url:r.link,name:r.name||"",step:st,note:r.beschreibung||"",img:r.bild||"",
+  types:tags.filter(function(t){return t!=="alle"&&TYPES[t]}),
+  concerns:tags.filter(function(t){return CONCERNS[t]})
+ };
+}
+/* Spätere Dateien überschreiben frühere Einträge mit gleichem Link (Felder werden zusammengeführt). */
+function mergeFiles(files){
+ var order=[],map={};
+ files.forEach(function(f){
+  (Array.isArray(f)?f:(f&&f.produkte)||[]).forEach(function(r){
+   if(!r||!r.link)return;
+   var k=String(r.link).trim();
+   if(!map[k]){map[k]={};order.push(k)}
+   for(var key in r)map[k][key]=r[key];
+   map[k].link=k;
+  });
+ });
+ return order.map(function(k){return map[k]}).filter(function(r){return r.aktiv!==false}).map(norm);
+}
+function loadProducts(done){
+ listFiles().then(function(names){
+  var t=Math.floor(Date.now()/60000);
+  return Promise.all(names.map(function(n){
+   return getJSON(baseUrl()+CFG.ordner+"/"+encodeURIComponent(n)+"?t="+t).catch(function(){return[]});
+  }));
+ }).then(function(files){done(mergeFiles(files))},function(){done([])});
+}
 
 function typeOk(p){return selT==="alle"||!p.types||!p.types.length||p.types.indexOf(selT)>-1}
 function hits(p){return selC.filter(function(c){return p.concerns&&p.concerns.indexOf(c)>-1})}
@@ -308,6 +354,8 @@ function drawImage(area,d){
 }
 
 function renderRoutine(out){
+ if(loading){out.innerHTML='<p class="empty">Produkte werden geladen …</p>';return}
+ if(!PRODUCTS.length){out.innerHTML='<p class="empty">Es sind noch keine Produkte hinterlegt.</p>';return}
  var wrap=document.createElement("div");
  var tg=document.createElement("div");tg.className="chips";
  mkChips(tg,pairs(TIMES),function(k){return k===time},function(k){time=k;render()});
@@ -337,6 +385,8 @@ function renderRoutine(out){
 
 /* Alle Produkte (gefiltert) */
 function renderProducts(out){
+ if(loading){out.innerHTML='<p class="empty">Produkte werden geladen …</p>';return}
+ if(!PRODUCTS.length){out.innerHTML='<p class="empty">Es sind noch keine Produkte hinterlegt.</p>';return}
  var list=PRODUCTS.filter(function(p){return typeOk(p)&&(!selC.length||hits(p).length>0)});
  list.sort(function(a,b){return hits(b).length-hits(a).length});
  if(!list.length){out.innerHTML='<p class="empty">Dafür gibt es noch keine Empfehlung. Wähle ein anderes Thema.</p>';return}
@@ -371,6 +421,7 @@ function render(){
  if(tab==="routine")renderRoutine(out);else renderProducts(out);
 }
 render();
+loadProducts(function(list){PRODUCTS=list;loading=false;render()});
 })();
 </script>
 </div>
