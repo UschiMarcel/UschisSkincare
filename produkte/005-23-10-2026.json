@@ -1,14 +1,16 @@
 [
   {
     "link": "https://www.rossmann.de/de/pflege-und-duft-isana-120h-liquid-moisturizer/p/4305615918082",
+    "bild": "https://www.rossmann.de/media-neu/536/MAM_53603342/MAM_53603342_SHOP_IMAGE_1.4.png?width=550&height=550&fit=bounds&auto=webp&format=webply&canvas=550%2C550&dpr=1&quality=85",
     "name": "Isana 120h Liquid Moisturizer",
     "schritt": "Toner",
     "beschreibung": "Leichter, flüssiger Moisturizer mit 5 % Glycerin und 6 % Panthenol für ein geschmeidiges, gut mit Feuchtigkeit versorgtes Hautgefühl.",
-    "tags": ["feuchtigkeit"],
+    "tags": ["feuchtigkeit, empfindlich, "],
     "preis": "3,99"
   },
   {
     "link": "https://www.rossmann.de/de/pflege-und-duft-isana-aha-peeling-konzentrat/p/4305615791920",
+    "bild": "https://www.rossmann.de/media-neu/567/MAM_56757472/MAM_56757472_SHOP_IMAGE_1.4.png?width=550&height=550&fit=bounds&auto=webp&format=webply&canvas=550%2C550&dpr=1&quality=85",
     "name": "Isana AHA Peeling Konzentrat",
     "schritt": "Peeling",
     "beschreibung": "Peeling-Konzentrat mit AHA, das abgestorbene Hautzellen löst und die Haut glatter und ebenmäßiger wirken lässt.",
@@ -21,11 +23,13 @@
   },
   {
     "link": "https://www.rossmann.de/de/pflege-und-duft-isana-niacinamid-serum/p/4305615951430",
+    "bild": "https://www.rossmann.de/media-neu/115/MAM_11534376/MAM_11534376_SHOP_IMAGE_2.0.png?width=550&height=550&fit=bounds&auto=webp&format=webply&canvas=550%2C550&dpr=1&quality=85",
     "name": "Isana Niacinamid Serum",
     "schritt": "Serum",
     "beschreibung": "Serum mit 10 % Niacinamid für ein ebenmäßigeres, klareres Hautbild und feinere Poren.",
     "tags": ["akne", "poren", "pigment"],
     "hinweis": "Morgens danach Sonnenschutz mit mindestens LSF 30 auftragen. Nicht in Schwangerschaft und Stillzeit anwenden.",
-    "preis": "5,49"
+    "preis": "5,49",
+    "konflikt": ["normal", "mischhaut"]
   }
 ]
