@@ -132,7 +132,7 @@ var PRODUCTS=[],loading=true;
 var STEPS=[
  {k:"Reinigungs-Öle",base:true,oil:true,when:["pm"],max:1},
  {k:"Reinigungs-Cleanser",base:true,cleanser:true,when:["am","pm"],max:1},
- {k:"Peeling",onlyHit:true,when:["pm"],max:1},
+ {k:"Peeling",onlyHit:true,allHits:true,when:["pm"],max:1},
  {k:"Toner",when:["am","pm"],max:1},
  {k:"Serum",when:["am","pm"],max:2},
  {k:"Retinol / Anti-Aging",when:["pm"],max:1,hint:"Langsam einführen, nicht am selben Abend mit Peelings kombinieren und tagsüber Sonnenschutz tragen. Nicht in Schwangerschaft und Stillzeit anwenden."},
@@ -337,6 +337,7 @@ function pairs(map){return Object.keys(map).map(function(k){return [k,map[k]]})}
 function pick(s,t,skip){
  skip=skip||[];
  var pool=PRODUCTS.filter(function(p){return p.step===s.k&&typeOk(p)&&(!p.when||p.when.indexOf(t)>-1)&&!(p.conflict||[]).some(function(c){return skip.indexOf(c)>-1})}).map(function(p){return{p:p,hit:hits(p)}});
+ if(s.allHits)pool=pool.filter(function(x){return(x.p.concerns||[]).every(function(c){return selC.indexOf(c)>-1})&&(x.p.concerns||[]).length>0});
  if((selC.length||s.onlyHit)&&!s.base)pool=pool.filter(function(x){return x.hit.length>0});
  var chosen=[],covered=[];
  function gain(x){return x.hit.filter(function(c){return covered.indexOf(c)<0}).length}
@@ -680,7 +681,10 @@ function drawImage(area,d){
 
 /* Tags eines Produkts (Reiter "Alle Produkte"): gewählte Filter sind hervorgehoben, die Erfahrung steht klein dahinter */
 function lvlHtml(p){
- return(p.levels||[]).map(function(k){return'<span class="lvl" title="Empfohlene Erfahrung">'+esc(LEVELS[k])+'</span>'}).join("");
+ /* Bei mehreren Stufen wird nur die niedrigste gezeigt. Empfohlen bleibt das Produkt für alle eingetragenen Stufen. */
+ var ks=Object.keys(LEVELS),low=null;
+ (p.levels||[]).forEach(function(k){if(low===null||ks.indexOf(k)<ks.indexOf(low))low=k});
+ return low?'<span class="lvl" title="Empfohlene Erfahrung">'+esc(LEVELS[low])+'</span>':"";
 }
 function cardTags(p){
  var h="";
