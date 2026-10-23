@@ -50,6 +50,8 @@
 #sg .rimg img{width:100%;height:100%;object-fit:contain;padding:12%;mix-blend-mode:multiply}
 #sg .rimg span{font-size:11px;color:var(--soft);padding:8px;text-align:center}
 #sg .hint{font-size:12px;color:var(--soft);margin:-4px 0 10px;max-width:56ch}
+#sg .warn{font-size:13px;margin:0 0 10px;padding:10px 14px;border-radius:12px;background:var(--blush);border-left:3px solid #b5654f;max-width:56ch}
+#sg .warn[hidden]{display:none}
 #sg .tags{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
 #sg .tag{font-size:12px;padding:3px 11px;border-radius:999px;background:var(--blush)}
 /* Speichern */
@@ -233,21 +235,23 @@ function pick(s,t,skip){
  return chosen;
 }
 function buildRows(t){
- var rows=[],i;
+ var rows=[];
  STEPS.forEach(function(s){
   if(s.when.indexOf(t)<0)return;
   pick(s,t).forEach(function(x){rows.push({s:s,x:x})});
  });
- /* Produkte mit "konflikt" entfallen, wenn der genannte Schritt in dieser Routine vorkommt */
- var present=rows.map(function(r){return r.s.k});
- if(rows.some(function(r){return(r.x.p.conflict||[]).some(function(c){return present.indexOf(c)>-1})})){
-  rows=[];
-  STEPS.forEach(function(s){
-   if(s.when.indexOf(t)<0)return;
-   pick(s,t,present).forEach(function(x){rows.push({s:s,x:x})});
-  });
- }
  return rows;
+}
+/* Konflikte: "konflikt" enthält Schrittnamen oder Produkt-Links. Die Warnung erscheint bei beiden Produkten. */
+function clash(a,b){
+ function hit(x,y){return(x.conflict||[]).some(function(c){return c===y.step||c===y.url})}
+ return hit(a,b)||hit(b,a);
+}
+function conflictRows(rows,i){
+ return rows.filter(function(o,j){return j!==i&&clash(rows[i].x.p,o.x.p)});
+}
+function warnText(names){
+ return "Dieses Produkt ist in der Anwendung mit "+names.map(function(n){return"'"+n+"'"}).join(" und ")+" nicht empfehlenswert, da es die Haut stark strapazieren könnte. Halte hier gerne einmal mit mir Rücksprache :)";
 }
 function missingBase(rows,t){
  return STEPS.filter(function(s){return s.base&&s.when.indexOf(t)>-1&&!rows.some(function(r){return r.s.k===s.k})}).map(function(s){return s.k});
@@ -283,7 +287,11 @@ function saveText(area){
   ["am","pm"].forEach(function(k){
    if(!d[k].length)return;
    t+="\n"+TIMES[k]+"\n";
-   d[k].forEach(function(r,i){t+=(i+1)+". "+r.s.k+": "+r.name+" – "+r.x.p.url+"\n"});
+   d[k].forEach(function(r,i){
+    t+=(i+1)+". "+r.s.k+": "+r.name+" – "+r.x.p.url+"\n";
+    var cr=conflictRows(d[k],i);
+    if(cr.length)t+="   Achtung: "+warnText(cr.map(function(o){return o.name}))+"\n";
+   });
   });
   var done=function(){msg(area,"Routine kopiert. Du kannst sie jetzt irgendwo einfügen.")};
   var fallback=function(){
@@ -364,6 +372,12 @@ function drawImage(area,d){
     });
     bottom=py+30;
    }
+   var cr=conflictRows(rows,i);
+   if(cr.length){
+    ctx.fillStyle="#8a4b3d";ctx.font="400 17px "+F;
+    var we=wrapText(ctx,warnText(cr.map(function(o){return o.name})),tx,bottom+26,maxW,24,5);
+    bottom=we-24+6;
+   }
    y=bottom+30;
    ctx.strokeStyle=C.line;ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(W-pad,y);ctx.stroke();
    y+=32;
@@ -404,9 +418,17 @@ function renderRoutine(out){
  rows.forEach(function(r,i){
   var p=r.x.p,li=document.createElement("li");li.className="row";
   var tags=r.x.hit.map(function(c){return '<span class="tag">'+esc(CONCERNS[c])+'</span>'}).join("");
-  li.innerHTML='<a class="rowlink" href="'+esc(p.url)+'" target="_blank" rel="noopener sponsored"><div class="num">'+(i+1)+'</div><div class="rimg"><span>Bild wird geladen</span></div><div><div class="step">'+esc(r.s.k)+'</div><p class="name">'+esc(p.name||"")+'</p><p class="note">'+esc(p.note)+'</p>'+(r.s.hint?'<p class="hint">'+esc(r.s.hint)+'</p>':'')+(tags?'<div class="tags">'+tags+'</div>':'')+'<span class="go">Zum Produkt</span></div></a>';
+  li.innerHTML='<a class="rowlink" href="'+esc(p.url)+'" target="_blank" rel="noopener sponsored"><div class="num">'+(i+1)+'</div><div class="rimg"><span>Bild wird geladen</span></div><div><div class="step">'+esc(r.s.k)+'</div><p class="name">'+esc(p.name||"")+'</p><p class="note">'+esc(p.note)+'</p>'+(r.s.hint?'<p class="hint">'+esc(r.s.hint)+'</p>':'')+'<p class="warn" hidden></p>'+(tags?'<div class="tags">'+tags+'</div>':'')+'<span class="go">Zum Produkt</span></div></a>';
   ol.appendChild(li);
   meta(p,function(m){fillImage(li.querySelector(".rimg"),m);li.querySelector(".name").textContent=m.name||"Produkt ansehen"});
+  var others=conflictRows(rows,i);
+  if(others.length){
+   var w=li.querySelector(".warn"),names=[],n=0;
+   others.forEach(function(o,k){meta(o.x.p,function(m){
+    names[k]=m.name||o.x.p.name||"anderes Produkt";
+    if(++n===others.length){w.textContent=warnText(names);w.hidden=false}
+   })});
+  }
  });
  wrap.appendChild(ol);wrap.appendChild(saveBar());out.appendChild(wrap);
 }
