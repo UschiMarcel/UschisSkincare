@@ -9,24 +9,27 @@
       "mischhaut",
       "roetungen",
       "trocken"
-    ]
+    ],
+    "preis": 3,95
   },
   {
     "link": "https://www.dm.de/p/d/3150585/geek-und-gorgeous-reinigungsbalsam-101-mighty-melt",
     "name": "Geek & Gorgeous Mighty Melt Reinigungsbalsam",
-    "schritt": "Reinigung",
+    "schritt": "Reinigungs-Öle",
     "beschreibung": "Reinigungsbalsam, der Sonnenschutz und Make-up löst. Ideal als erster Reinigungsschritt am Abend.",
     "tags": [
       "trocken",
       "normal",
+      "makeup",
       "mischhaut",
       "feuchtigkeit"
     ],
-    "zeit": "abends"
+    "zeit": "abends",
+    "preis": 14,35
   },
   {
     "link": "https://www.dm.de/p/d/1630606/balea-peeling-cleanser-beauty-expert",
-    "bild": "https://products.dm-static.com/images/f_auto,q_auto,c_fit,h_1200,w_1200/v1749776770/assets/pas/images/45f29851-a307-42e9-a074-a38d35811c26/balea-peeling-toner-beauty-expert",
+    "bild": "https://products.dm-static.com/images/f_auto,q_auto,c_fit,h_1200,w_1200/v1762467486/assets/pas/images/2a1d1d13-dd38-4d27-8901-917941e37820/balea-peeling-cleanser-beauty-expert",
     "name": "Balea Peeling Cleanser Beauty Expert",
     "schritt": "Reinigung",
     "beschreibung": "Reinigung mit Peeling-Effekt für ein klareres, glatteres Hautbild.",
@@ -38,6 +41,7 @@
       "akne",
       "falten"
     ],
+    "preis": 4,25,
     "konflikt": [
       "Retinol / Anti-Aging"
     ]
@@ -53,7 +57,8 @@
       "mischhaut",
       "empfindlich",
       "feuchtigkeit"
-    ]
+    ],
+    "preis": 3,95
   },
   {
     "link": "https://www.dm.de/p/d/1306226/geek-und-gorgeous-toner-101-liquid-hydration",
@@ -67,7 +72,8 @@
       "empfindlich",
       "feuchtigkeit",
       "fettig"
-    ]
+    ],
+    "preis": 8,35
   },
   {
     "link": "https://www.dm.de/p/d/1630366/balea-peeling-toner-beauty-expert",
@@ -84,6 +90,7 @@
       "pigment"
     ],
     "zeit": "abends",
+    "preis": 6,45,
     "konflikt": [
       "Retinol / Anti-Aging"
     ]
@@ -103,7 +110,8 @@
       "poren",
       "falten"
     ],
-        "zeit": "morgens",
+    "zeit": "morgens",
+    "preis": 12,35,
     "konflikt": [
       "Retinol / Anti-Aging"
     ]
@@ -120,6 +128,7 @@
       "poren"
     ],
     "zeit": "abends",
+    "preis": 12,85,
     "erfahrung": ["anfaenger"]
   },
   {
@@ -137,6 +146,7 @@
       "poren"
     ],
     "zeit": "abends",
+    "preis": 18,35,
     "erfahrung": ["erfahren"]
   },
   {
@@ -155,6 +165,7 @@
       "poren"
     ],
     "zeit": "abends",
+    "preis": 22,35,
     "erfahrung": ["fortgeschritten"]
   },
   {
@@ -170,7 +181,8 @@
       "roetungen",
       "feuchtigkeit"
     ],
-     "zeit": "abends"
+    "zeit": "abends",
+    "preis": 10,35
   },
   {
     "link": "https://www.dm.de/p/d/3131974/geek-und-gorgeous-gesichtscreme-sonnenschutz-101-zero-feel-lsf-50",
@@ -181,7 +193,8 @@
     "tags": [
       "pigment",
       "falten"
-    ]
+    ],
+    "preis": 12,35
   },
   {
     "link": "https://www.dm.de/p/d/1678418/l-oreal-paris-revitalift-gesichtsfluid-revitalift-clinical-vitamin-c-lsf-50",
@@ -191,7 +204,8 @@
     "tags": [
       "pigment",
       "falten"
-    ]
+    ],
+    "preis": 14,95
   },
   {
     "link": "https://www.shop-apotheke.com/arzneimittel/2137594/cordes-vas-creme.htm",
@@ -204,6 +218,7 @@
     ],
     "zeit": "abends",
     "aktiv": true,
+    "preis": 19,50,
     "erfahrung": ["experte"]
   }
 ]
