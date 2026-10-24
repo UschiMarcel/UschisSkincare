@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="robots" content="noindex">
+<title>Impressum – Uschi's Skincare Guide</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap">
+<style>
+:root{--bg:#eceee9;--ink:#262a26;--soft:#6c736b;--moss:#58654f;--line:#d5d9d1}
+:root[data-theme="dark"]{--bg:#151815;--ink:#e9ece6;--soft:#9ba596;--moss:#6b7e5c;--line:#2f362f}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg)}
+body{font-family:'Montserrat',system-ui,sans-serif;color:var(--ink);line-height:1.6;padding:clamp(20px,6vw,88px);max-width:1040px;margin:0 auto;transition:background-color .3s,color .3s}
+a{color:inherit}
+.back{display:inline-block;font-size:14px;color:var(--soft);text-decoration:none;margin:0 0 28px}
+.back:hover{color:var(--ink)}
+h1{font-weight:300;font-size:clamp(30px,5vw,54px);line-height:1.1;margin:0 0 28px;letter-spacing:-.02em}
+h2{font-weight:500;font-size:17px;margin:32px 0 8px}
+p{max-width:68ch;font-size:15px;margin:0 0 12px}
+.soft{color:var(--soft)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<script>
+/* gleiche Darstellung wie der Guide (Hell/Dunkel merkt sich der Browser) */
+(function(){
+ var t=null;try{t=localStorage.getItem("sg-theme")}catch(e){}
+ if(t!=="dark"&&t!=="light"){try{t=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}catch(e){t="light"}}
+ document.documentElement.setAttribute("data-theme",t);
+})();
+</script>
+</head>
+<body>
+<a class="back" href="./">← Zurück zum Guide</a>
+<h1>Impressum</h1>
+
+<h2>Angaben gemäß § 5 DDG</h2>
+<p>Marcel Rittau<br>
+Zur Thingstätte 10<br>
+53894 Mechernich</p>
+
+<h2>Kontakt</h2>
+<p>E-Mail: <a href="mailto:rittau.marcel@gmail.com">rittau.marcel@gmail.com</a></p>
+
+<h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
+<p>Marcel Rittau, Anschrift wie oben.</p>
+
+<h2>Hinweis zu den Empfehlungen</h2>
+<p>Die Produktempfehlungen auf dieser Seite sind persönliche Empfehlungen und ersetzen keine medizinische oder dermatologische Beratung. Bei Hautproblemen, Unverträglichkeiten, Schwangerschaft und Stillzeit sprich bitte vor der Anwendung mit einer Ärztin, einem Arzt oder einer Apotheke. Bitte beachte immer auch die Angaben auf der Verpackung.</p>
+
+<h2>Haftung für Inhalte</h2>
+<p>Die Inhalte dieser Seite wurden mit Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität, insbesondere von Preisen und Produktangaben, kann ich keine Gewähr übernehmen. Preise und Verfügbarkeit können sich beim Händler jederzeit ändern.</p>
+
+<h2>Haftung für Links</h2>
+<p>Diese Seite enthält Links zu externen Websites Dritter (zum Beispiel Drogerien und Hersteller), auf deren Inhalte ich keinen Einfluss habe. Für diese fremden Inhalte kann ich keine Gewähr übernehmen. Verantwortlich ist immer der jeweilige Anbieter. Bei Bekanntwerden von Rechtsverletzungen entferne ich solche Links umgehend.</p>
+
+<h2>Urheberrecht</h2>
+<p>Die Texte und das Design dieser Seite unterliegen dem deutschen Urheberrecht. Marken- und Produktnamen gehören ihren jeweiligen Inhabern und werden hier nur zur Bezeichnung der empfohlenen Produkte genannt.</p>
+
+<p class="soft" style="margin-top:36px;font-size:13px">Stand: Oktober 2026</p>
+</body>
+</html>

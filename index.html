@@ -23,6 +23,15 @@
 #sg .tab{font:inherit;font-size:16px;background:none;border:0;border-bottom:2px solid transparent;padding:12px 0;margin-bottom:-1px;color:var(--soft);cursor:pointer;transition:color .2s,border-color .2s}
 #sg .tab:hover{color:var(--ink)}
 #sg .tab[aria-selected="true"]{color:var(--ink);font-weight:500;border-bottom-color:var(--moss)}
+#sg .foot{margin:56px 0 0;font-size:12px;color:var(--soft)}
+#sg .foot a{color:inherit;text-decoration:none;border-bottom:1px solid var(--line)}
+#sg .foot a:hover{color:var(--ink)}
+#sg.indetail .foot{display:none}
+/* Ohne Bilder */
+#sg.noimg .card .img,#sg.noimg .dimg,#sg.noimg .aimg{display:none}
+#sg.noimg .dgrid{grid-template-columns:1fr}
+#sg.noimg .rimg{min-height:110px}
+#sg.noimg .altlink{margin-top:8px}
 /* Produkt-Detailseite */
 #sg.indetail .tabs,#sg.indetail h3,#sg.indetail .chips,#sg.indetail .budget,#sg.indetail #sg-lnote,#sg.indetail #sg-tip,#sg.indetail .intro{display:none!important}
 #sg .back{font:inherit;font-size:14px;background:none;border:0;padding:4px 0;margin:0 0 24px;color:var(--soft);cursor:pointer}
@@ -193,6 +202,7 @@
 <div class="budget" id="sg-budget" hidden></div>
 <div class="tip" id="sg-tip" hidden></div>
 <div id="sg-out"></div>
+<p class="foot"><a href="impressum.html">Impressum</a></p>
 
 <script>
 (function(){
@@ -239,6 +249,12 @@ function $(id){return document.getElementById(id)}
 
 /* ---------- Produkte aus Dateien laden ---------- */
 var CFG={ordner:"produkte"};
+/* Produktbilder: false = keine Bilder anzeigen und keine Bilddienste abfragen. Zum Einschalten auf true setzen. */
+var SHOW_IMAGES=false;
+function nameFromUrl(u){
+ var b=String(u||"").split(/[?#]/)[0].replace(/\/+$/,"").split("/").pop()||"Produkt";
+ return b.replace(/-/g," ").replace(/\b\w/g,function(c){return c.toUpperCase()});
+}
 var ALIAS={"anti-aging":"antiaging","anti aging":"antiaging","anti_aging":"antiaging","antiaging":"antiaging","retinol":"antiaging","retinal":"antiaging","make-up":"makeup","make up":"makeup","schminke":"makeup","unreinheiten":"akne","pickel":"akne","rötungen":"roetungen","feine linien":"falten","linien":"falten","pigmentflecken":"pigment","pigmentierung":"pigment","große poren":"poren","grosse poren":"poren"};
 function cmpName(a,b){return a.localeCompare(b,undefined,{numeric:true})}
 function baseUrl(){return location.origin+location.pathname.replace(/[^\/]*$/,"")}
@@ -393,6 +409,7 @@ function blockImage(u){
  save();rerenderSoon();
 }
 function meta(p,done){
+ if(!SHOW_IMAGES)return done({img:"",name:p.name||nameFromUrl(p.url)});
  if(p.img&&p.name)return done({img:p.img,name:p.name});
  var m=CACHE[p.url];
  if(m&&((m.img&&!badImage(m.img))||(m.fail&&Date.now()-m.t<21600000)))return done({img:p.img||m.img,name:p.name||m.name});
@@ -418,6 +435,7 @@ function meta(p,done){
  next();
 }
 function fillImage(box,m){
+ if(!SHOW_IMAGES){box.innerHTML="";return}
  if(m.img){box.innerHTML='<img alt="'+esc(m.name)+'" src="'+esc(m.img)+'" loading="lazy">';
   box.querySelector("img").onerror=function(){box.innerHTML="<span>"+esc(m.name||"Produkt")+"</span>"}}
  else box.innerHTML="<span>"+esc(m.name||"Produkt")+"</span>";
@@ -1043,6 +1061,7 @@ $("sg-theme").onclick=function(){
  applyTheme();
 };
 try{window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",function(){if(!themeSel)applyTheme()})}catch(e){}
+if(!SHOW_IMAGES)$("sg").classList.add("noimg");
 applyTheme();
 readHash();
 render();
