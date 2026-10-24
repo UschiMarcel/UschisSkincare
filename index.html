@@ -27,6 +27,18 @@
 #sg .foot a{color:inherit;text-decoration:none;border-bottom:1px solid var(--line)}
 #sg .foot a:hover{color:var(--ink)}
 #sg.indetail .foot{display:none}
+/* Passwortschutz */
+#sg.locked>*:not(h2):not(.gate):not(.themebtn){display:none!important}
+#sg .gate{max-width:420px;margin:28px 0 0}
+#sg .gate[hidden]{display:none}
+#sg .gate .gl{font-size:15px;margin:0 0 14px}
+#sg .gate .grow{display:flex;gap:10px;flex-wrap:wrap}
+#sg .gate input{flex:1;min-width:180px;font:inherit;font-size:15px;padding:11px 18px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink);outline:none;transition:border-color .2s}
+#sg .gate input:focus{border-color:var(--moss)}
+#sg .gate .gerr{font-size:13px;color:#b5654f;margin:10px 0 0}
+#sg .gate .gerr[hidden]{display:none}
+#sg .gate .gfoot{margin:28px 0 0;font-size:12px}
+#sg .gate .gfoot a{color:var(--soft);text-decoration:none;border-bottom:1px solid var(--line)}
 /* Ohne Bilder */
 #sg.noimg .card .img,#sg.noimg .dimg,#sg.noimg .aimg{display:none}
 #sg.noimg .dgrid{grid-template-columns:1fr}
@@ -187,6 +199,15 @@
 <h2>Uschi's Skincare Guide</h2>
 <p class="intro"><b>Ich hab hier wat janz Spezielles. Nur für dich &lt;3</b><br>Garantiert ohne L'Oréal, Neutrogena und ähnliche große Kosmetikhäuser</p>
 
+<div class="gate" id="sg-gate" hidden>
+<form id="sg-gform" autocomplete="off">
+<p class="gl">Diese Seite ist passwortgeschützt.</p>
+<div class="grow"><input type="password" id="sg-gpw" placeholder="Passwort" aria-label="Passwort" autocomplete="current-password"><button class="btn" type="submit">Öffnen</button></div>
+<p class="gerr" id="sg-gerr" role="alert" hidden>Das Passwort stimmt nicht.</p>
+<p class="gfoot"><a href="impressum.html">Impressum</a></p>
+</form>
+</div>
+
 <div class="tabs" role="tablist" id="sg-tabs"></div>
 
 <h3>Dein Hauttyp</h3>
@@ -250,7 +271,7 @@ function $(id){return document.getElementById(id)}
 /* ---------- Produkte aus Dateien laden ---------- */
 var CFG={ordner:"produkte"};
 /* Produktbilder: false = keine Bilder anzeigen und keine Bilddienste abfragen. Zum Einschalten auf true setzen. */
-var SHOW_IMAGES=false;
+var SHOW_IMAGES=true;
 function nameFromUrl(u){
  var b=String(u||"").split(/[?#]/)[0].replace(/\/+$/,"").split("/").pop()||"Produkt";
  return b.replace(/-/g," ").replace(/\b\w/g,function(c){return c.toUpperCase()});
@@ -993,6 +1014,7 @@ document.addEventListener("click",function(e){
 },true);
 document.addEventListener("keydown",function(e){if(e.key==="Escape"&&curSlug)leaveDetail()});
 window.addEventListener("hashchange",function(){
+ if(!unlocked)return;
  var was=curSlug;readHash();
  if(curSlug&&!was)lastY=window.scrollY||0;
  render();
@@ -1000,6 +1022,7 @@ window.addEventListener("hashchange",function(){
 });
 
 function render(){
+ if(!unlocked)return;
  var dpr=null;
  if(curSlug&&!loading){dpr=findSlug(curSlug);if(!dpr){curSlug=null}}
  $("sg").classList.toggle("indetail",!!(curSlug&&(loading||dpr)));
@@ -1064,8 +1087,33 @@ try{window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",
 if(!SHOW_IMAGES)$("sg").classList.add("noimg");
 applyTheme();
 readHash();
-render();
-loadProducts(function(list){PRODUCTS=list;loading=false;render()});
+/* Passwortschutz: Die Seite prüft einen SHA-256-Hash im Browser. Das hält Zufallsbesucher fern, ist aber keine echte Sicherheit. */
+var PW_HASH="e2633d0881f2a850fe60a465f04bb37d99af62fade6cb126131f245ab04fe2c3",unlocked=false;
+function sha(t){
+ if(!window.crypto||!crypto.subtle)return Promise.reject(new Error("nocrypto"));
+ return crypto.subtle.digest("SHA-256",new TextEncoder().encode("sg-uschi:"+t)).then(function(b){
+  return Array.prototype.map.call(new Uint8Array(b),function(x){return("0"+x.toString(16)).slice(-2)}).join("");
+ });
+}
+function startGuide(){
+ unlocked=true;
+ $("sg").classList.remove("locked");$("sg-gate").hidden=true;
+ render();
+ loadProducts(function(list){PRODUCTS=list;loading=false;render()});
+}
+var stored=null;try{stored=localStorage.getItem("sg-auth")}catch(e){}
+if(stored===PW_HASH){startGuide()}
+else{
+ $("sg").classList.add("locked");$("sg-gate").hidden=false;
+ $("sg-gform").onsubmit=function(e){
+  e.preventDefault();
+  var err=$("sg-gerr");
+  sha($("sg-gpw").value).then(function(h){
+   if(h===PW_HASH){try{localStorage.setItem("sg-auth",h)}catch(x){}startGuide()}
+   else{err.textContent="Das Passwort stimmt nicht.";err.hidden=false;$("sg-gpw").select()}
+  },function(){err.textContent="Bitte öffne die Seite über https, sonst kann das Passwort nicht geprüft werden.";err.hidden=false});
+ };
+}
 })();
 </script>
 </div>
