@@ -148,7 +148,30 @@
 #sg .preview a{display:inline-block;margin-top:10px;font-size:14px;color:var(--ink)}
 #sg .copybox{width:100%;max-width:560px;height:170px;font:inherit;font-size:13px;margin-top:12px;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
 @media (max-width:520px){#sg .rimg img{max-height:95px}#sg .extra{margin-left:90px}#sg .altmenu{margin-left:90px}#sg .rowlink{grid-template-columns:76px 1fr;gap:6px 14px}#sg .rowlink>.num{left:38px;font-size:110px}}
-@media (prefers-reduced-motion:reduce){#sg *{transition:none!important}}
+/* Kleine Übergänge */
+@keyframes sgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes sgFade{from{opacity:0}to{opacity:1}}
+#sg,#sg .themebtn,#sg .daytoggle,#sg .tip,#sg .info,#sg .warn,#sg .tag,#sg .lvl,#sg .chip,#sg .tab,#sg .btn{transition:background-color .3s ease,color .3s ease,border-color .3s ease,opacity .2s ease,transform .2s ease}
+#sg .chip:active,#sg .btn:active,#sg .dt:active{transform:scale(.97)}
+#sg .btn:hover{opacity:.9}
+#sg #sg-out>div,#sg .dgrid{animation:sgIn .32s ease both}
+#sg .routine .row,#sg .grid .card{animation:sgIn .38s ease both}
+#sg .routine .row:nth-child(2),#sg .grid .card:nth-child(2){animation-delay:.04s}
+#sg .routine .row:nth-child(3),#sg .grid .card:nth-child(3){animation-delay:.08s}
+#sg .routine .row:nth-child(4),#sg .grid .card:nth-child(4){animation-delay:.12s}
+#sg .routine .row:nth-child(5),#sg .grid .card:nth-child(5){animation-delay:.16s}
+#sg .routine .row:nth-child(6),#sg .grid .card:nth-child(6){animation-delay:.2s}
+#sg .routine .row:nth-child(n+7),#sg .grid .card:nth-child(n+7){animation-delay:.24s}
+#sg .rimg img,#sg .img img,#sg .dimg img,#sg .aimg img{animation:sgFade .45s ease both}
+#sg .card .img img,#sg .rimg img{transition:transform .35s ease}
+#sg .card:hover .img img{transform:translateY(-4px)}
+#sg .rowlink:hover .rimg img{transform:scale(1.04)}
+#sg .rowlink>.num{transition:color .3s ease,transform .35s ease}
+#sg .rowlink:hover>.num{transform:translate(-50%,-50%) scale(1.04)}
+#sg .altmenu[open] .altlist{animation:sgIn .25s ease both}
+#sg .altmenu summary::after{transition:transform .2s ease}
+#sg .budget input[type=range]{transition:opacity .2s}
+@media (prefers-reduced-motion:reduce){#sg *{transition:none!important;animation:none!important}}
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Archivo:wdth,wght@125,800&display=swap">
 
