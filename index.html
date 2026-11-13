@@ -271,7 +271,7 @@ function $(id){return document.getElementById(id)}
 /* ---------- Produkte aus Dateien laden ---------- */
 var CFG={ordner:"produkte"};
 /* Produktbilder: false = keine Bilder anzeigen und keine Bilddienste abfragen. Zum Einschalten auf true setzen. */
-var SHOW_IMAGES=true;
+var SHOW_IMAGES=false;
 function nameFromUrl(u){
  var b=String(u||"").split(/[?#]/)[0].replace(/\/+$/,"").split("/").pop()||"Produkt";
  return b.replace(/-/g," ").replace(/\b\w/g,function(c){return c.toUpperCase()});
