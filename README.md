@@ -120,7 +120,7 @@ Unter der Routine kann man sie als Bild speichern (mit Schreiblinie „Anwendung
 
 ## Bilder
 
-Jedes Produkt bekommt eine realistisch gerenderte, neutrale Flasche aus mattem Glas mit Silberkappe (oder einen Tiegel bzw. eine Tube), bewusst ohne Marke oder Logo. Die Flüssigkeit hat die Produktfarbe, den Namen schreibt die Seite per Handschrift (Feld `etikett`) wie mit Edding darauf. Die Seite sucht die Datei `bilder/<kennung>.svg`. Die Kennung ist der letzte Teil des Produktlinks in Kleinbuchstaben (z. B. `…/mivolis-panthenol-salbe` wird `bilder/mivolis-panthenol-salbe.svg`).
+Jedes Produkt bekommt eine realistisch gerenderte, neutrale Flasche aus mattem Glas mit Silberkappe (oder einen Tiegel bzw. eine Tube), bewusst ohne Marke oder Logo. Die Flüssigkeit hat die Produktfarbe, den Namen schreibt die Seite in fetter Marker-Schrift (Feld `etikett`) mit Unterstreichung und kleinem Schritt-Namen darauf. Die Seite sucht die Datei `bilder/<kennung>.svg`. Die Kennung ist der letzte Teil des Produktlinks in Kleinbuchstaben (z. B. `…/mivolis-panthenol-salbe` wird `bilder/mivolis-panthenol-salbe.svg`).
 
 Neue Illustrationen erzeugst du im Repository-Ordner mit:
 

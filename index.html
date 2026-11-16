@@ -315,9 +315,12 @@
 #sg .extra,#sg .altmenu{margin-left:224px}
 @media (max-width:720px){#sg .rowlink{grid-template-columns:120px 1fr;gap:6px 14px}#sg .rowlink>.num{left:60px;font-size:100px}#sg .extra,#sg .altmenu{margin-left:134px}}
 #sg .budget,#sg .tip,#sg .sum{max-width:none}
+#sg .mk{left:35.5%;top:60%;transform:rotate(-3deg);transform-origin:left top;width:32%;text-align:left;font-family:'Permanent Marker','Marker Felt','Segoe Print','Comic Sans MS',cursive;font-weight:400;text-transform:uppercase;color:#111;opacity:.92;line-height:1.02;letter-spacing:0}
+#sg .mk .mkm{display:block;white-space:pre-line;padding-bottom:.18em;border-bottom:.13em solid #111;width:fit-content;max-width:100%}
+#sg .mk small{display:block;margin-top:.55em;font:500 3.4cqw/1.2 'Montserrat',system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#222;white-space:nowrap}
 @media (prefers-reduced-motion:reduce){#sg *{transition:none!important;animation:none!important}}
 </style>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Montserrat:wght@300;400;500;600;700&family=Archivo:wdth,wght@125,800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Montserrat:wght@300;400;500;600;700&family=Archivo:wdth,wght@125,800&display=swap">
 
 <h2>Uschi's <span class="pillw"><svg viewBox="0 0 24 24" width=".62em" height=".62em" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9"/></svg>Skincare</span> Guide</h2>
 <p class="intro"><b>Ich hab hier wat janz Spezielles. Nur für dich &lt;3</b><br>Garantiert ohne L'Oréal, Neutrogena und ähnliche große Kosmetikhäuser</p>
@@ -523,9 +526,10 @@ function autoLabel(n){
  if(w.length<2)return w.join("");
  var h=Math.ceil(w.length/2);return w.slice(0,h).join(" ")+"\n"+w.slice(h).join(" ");
 }
+var SUBL={"Reinigungs-Öle":"Reinigungsöl","Reinigungs-Cleanser":"Cleanser","Peeling":"Peeling","Toner":"Toner","Serum":"Serum","Retinol / Anti-Aging":"Anti-Aging","Creme":"Creme","Salbe":"Salbe","Sonnenschutz":"SPF"};
 function meta(p,done){
  var nm=p.name||nameFromUrl(p.url);
- done({img:SHOW_IMAGES?(p.img||("bilder/"+p.slug+".svg")):"",name:nm,label:p.label||autoLabel(nm)});
+ done({img:SHOW_IMAGES?(p.img||("bilder/"+p.slug+".svg")):"",name:nm,label:p.label||autoLabel(nm),sub:SUBL[p.step]||""});
 }
 function fillImage(box,m){
  if(!SHOW_IMAGES||!m.img){box.innerHTML="";return}
@@ -534,7 +538,12 @@ function fillImage(box,m){
  im.src=m.img;box.innerHTML="";
  if(box.classList.contains("aimg")||!m.label){box.appendChild(im);return}
  var w=document.createElement("span");w.className="hw";w.appendChild(im);
- var t=document.createElement("span");t.className="mk";t.textContent=m.label;w.appendChild(t);
+ var t=document.createElement("span");t.className="mk";
+ var ls=String(m.label).split("\n"),mx=0;ls.forEach(function(x){if(x.length>mx)mx=x.length});
+ t.style.fontSize=Math.min(10.5,31/(Math.max(mx,4)*.64)).toFixed(2)+"cqw";
+ var main=document.createElement("span");main.className="mkm";main.textContent=m.label;t.appendChild(main);
+ if(m.sub){var sm=document.createElement("small");sm.textContent=m.sub;t.appendChild(sm)}
+ w.appendChild(t);
  box.appendChild(w);
 }
 
