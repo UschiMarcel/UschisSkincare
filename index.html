@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Uschi's Skincare Guide</title>
-<style>html,body{margin:0;background:#f3efe7}</style>
+<style>html,body{margin:0;background:#f5f4f0}</style>
 <meta name="color-scheme" content="light dark">
 </head>
 <body>
 <div id="sg">
 <button class="themebtn" id="sg-theme" type="button" aria-label="Zwischen hellem und dunklem Modus wechseln"></button>
 <style>
-#sg{--bg:#f3efe7;--paper:#fbf9f4;--ink:#1c1c1a;--soft:#77746b;--moss:#1c1c1a;--onmoss:#fbf9f4;--acc:#e2673a;--blush:#f0e3d6;--line:#ddd6c8;
+#sg{--bg:#f5f4f0;--paper:#fbf9f4;--ink:#1c1c1a;--soft:#77746b;--moss:#1c1c1a;--onmoss:#fbf9f4;--acc:#e2673a;--blush:#f0e3d6;--line:#ddd6c8;
   font-family:'Montserrat',system-ui,sans-serif;color:var(--ink);background:var(--bg);padding:clamp(20px,6vw,88px);max-width:1040px;margin:0 auto;box-sizing:border-box;line-height:1.55}
 #sg *{box-sizing:border-box}
 #sg h2{font-weight:300;font-size:clamp(30px,5vw,54px);line-height:1.1;margin:0 0 16px;letter-spacing:-.02em}
@@ -214,6 +214,37 @@
 @media (max-width:520px){#sg .rowlink{grid-template-columns:96px 1fr}#sg .rowlink>.num{left:48px}#sg .rimg img{max-height:120px}}
 #sg .extra,#sg .altmenu{margin-left:152px}
 @media (max-width:520px){#sg .extra,#sg .altmenu{margin-left:110px}}
+/* Klinischer Look: Haarlinien, Raster, Großbuchstaben-Labels */
+#sg{--bg:#f5f4f0;--paper:#fbfbf8;--line:#cfcdc4;--r:10px}
+#sg[data-theme="dark"]{--bg:#121211;--paper:#181816;--line:#34332f}
+#sg h2{font-size:clamp(44px,10.5vw,118px);letter-spacing:-.055em;line-height:.92;max-width:none;text-transform:none}
+#sg .pillw{border-width:.035em}
+#sg .intro{border-top:1px solid var(--line);padding-top:16px;font-size:13px;letter-spacing:.01em;max-width:560px}
+#sg .tabs{gap:0;border:1px solid var(--line);border-radius:999px;display:inline-flex;padding:3px;background:var(--paper)}
+#sg .tab{border:0;padding:9px 20px;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+#sg h3{border-top:1px solid var(--line);padding-top:14px;margin:34px 0 16px}
+#sg .chip{border-radius:999px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;padding:9px 16px;background:transparent}
+#sg .chip[aria-pressed="true"]{background:var(--moss)}
+#sg .tip{border-radius:var(--r);background:transparent;border:1px solid var(--line);padding:18px 22px}
+#sg .routine{gap:0;border-top:1px solid var(--line)}
+#sg .row,#sg .row:last-child{background:transparent;border:0;border-bottom:1px solid var(--line);border-radius:0;padding:0;overflow:visible}
+#sg .row:hover{transform:none;box-shadow:none;background:rgba(127,127,110,.06)}
+#sg .rowlink{padding:30px 8px}
+#sg .rowlink>.num{color:rgba(28,28,26,.13)}
+#sg[data-theme="dark"] .rowlink>.num{color:rgba(239,236,228,.12)}
+#sg .rimg{position:relative;z-index:1}
+#sg .rimg img{max-height:170px;filter:drop-shadow(0 10px 12px rgba(28,28,26,.18))}
+#sg .rimg+div>div:first-child,#sg .info .step{text-transform:uppercase;letter-spacing:.14em;font-size:10px}
+#sg .extra,#sg .altmenu{margin-left:160px}
+#sg .grid{gap:0;border-top:1px solid var(--line);border-left:1px solid var(--line)}
+#sg .card{background:transparent;border-radius:0;border:0;border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:24px}
+#sg .card:hover{transform:none;box-shadow:none;background:var(--paper)}
+#sg .img img{width:170px;max-height:230px;filter:drop-shadow(0 10px 12px rgba(28,28,26,.18))}
+#sg .dgrid{border-radius:var(--r);background:var(--paper);border:1px solid var(--line)}
+#sg .dimg img{filter:drop-shadow(0 12px 14px rgba(28,28,26,.2))}
+#sg .info,#sg .warn{border-radius:6px}
+#sg .foot{border-top:1px solid var(--line);padding-top:16px}
+@media (max-width:520px){#sg .extra,#sg .altmenu{margin-left:110px}#sg .rowlink{padding:24px 0}}
 @media (prefers-reduced-motion:reduce){#sg *{transition:none!important;animation:none!important}}
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Archivo:wdth,wght@125,800&display=swap">
@@ -746,7 +777,7 @@ function wrapText(ctx,text,x,y,maxW,lh,maxLines){
 }
 function drawImage(area,d){
  var W=1080,pad=72,tx=pad+68,maxW=W-pad-tx,F="Montserrat, system-ui, sans-serif";
- var C={bg:"#f3efe7",ink:"#1c1c1a",soft:"#77746b",moss:"#1c1c1a",blush:"#f0e3d6",line:"#ddd6c8"};
+ var C={bg:"#f5f4f0",ink:"#1c1c1a",soft:"#77746b",moss:"#1c1c1a",blush:"#f0e3d6",line:"#ddd6c8"};
  var cv=document.createElement("canvas");cv.width=W;cv.height=7000;
  var ctx=cv.getContext("2d");
  ctx.fillStyle=C.bg;ctx.fillRect(0,0,W,7000);
@@ -1035,7 +1066,7 @@ try{themeSel=localStorage.getItem("sg-theme")}catch(e){}
 function sysDark(){try{return window.matchMedia("(prefers-color-scheme: dark)").matches}catch(e){return false}}
 function curTheme(){return themeSel==="dark"||themeSel==="light"?themeSel:(sysDark()?"dark":"light")}
 function applyTheme(){
- var t=curTheme(),bg=t==="dark"?"#141412":"#f3efe7";
+ var t=curTheme(),bg=t==="dark"?"#121211":"#f5f4f0";
  $("sg").setAttribute("data-theme",t);
  document.documentElement.style.background=bg;document.body.style.background=bg;
  var b=$("sg-theme");b.innerHTML=t==="dark"?ICON.am:ICON.pm;

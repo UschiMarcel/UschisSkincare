@@ -4,7 +4,7 @@
 Aufruf:  python scripts/make_illustrations.py [--produkte produkte] [--ziel bilder] [--ueberschreiben]
 
 Es werden keine echten Verpackungen nachgebildet: Je nach Schritt und Namen entsteht eine neutrale
-Flasche, Tube, Dose oder Pipettenflasche in einer Pastellfarbe, ohne Marken, Logos oder Aufschriften.
+Flasche, Tube, Dose oder Pipettenflasche in einer Pastellfarbe, ohne Hintergrund, Marken, Logos oder Aufschriften.
 Dateiname = Kennung des Produkts (letzter Teil des Links), z. B. bilder/mighty-melt.svg.
 Vorhandene Dateien bleiben unverändert, außer mit --ueberschreiben. Eigene Bilder gehen immer vor:
 trage im Produkt "bild": "bilder/mein-foto.jpg" ein.
@@ -175,8 +175,7 @@ def svg(slug, name, step):
     k = form(name, step)
     return (
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 380" role="img" aria-label="Illustration">'
-        f'<circle cx="150" cy="196" r="128" fill="{circ}"/>'
-        '<ellipse cx="150" cy="334" rx="76" ry="8" fill="#000" opacity=".1"/>'
+        '<ellipse cx="150" cy="334" rx="70" ry="6" fill="#000" opacity=".12"/>'
         + shape(k, body, cap, accent)
         + "</svg>\n"
     )
