@@ -234,17 +234,39 @@ def svg(slug, name, step, vorgabe=None):
     col = farbe(slug, name, step, vorgabe)
     lid = "#8a63c9" if re.search(r"balsam|balm|melt", (name or "").lower()) else None
     return (
-        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 380" role="img" aria-label="Illustration">'
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="60 40 180 305" role="img" aria-label="Illustration">'
         + gdefs(col, lid)
-        + '<ellipse cx="150" cy="334" rx="92" ry="11" fill="url(#sh)"/>'
+        + '<ellipse cx="150" cy="334" rx="80" ry="10" fill="url(#sh)"/>'
         + shape(k, col, lid)
         + "</svg>\n"
     )
 
 
-# Beschriftungsfläche je Form in Prozent des Bildes: (links, Mitte oben, Breite)
-LABELBOX = {"pump": (35.5, 62, 30), "dropper": (35.5, 63, 30), "flip": (35.5, 60, 30), "spray": (35.5, 63, 30),
-            "jar": (33, 77, 36), "padjar": (33, 68, 34), "tin": (33, 78, 36), "tube": (36.5, 56, 27)}
+# Beschriftungsfläche je Form im Zeichenraster (links, Mitte oben, Breite); wird in Prozent des Bildausschnitts umgerechnet
+VB = (60, 40, 180, 305)
+LABELBOX = {"pump": (106, 248, 88), "dropper": (108, 256, 84), "flip": (106, 244, 88), "spray": (108, 248, 84),
+            "jar": (88, 290, 124), "padjar": (92, 262, 116), "tin": (92, 308, 116), "tube": (108, 198, 86)}
+
+
+def lum(hexcol):
+    h = hexcol.lstrip("#")
+    r, g, b = [int(h[i:i + 2], 16) / 255 for i in (0, 2, 4)]
+    lin = [c / 12.92 if c <= .03928 else ((c + .055) / 1.055) ** 2.4 for c in (r, g, b)]
+    return .2126 * lin[0] + .7152 * lin[1] + .0722 * lin[2]
+
+
+def textcolor(col, kind):
+    """Dunkle Fläche -> weiße Schrift, helle -> schwarze. Glasflaschen sind milchig aufgehellt."""
+    h = col.lstrip("#")
+    r, g, b = [int(h[i:i + 2], 16) for i in (0, 2, 4)]
+    if kind not in ("tube",):
+        r, g, b = [round(c + (255 - c) * .3) for c in (r, g, b)]
+    return "#ffffff" if lum("#%02x%02x%02x" % (r, g, b)) < .3 else "#111111"
+
+
+def layout_for(kind, col):
+    x, y, w = LABELBOX[kind]
+    return [round((x - VB[0]) / VB[2] * 100, 1), round((y - VB[1]) / VB[3] * 100, 1), round(w / VB[2] * 100, 1), textcolor(col, kind)]
 
 
 def main():
@@ -257,7 +279,8 @@ def main():
     n = 0
     layout = {}
     for slug, p in slugs(a.produkte):
-        layout[slug] = LABELBOX[form(p.get("name", ""), p.get("schritt", ""))]
+        _k = form(p.get("name", ""), p.get("schritt", ""))
+        layout[slug] = layout_for(_k, farbe(slug, p.get("name", ""), norm_step(p.get("schritt", "")), p.get("farbe")))
         f = os.path.join(a.ziel, slug + ".svg")
         if os.path.exists(f) and not a.ueberschreiben:
             continue
