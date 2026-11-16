@@ -53,7 +53,7 @@ Eine Datei ist eine Liste von Produkten:
 | `schritt` | ja | Schritt der Routine (siehe unten). |
 | `beschreibung` | nein | Kurzer Text auf der Karte. |
 | `tags` | nein | Hauttypen und Themen gemischt (siehe unten). |
-| `bild` | nein | Eigener Bildpfad oder -link (z. B. `bilder/mein-foto.jpg`). Ohne Angabe wird `bilder/<kennung>.svg` genutzt. |
+| `bild` | nein | Eigener Bildpfad im Repository (z. B. `bilder/mein-foto.jpg`). Externe Links (`https://…`) werden bewusst ignoriert, damit keine fremden Shop-Bilder erscheinen. Ohne Angabe wird `bilder/<kennung>.svg` genutzt. |
 | `zeit` | nein | `"morgens"` oder `"abends"`. Ohne Angabe: beides. |
 | `erfahrung` | nein | Liste aus `anfaenger`, `erfahren`, `fortgeschritten`, `experte`. Ohne Angabe: für alle. |
 | `konflikt` | nein | Schrittnamen oder Produktlinks, mit denen das Produkt nicht kombiniert werden soll. |

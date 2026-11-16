@@ -245,6 +245,8 @@
 #sg .info,#sg .warn{border-radius:6px}
 #sg .foot{border-top:1px solid var(--line);padding-top:16px}
 @media (max-width:520px){#sg .extra,#sg .altmenu{margin-left:110px}#sg .rowlink{padding:24px 0}}
+#sg .card .img{height:240px;display:flex;align-items:flex-end;justify-content:center}
+#sg .card .img img{height:100%;width:auto;max-width:100%;max-height:none;object-fit:contain}
 @media (prefers-reduced-motion:reduce){#sg *{transition:none!important;animation:none!important}}
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Archivo:wdth,wght@125,800&display=swap">
@@ -359,7 +361,7 @@ function norm(r){
  var z=[].concat(r.zeit||[]).join(" ").toLowerCase(),when=null;
  if(z){when=[];if(z.indexOf("morgen")>-1)when.push("am");if(z.indexOf("abend")>-1)when.push("pm");if(!when.length)when=null}
  return{
-  url:r.link,old:(function(v){if(v===undefined||v===null||v==="")return null;var n=parseFloat(String(v).replace(",","."));return isNaN(n)?null:n})(r.preis_alt),price:(function(v){if(v===undefined||v===null||v==="")return null;var n=parseFloat(String(v).replace(",","."));return isNaN(n)?null:n})(r.preis),name:r.name||"",info:String(r.hinweis||"").trim(),use:String(r.anwendung||"").trim(),det:String(r.details||"").trim(),ing:[].concat(r.inhaltsstoffe||[]).join(", ").trim(),step:st,when:when,levels:lv.length?lv:null,conflict:[].concat(r.konflikt||[]).map(stepName),note:r.beschreibung||"",img:r.bild||"",
+  url:r.link,old:(function(v){if(v===undefined||v===null||v==="")return null;var n=parseFloat(String(v).replace(",","."));return isNaN(n)?null:n})(r.preis_alt),price:(function(v){if(v===undefined||v===null||v==="")return null;var n=parseFloat(String(v).replace(",","."));return isNaN(n)?null:n})(r.preis),name:r.name||"",info:String(r.hinweis||"").trim(),use:String(r.anwendung||"").trim(),det:String(r.details||"").trim(),ing:[].concat(r.inhaltsstoffe||[]).join(", ").trim(),step:st,when:when,levels:lv.length?lv:null,conflict:[].concat(r.konflikt||[]).map(stepName),note:r.beschreibung||"",img:(typeof r.bild==="string"&&!/^(https?:)?\/\//i.test(r.bild.trim()))?r.bild.trim():"",
   types:tags.filter(function(t){return t!=="alle"&&TYPES[t]}),
   concerns:tags.filter(function(t,i,a){return CONCERNS[t]&&a.indexOf(t)===i}).concat(st==="Retinol / Anti-Aging"&&tags.indexOf("antiaging")<0?["antiaging"]:[])
  };
@@ -369,7 +371,7 @@ function mergeFiles(files){
  var order=[],map={};
  files.forEach(function(f){
   (Array.isArray(f)?f:(f&&f.produkte)||[]).forEach(function(r){
-   if(!r||!r.link)return;
+   if(!r||typeof r!=="object"||typeof r.link!=="string"||!r.link)return;
    var k=String(r.link).trim();
    if(!map[k]){map[k]={};order.push(k)}
    for(var key in r)map[k][key]=r[key];
