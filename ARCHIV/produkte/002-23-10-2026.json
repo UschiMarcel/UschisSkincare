@@ -1,0 +1,220 @@
+[
+  {
+    "link": "https://www.dm.de/p/d/3040929/balea-cleanser-jelly",
+    "name": "Balea Cleanser Jelly",
+    "schritt": "Reinigung",
+    "beschreibung": "Reinigungsgel in Jelly-Textur für den täglichen Einsatz.",
+    "tags": [
+      "normal",
+      "mischhaut",
+      "empfindlich",
+      "roetungen",
+      "trocken"
+    ],
+    "preis": "3,95"
+  },
+  {
+    "link": "https://www.dm.de/p/d/3150585/geek-und-gorgeous-reinigungsbalsam-101-mighty-melt",
+    "name": "Geek & Gorgeous Mighty Melt Reinigungsbalsam",
+    "schritt": "Reinigungs-Öle",
+    "beschreibung": "Reinigungsbalsam, der Sonnenschutz und Make-up löst. Ideal als erster Reinigungsschritt am Abend.",
+    "tags": [
+      "trocken",
+      "normal",
+      "makeup",
+      "mischhaut",
+      "feuchtigkeit"
+    ],
+    "zeit": "abends",
+    "preis": "14,35"
+  },
+  {
+    "link": "https://www.dm.de/p/d/1630606/balea-peeling-cleanser-beauty-expert",
+    "bild": "https://products.dm-static.com/images/f_auto,q_auto,c_fit,h_1200,w_1200/v1762467486/assets/pas/images/2a1d1d13-dd38-4d27-8901-917941e37820/balea-peeling-cleanser-beauty-expert",
+    "name": "Balea Peeling Cleanser Beauty Expert",
+    "schritt": "Reinigung",
+    "beschreibung": "Reinigung mit Peeling-Effekt für ein klareres, glatteres Hautbild.",
+    "tags": [
+      "normal",
+      "mischhaut",
+      "fettig",
+      "poren",
+      "akne",
+      "falten"
+    ],
+    "preis": "4,25",
+    "konflikt": [
+      "Retinol / Anti-Aging"
+    ]
+  },
+  {
+    "link": "https://www.dm.de/p/d/1704994/balea-toner-beauty-expert-hydration",
+    "name": "Balea Toner Beauty Expert Hydration",
+    "schritt": "Toner",
+    "beschreibung": "Feuchtigkeitsspendender Toner für den Schritt nach der Reinigung.",
+    "tags": [
+      "trocken",
+      "normal",
+      "mischhaut",
+      "empfindlich",
+      "feuchtigkeit"
+    ],
+    "preis": "3,95"
+  },
+  {
+    "link": "https://www.dm.de/p/d/1306226/geek-und-gorgeous-toner-101-liquid-hydration",
+    "name": "Geek & Gorgeous Liquid Hydration Toner",
+    "schritt": "Toner",
+    "beschreibung": "Toner, der Feuchtigkeit gibt und die Haut auf die Pflege danach vorbereitet. Eine super alternative zu Cremen bei stark fettender Haut.",
+    "tags": [
+      "trocken",
+      "normal",
+      "mischhaut",
+      "empfindlich",
+      "feuchtigkeit",
+      "fettig"
+    ],
+    "preis": "8,35"
+  },
+  {
+    "link": "https://www.dm.de/p/d/1630366/balea-peeling-toner-beauty-expert",
+    "bild": "https://products.dm-static.com/images/f_auto,q_auto,c_fit,h_1200,w_1200/v1749776770/assets/pas/images/45f29851-a307-42e9-a074-a38d35811c26/balea-peeling-toner-beauty-expert",
+    "name": "Balea Peeling Toner Beauty Expert",
+    "schritt": "Toner",
+    "beschreibung": "Peeling-Toner für ein ebenmäßigeres Hautbild. Nicht am selben Abend wie Retinal verwenden.",
+    "tags": [
+      "normal",
+      "mischhaut",
+      "fettig",
+      "poren",
+      "akne",
+      "pigment"
+    ],
+    "zeit": "abends",
+    "preis": "6,45",
+    "konflikt": [
+      "Retinol / Anti-Aging"
+    ]
+  },
+  {
+    "link": "https://www.dm.de/p/d/1306163/geek-und-gorgeous-gesichtsserum-101-c-glow-15-prozent-vitamin-c",
+    "name": "Geek & Gorgeous C-Glow 15% Vitamin C Gesichtsserum",
+    "schritt": "Serum",
+    "hinweis": "Am besten im Kühlschrank lagern, dann bleibt das Vitamin C länger wirksam.",
+    "beschreibung": "Vitamin-C-Serum für mehr Ausstrahlung und einen ebenmäßigeren Teint. Arbeitet Ebenfalls gegen Pigmentflechen und der Verminderung sichtbarer Poren",
+    "tags": [
+      "normal",
+      "mischhaut",
+      "fettig",
+      "trocken",
+      "pigment",
+      "poren",
+      "falten"
+    ],
+    "zeit": "morgens",
+    "preis": "12,35",
+    "konflikt": [
+      "Retinol / Anti-Aging"
+    ]
+  },
+  {
+    "link": "https://www.dm.de/p/d/1306173/geek-und-gorgeous-gesichtsserum-101-a-game-5-0-05-prozent-retinal",
+    "bild": "https://products.dm-static.com/images/f_auto,q_auto,c_fit,h_1200,w_1200/v1791414217/assets/pas/images/a40a7000-06b6-479c-815c-35685db71519/geek-und-gorgeous-gesichtsserum-101-a-game-5-0-05-prozent-retinal",
+    "name": "Geek & Gorgeous A-Game 0,05% Retinal Gesichtsserum",
+    "schritt": "Retinol / Anti-Aging",
+    "beschreibung": "Retinal-Serum in der niedrigsten der drei Stärken, passend für den Einstieg.",
+    "tags": [
+      "falten",
+      "pigment",
+      "poren"
+    ],
+    "zeit": "abends",
+    "preis": "12,85",
+    "erfahrung": ["anfaenger"]
+  },
+  {
+    "link": "https://www.dm.de/p/d/1459264/geek-und-gorgeous-gesichtsserum-101-a-game-10-0-1-prozent-retinal",
+    "name": "Geek & Gorgeous A-Game 0,1% Retinal Gesichtsserum",
+    "schritt": "Retinol / Anti-Aging",
+    "beschreibung": "Retinal-Serum in mittlerer Stärke für Haut, die Retinal schon gut verträgt.",
+    "tags": [
+      "normal",
+      "mischhaut",
+      "fettig",
+      "trocken",
+      "falten",
+      "pigment",
+      "poren"
+    ],
+    "zeit": "abends",
+    "preis": "18,35",
+    "erfahrung": ["erfahren"]
+  },
+  {
+    "link": "https://www.dm.de/p/d/2978218/geek-und-gorgeous-gesichtsserum-101-a-game-20-0-2-prozent-retinal",
+    "bild": "https://products.dm-static.com/images/f_auto,q_auto,c_fit,h_1200,w_1200/v1791413288/assets/pas/images/8e8a1ae1-6e18-475e-b95f-be514f56096a/geek-und-gorgeous-gesichtsserum-101-a-game-20-0-2-prozent-retinal",
+    "name": "Geek & Gorgeous A-Game 0,2% Retinal Gesichtsserum",
+    "schritt": "Retinol / Anti-Aging",
+    "beschreibung": "Retinal-Serum in der höchsten der drei Stärken für erfahrene Anwender.",
+    "tags": [
+      "normal",
+      "mischhaut",
+      "fettig",
+      "trocken",
+      "falten",
+      "pigment",
+      "poren"
+    ],
+    "zeit": "abends",
+    "preis": "22,35",
+    "erfahrung": ["fortgeschritten"]
+  },
+  {
+    "link": "https://www.dm.de/p/d/1306263/geek-und-gorgeous-gesichtscreme-101-happier-barrier",
+    "name": "Geek & Gorgeous Happier Barrier Gesichtscreme",
+    "schritt": "Creme",
+    "beschreibung": "Gesichtscreme, die die Hautbarriere pflegt und Feuchtigkeit spendet.",
+    "tags": [
+      "trocken",
+      "empfindlich",
+      "normal",
+      "mischhaut",
+      "roetungen",
+      "feuchtigkeit"
+    ],
+    "zeit": "abends",
+    "preis": "10,35"
+  },
+  {
+    "link": "https://www.dm.de/p/d/3131974/geek-und-gorgeous-gesichtscreme-sonnenschutz-101-zero-feel-lsf-50",
+    "bild": "https://products.dm-static.com/images/f_auto,q_auto,c_fit,h_1200,w_1200/v1791325886/assets/pas/images/7aa3f2a9-6252-4480-88d6-dd712acf4dd5/geek-und-gorgeous-gesichtscreme-sonnenschutz-101-zero-feel-lsf-50",
+    "name": "Geek & Gorgeous Zero Feel Gesichtscreme Sonnenschutz LSF 50",
+    "schritt": "Sonnenschutz",
+    "beschreibung": "Leichter Sonnenschutz mit LSF 50, den man auf der Haut kaum spürt.",
+    "tags": [
+      "pigment",
+      "falten"
+    ],
+    "preis": "12,35"
+  },
+  {
+    "link": "https://www.shop-apotheke.com/arzneimittel/2137594/cordes-vas-creme.htm",
+    "bild": "https://cdn.shop-apotheke.com/images/650x0/D02/137/594/D02137594-p10.webp",
+    "name": "Cordes VAS Creme",
+    "schritt": "Retinol / Anti-Aging",
+    "hinweis": "Sehr hoch wirksam und sollte nicht ohne Rücksprache mit Artzt oder Apotheker eingesetzt werden. Nie ohne Sonnencreme raus gehen.",
+    "beschreibung": "Verschreibungspflichtiges Arzneimittel. Nur nach ärztlicher Beratung. Das ist die ultimative Endstufe was Retinol und Anti-Aging angeht.",
+    "tags": [
+      "fettig",
+      "akne",
+      "trocken",
+      "falten",
+      "pigment",
+      "poren"
+    ],
+    "zeit": "abends",
+    "aktiv": true,
+    "preis": "19,50",
+    "erfahrung": ["experte"]
+  }
+]

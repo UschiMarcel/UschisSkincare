@@ -1,0 +1,1122 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Uschi's Skincare Guide</title>
+<style>html,body{margin:0;background:#eceee9}</style>
+<meta name="color-scheme" content="light dark">
+</head>
+<body>
+<div id="sg">
+<button class="themebtn" id="sg-theme" type="button" aria-label="Zwischen hellem und dunklem Modus wechseln"></button>
+<style>
+#sg{--bg:#eceee9;--paper:#f8f8f5;--ink:#262a26;--soft:#6c736b;--moss:#58654f;--blush:#e6d6d0;--line:#d5d9d1;
+  font-family:'Montserrat',system-ui,sans-serif;color:var(--ink);background:var(--bg);padding:clamp(20px,6vw,88px);max-width:1040px;margin:0 auto;box-sizing:border-box;line-height:1.55}
+#sg *{box-sizing:border-box}
+#sg h2{font-weight:300;font-size:clamp(30px,5vw,54px);line-height:1.1;margin:0 0 16px;letter-spacing:-.02em}
+#sg .intro b{color:var(--ink);font-weight:600}
+#sg .intro{max-width:72ch;color:var(--soft);margin:0 0 32px;font-size:15px}
+#sg h3{font-weight:500;font-size:17px;margin:0 0 12px}
+#sg h3 small{font-weight:400;font-size:13px;color:var(--soft);margin-left:8px}
+#sg .tabs{display:flex;gap:30px;border-bottom:1px solid var(--line);margin:0 0 32px}
+#sg .tab{font:inherit;font-size:16px;background:none;border:0;border-bottom:2px solid transparent;padding:12px 0;margin-bottom:-1px;color:var(--soft);cursor:pointer;transition:color .2s,border-color .2s}
+#sg .tab:hover{color:var(--ink)}
+#sg .tab[aria-selected="true"]{color:var(--ink);font-weight:500;border-bottom-color:var(--moss)}
+#sg .foot{margin:56px 0 0;font-size:12px;color:var(--soft)}
+#sg .foot a{color:inherit;text-decoration:none;border-bottom:1px solid var(--line)}
+#sg .foot a:hover{color:var(--ink)}
+#sg.indetail .foot{display:none}
+/* Passwortschutz */
+#sg.locked>*:not(h2):not(.gate):not(.themebtn){display:none!important}
+#sg .gate{max-width:420px;margin:28px 0 0}
+#sg .gate[hidden]{display:none}
+#sg .gate .gl{font-size:15px;margin:0 0 14px}
+#sg .gate .grow{display:flex;gap:10px;flex-wrap:wrap}
+#sg .gate input{flex:1;min-width:180px;font:inherit;font-size:15px;padding:11px 18px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink);outline:none;transition:border-color .2s}
+#sg .gate input:focus{border-color:var(--moss)}
+#sg .gate .gerr{font-size:13px;color:#b5654f;margin:10px 0 0}
+#sg .gate .gerr[hidden]{display:none}
+#sg .gate .gfoot{margin:28px 0 0;font-size:12px}
+#sg .gate .gfoot a{color:var(--soft);text-decoration:none;border-bottom:1px solid var(--line)}
+/* Ohne Bilder */
+#sg.noimg .card .img,#sg.noimg .dimg,#sg.noimg .aimg{display:none}
+#sg.noimg .dgrid{grid-template-columns:1fr}
+#sg.noimg .rimg{min-height:110px}
+#sg.noimg .altlink{margin-top:8px}
+/* Produkt-Detailseite */
+#sg.indetail .tabs,#sg.indetail h3,#sg.indetail .chips,#sg.indetail .budget,#sg.indetail #sg-lnote,#sg.indetail #sg-tip,#sg.indetail .intro{display:none!important}
+#sg .back{font:inherit;font-size:14px;background:none;border:0;padding:4px 0;margin:0 0 24px;color:var(--soft);cursor:pointer}
+#sg .back:hover{color:var(--ink)}
+#sg .dgrid{display:grid;grid-template-columns:minmax(200px,340px) 1fr;gap:36px;align-items:start}
+#sg .dimg img{display:block;width:100%;height:auto;max-height:440px;object-fit:contain;mix-blend-mode:multiply;filter:brightness(1.05) contrast(1.02)}
+#sg .dimg span{font-size:13px;color:var(--soft)}
+#sg .dname{font-weight:500;font-size:clamp(24px,3.4vw,34px);line-height:1.2;margin:2px 0 12px}
+#sg .dtags{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 16px}
+#sg .dnote{font-size:15px;margin:0 0 16px;max-width:60ch}
+#sg .dh{font-weight:500;font-size:15px;margin:22px 0 6px}
+#sg .dtext{font-size:14px;line-height:1.6;color:var(--soft);white-space:pre-line;max-width:60ch;margin:0}
+#sg .dsrc{font-size:12px;color:var(--soft);margin:22px 0 0}
+#sg .dbtn{display:inline-block;margin-top:22px;text-decoration:none}
+#sg .dsim{display:flex;flex-direction:column;gap:4px}
+@media (max-width:640px){#sg .dgrid{grid-template-columns:1fr;gap:20px}#sg .dimg{max-width:240px}}
+/* Darkmode */
+#sg{position:relative}
+#sg .themebtn{position:absolute;top:clamp(14px,3vw,34px);right:clamp(14px,3vw,34px);width:42px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;padding:0;transition:border-color .2s}
+#sg .themebtn:hover{border-color:var(--moss)}
+#sg[data-theme="dark"]{--bg:#151815;--paper:#1e231e;--ink:#e9ece6;--soft:#9ba596;--moss:#6b7e5c;--blush:#332c28;--line:#2f362f}
+#sg[data-theme="dark"] .info{background:#1d2c38;border-left-color:#5b8fb3}
+#sg[data-theme="dark"] .info svg{color:#8fc0e3}
+#sg[data-theme="dark"] .lvl{background:#1d2c38;color:#9cc7e6}
+#sg[data-theme="dark"] .warn{border-left-color:#c97a63}
+#sg[data-theme="dark"] .tip{background:rgba(127,150,110,.14)}
+/* Im Darkmode bekommen Produktfotos eine helle Fläche, weil der Multiply-Effekt dunkle Produkte unsichtbar machen würde. */
+#sg[data-theme="dark"] .img img,#sg[data-theme="dark"] .rimg img,#sg[data-theme="dark"] .aimg img,#sg[data-theme="dark"] .dimg img{mix-blend-mode:normal;filter:none}
+#sg[data-theme="dark"] .img img,#sg[data-theme="dark"] .rimg img,#sg[data-theme="dark"] .aimg img,#sg[data-theme="dark"] .dimg img{background:#f1f2ed;border-radius:12px;padding:6px}
+#sg[data-theme="dark"] .rowlink>.num{color:rgba(233,236,230,.16)}
+#sg .chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px}
+#sg .chip{font:inherit;font-size:14px;padding:9px 18px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+#sg .chip:hover{border-color:var(--moss)}
+#sg .chip[aria-pressed="true"]{background:var(--moss);border-color:var(--moss);color:#fff}
+#sg .tab:focus-visible,#sg .chip:focus-visible,#sg .btn:focus-visible,#sg a:focus-visible{outline:2px solid var(--moss);outline-offset:3px}
+#sg .tip{background:rgba(88,101,79,.1);border-radius:20px;padding:20px 24px;max-width:62ch;margin:6px 0 40px;font-size:14px}
+#sg .tip b{font-weight:600;font-size:16px;display:block;margin-bottom:2px}
+#sg .sum{max-width:62ch;font-size:14px;color:var(--soft);margin:0 0 28px}
+#sg .sum b{color:var(--ink);font-weight:500}
+/* Produkte-Raster */
+#sg .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:28px 22px}
+#sg .card{display:flex;flex-direction:column;text-decoration:none;color:inherit}
+#sg .img{flex:1;display:flex;align-items:flex-end;justify-content:center;margin-bottom:14px}
+#sg .img img{display:block;width:190px;max-width:100%;height:auto;max-height:240px;object-fit:contain;mix-blend-mode:multiply;filter:brightness(1.05) contrast(1.02)}
+#sg .img span{font-size:13px;color:var(--soft);text-align:center}
+#sg .step{font-size:13px;color:var(--moss);margin-bottom:2px}
+#sg .name{font-weight:500;font-size:16px;line-height:1.3;margin:0 0 6px}
+#sg .note{font-size:14px;color:var(--soft);margin:0 0 10px}
+#sg .go{font-size:14px;border-bottom:1px solid var(--ink);align-self:flex-start;padding-bottom:1px}
+#sg .empty{color:var(--soft);padding:30px 0}
+/* Routine */
+#sg .routine{list-style:none;margin:0;padding:0}
+#sg .row{border-top:1px solid var(--line)}
+#sg .row:last-child{border-bottom:1px solid var(--line)}
+#sg .rowlink{position:relative;display:grid;grid-template-columns:96px 1fr;gap:6px 20px;align-items:center;padding:22px 0;text-decoration:none;color:inherit}
+#sg .rowlink>*{position:relative;z-index:1}
+#sg .rowlink>.num{position:absolute;z-index:0;left:48px;top:50%;transform:translate(-50%,-50%);white-space:nowrap;text-align:center;font-family:"Archivo","Montserrat",system-ui,sans-serif;font-stretch:125%;font-size:150px;line-height:1;font-weight:800;color:rgba(38,42,38,.22);pointer-events:none;user-select:none;font-variant-numeric:tabular-nums}
+#sg .rimg{display:block}
+#sg .rimg img{display:block;width:100%;height:auto;max-height:120px;object-fit:contain;mix-blend-mode:multiply;filter:brightness(1.05) contrast(1.02)}
+#sg .rimg span{display:block;font-size:11px;color:var(--soft)}
+#sg .info{display:flex;gap:9px;align-items:flex-start;font-size:13px;line-height:1.45;margin:0 0 10px;padding:10px 14px;border-radius:12px;background:#dcebf5;border-left:3px solid #7fb0d3;max-width:56ch}
+#sg .info svg{flex:none;margin-top:1px;color:#3f6a8a}
+#sg .hint{font-size:12px;color:var(--soft);margin:-4px 0 10px;max-width:56ch}
+#sg .warn{font-size:13px;margin:0 0 10px;padding:10px 14px;border-radius:12px;background:var(--blush);border-left:3px solid #b5654f;max-width:56ch}
+#sg .warn{margin:0}
+#sg .extra{margin:-6px 0 24px 116px;max-width:56ch}
+#sg .extra[hidden]{display:none}
+#sg .altmenu{margin:-8px 0 22px 116px;max-width:56ch;font-size:13px}
+#sg .altmenu[hidden]{display:none}
+#sg .altmenu summary{cursor:pointer;color:var(--soft);font-size:13px;list-style:none;display:inline-flex;align-items:center;gap:6px}
+#sg .altmenu summary::-webkit-details-marker{display:none}
+#sg .altmenu summary::after{content:"+";font-size:15px;line-height:1}
+#sg .altmenu[open] summary::after{content:"\2212"}
+#sg .altmenu summary:hover{color:var(--ink)}
+#sg .altmenu .altlist{display:flex;flex-direction:column;gap:2px;margin-top:4px}
+#sg .altmenu .altlink{margin-top:8px}
+#sg .altmenu .aprice{display:block;font-size:12px;color:var(--soft)}
+#sg .altlink{display:flex;align-items:center;gap:12px;margin-top:12px;text-decoration:none;color:inherit}
+#sg .aimg{width:44px;flex:none;display:block}
+#sg .aimg img{display:block;width:100%;height:auto;max-height:55px;object-fit:contain;mix-blend-mode:multiply;filter:brightness(1.05) contrast(1.02)}
+#sg .aimg span{font-size:9px;color:var(--soft)}
+#sg .alabel{display:block;font-size:12px;color:var(--soft)}
+#sg .aname{display:block;font-size:14px;font-weight:500;text-decoration:underline;text-underline-offset:3px}
+#sg .daytoggle{display:inline-flex;gap:4px;padding:5px;margin:0 0 30px;background:var(--paper);border:1px solid var(--line);border-radius:999px}
+#sg .dt{font:inherit;font-size:15px;display:flex;align-items:center;gap:9px;padding:11px 26px;border:0;border-radius:999px;background:transparent;color:var(--ink);cursor:pointer;transition:background .2s,color .2s}
+#sg .dt:hover{background:var(--bg)}
+#sg .dt[aria-pressed="true"]{background:var(--moss);color:#fff}
+#sg .dt:focus-visible{outline:2px solid var(--moss);outline-offset:3px}
+#sg #sg-lnote{margin-top:-14px}
+#sg .price{margin-left:14px;font-size:14px;color:var(--soft)}
+#sg .price del{color:var(--soft)}
+#sg .price b{color:var(--ink);font-weight:500}
+#sg .off{font-size:12px;background:var(--blush);color:var(--ink);border-radius:999px;padding:1px 8px;margin-left:4px}
+#sg .card .price{display:block;margin:6px 0 0}
+#sg .dbg{font-size:13px;max-width:62ch;margin:0 0 28px;padding:12px 16px;border:1px solid var(--line);border-radius:12px}
+#sg .dbg summary{cursor:pointer;font-size:14px;font-weight:500}
+#sg .dbg summary:focus-visible{outline:2px solid var(--moss);outline-offset:3px}
+#sg .dbg .dbgbody{margin-top:10px}
+#sg .dbg a{color:inherit}
+#sg .dbg ul{margin:6px 0 0;padding-left:18px}
+#sg .budget{max-width:420px;margin:0 0 28px}
+#sg .budget[hidden]{display:none}
+#sg .budget input[type=range]{width:100%;accent-color:var(--moss);margin:4px 0}
+#sg .blabels{display:flex;justify-content:space-between;font-size:12px;color:var(--soft)}
+#sg .chips[hidden]{display:none}
+#sg .tag.on{background:var(--moss);color:#fff}
+#sg .card .step{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+#sg .lvl{font-size:11px;line-height:1.4;padding:2px 9px;border-radius:999px;background:#dcebf5;color:#2f5671}
+#sg .card .tag{background:transparent;border:1px solid var(--line)}
+#sg .card .tag.on{background:var(--moss);border-color:var(--moss);color:#fff}
+#sg .tags{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+#sg .tag{font-size:12px;padding:3px 11px;border-radius:999px;background:var(--blush)}
+/* Speichern */
+#sg .savebar{display:flex;flex-wrap:wrap;gap:10px;margin:32px 0 0}
+#sg .btn svg{flex:none}
+#sg .savebar .btn:first-child{display:inline-flex;align-items:center;gap:9px}
+#sg .btn{font:inherit;font-size:14px;padding:11px 22px;border-radius:999px;border:1px solid var(--moss);background:var(--moss);color:#fff;cursor:pointer;transition:opacity .2s}
+#sg .btn:hover{opacity:.85}
+#sg .btn.ghost{background:transparent;color:var(--ink)}
+#sg .savemsg{font-size:13px;color:var(--soft);margin:14px 0 0;max-width:62ch}
+#sg .preview{margin-top:18px;max-width:420px}
+#sg .preview img{width:100%;display:block;border-radius:12px;border:1px solid var(--line)}
+#sg .preview a{display:inline-block;margin-top:10px;font-size:14px;color:var(--ink)}
+#sg .copybox{width:100%;max-width:560px;height:170px;font:inherit;font-size:13px;margin-top:12px;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+@media (max-width:520px){#sg .rimg img{max-height:95px}#sg .extra{margin-left:90px}#sg .altmenu{margin-left:90px}#sg .rowlink{grid-template-columns:76px 1fr;gap:6px 14px}#sg .rowlink>.num{left:38px;font-size:110px}}
+/* Kleine Übergänge */
+@keyframes sgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes sgFade{from{opacity:0}to{opacity:1}}
+#sg,#sg .themebtn,#sg .daytoggle,#sg .tip,#sg .info,#sg .warn,#sg .tag,#sg .lvl,#sg .chip,#sg .tab,#sg .btn{transition:background-color .3s ease,color .3s ease,border-color .3s ease,opacity .2s ease,transform .2s ease}
+#sg .chip:active,#sg .btn:active,#sg .dt:active{transform:scale(.97)}
+#sg .btn:hover{opacity:.9}
+#sg #sg-out>div,#sg .dgrid{animation:sgIn .32s ease both}
+#sg .routine .row,#sg .grid .card{animation:sgIn .38s ease both}
+#sg .routine .row:nth-child(2),#sg .grid .card:nth-child(2){animation-delay:.04s}
+#sg .routine .row:nth-child(3),#sg .grid .card:nth-child(3){animation-delay:.08s}
+#sg .routine .row:nth-child(4),#sg .grid .card:nth-child(4){animation-delay:.12s}
+#sg .routine .row:nth-child(5),#sg .grid .card:nth-child(5){animation-delay:.16s}
+#sg .routine .row:nth-child(6),#sg .grid .card:nth-child(6){animation-delay:.2s}
+#sg .routine .row:nth-child(n+7),#sg .grid .card:nth-child(n+7){animation-delay:.24s}
+#sg .rimg img,#sg .img img,#sg .dimg img,#sg .aimg img{animation:sgFade .45s ease both}
+#sg .card .img img,#sg .rimg img{transition:transform .35s ease}
+#sg .card:hover .img img{transform:translateY(-4px)}
+#sg .rowlink:hover .rimg img{transform:scale(1.04)}
+#sg .rowlink>.num{transition:color .3s ease,transform .35s ease}
+#sg .rowlink:hover>.num{transform:translate(-50%,-50%) scale(1.04)}
+#sg .altmenu[open] .altlist{animation:sgIn .25s ease both}
+#sg .altmenu summary::after{transition:transform .2s ease}
+#sg .budget input[type=range]{transition:opacity .2s}
+@media (prefers-reduced-motion:reduce){#sg *{transition:none!important;animation:none!important}}
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Archivo:wdth,wght@125,800&display=swap">
+
+<h2>Uschi's Skincare Guide</h2>
+<p class="intro"><b>Ich hab hier wat janz Spezielles. Nur für dich &lt;3</b><br>Garantiert ohne L'Oréal, Neutrogena und ähnliche große Kosmetikhäuser</p>
+
+<div class="gate" id="sg-gate" hidden>
+<form id="sg-gform" autocomplete="off">
+<p class="gl">Diese Seite ist passwortgeschützt.</p>
+<div class="grow"><input type="password" id="sg-gpw" placeholder="Passwort" aria-label="Passwort" autocomplete="current-password"><button class="btn" type="submit">Öffnen</button></div>
+<p class="gerr" id="sg-gerr" role="alert" hidden>Das Passwort stimmt nicht.</p>
+<p class="gfoot"><a href="impressum.html">Impressum</a></p>
+</form>
+</div>
+
+<div class="tabs" role="tablist" id="sg-tabs"></div>
+
+<h3>Dein Hauttyp</h3>
+<div class="chips" id="sg-types"></div>
+<h3>Deine Themen<small>mehrere möglich</small></h3>
+<div class="chips" id="sg-concerns"></div>
+<h3 id="sg-sth" hidden>Schritt</h3>
+<div class="chips" id="sg-steps" hidden></div>
+<h3 id="sg-lh">Deine Erfahrung<small>mit starken Wirkstoffen</small></h3>
+<div class="chips" id="sg-levels"></div>
+<p class="sum" id="sg-lnote" hidden></p>
+<h3 id="sg-bh" hidden>Dein Budget<small id="sg-bval"></small></h3>
+<div class="budget" id="sg-budget" hidden></div>
+<div class="tip" id="sg-tip" hidden></div>
+<div id="sg-out"></div>
+<p class="foot"><a href="impressum.html">Impressum</a></p>
+
+<script>
+(function(){
+/* Produkte kommen aus dem Ordner "produkte" im Repository (siehe loadProducts unten). */
+var PRODUCTS=[],loading=true;
+/* Reihenfolge der Routine. base:true = Basis-Schritt, kommt immer vor. when = morgens/abends, max = Produkte pro Schritt. */
+var STEPS=[
+ {k:"Reinigungs-Öle",base:true,oil:true,when:["pm"],max:1},
+ {k:"Reinigungs-Cleanser",base:true,cleanser:true,when:["am","pm"],max:1},
+ {k:"Peeling",onlyHit:true,allHits:true,when:["pm"],max:1},
+ {k:"Toner",when:["am","pm"],max:1},
+ {k:"Serum",when:["am","pm"],max:2,layer:3},
+ {k:"Retinol / Anti-Aging",when:["pm"],max:1,hint:"Langsam einführen, nicht am selben Abend mit Peelings kombinieren und tagsüber Sonnenschutz tragen. Nicht in Schwangerschaft und Stillzeit anwenden."},
+ {k:"Creme",base:true,repl:true,when:["am","pm"],max:1},
+ {k:"Salbe",onlyHit:true,when:["pm"],max:1},
+ {k:"Sonnenschutz",base:true,when:["am"],max:1}
+];
+var TYPES={alle:"Alle",trocken:"Trocken",fettig:"Fettig",mischhaut:"Mischhaut",empfindlich:"Empfindlich",normal:"Normal"};
+var CONCERNS={akne:"Unreinheiten",roetungen:"Rötungen",falten:"Feine Linien",pigment:"Pigmentflecken",poren:"Große Poren",feuchtigkeit:"Feuchtigkeit",antiaging:"Anti Aging",makeup:"Make-up"};
+var TIPS={
+ trocken:["Trockene Haut","Setze auf milde Reinigung und reichhaltige Cremes mit Lipiden und Hyaluron."],
+ fettig:["Fettige Haut","Leichte Gel-Texturen und ein sanfter Wirkstoff wie Niacinamid halten den Glanz im Zaum."],
+ mischhaut:["Mischhaut","Pflege die T-Zone leicht und die Wangen etwas reichhaltiger."],
+ empfindlich:["Empfindliche Haut","Wenige Produkte, keine Duftstoffe, neue Dinge einzeln und langsam einführen."],
+ normal:["Normale Haut","Du hast viel Spielraum. Konzentriere dich auf Sonnenschutz und ein Serum für dein Thema."]
+};
+var TABS={routine:"Deine Routine",produkte:"Alle Produkte"};
+var TIMES={am:"Morgens",pm:"Abends"};
+var LEVELS={anfaenger:"Anfänger",erfahren:"Erfahren",fortgeschritten:"Fortgeschritten",experte:"Experte"};
+var ICON={am:'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',pm:'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>'};
+var lvlRel=true,ignoreLvl=false;
+var selS="alle",tab="routine",selT="alle",selC=[],time="am",selL="anfaenger",selB=null,CACHE={};
+try{CACHE=JSON.parse(localStorage.getItem("sg-meta2")||"{}")}catch(e){}
+/* letzte Auswahl dieses Besuchers wiederherstellen */
+try{var S=JSON.parse(localStorage.getItem("sg-sel")||"{}");
+ if(S.t&&TYPES[S.t])selT=S.t;
+ if(S.c&&S.c.filter)selC=S.c.filter(function(c){return CONCERNS[c]});
+ if(S.m&&TIMES[S.m])time=S.m;
+ if(S.l&&LEVELS[S.l])selL=S.l;
+ if(typeof S.b==="number")selB=S.b}catch(e){}
+function save(){try{localStorage.setItem("sg-meta2",JSON.stringify(CACHE))}catch(e){}}
+function esc(s){return String(s||"").replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function $(id){return document.getElementById(id)}
+
+/* ---------- Produkte aus Dateien laden ---------- */
+var CFG={ordner:"produkte"};
+/* Produktbilder: false = keine Bilder anzeigen und keine Bilddienste abfragen. Zum Einschalten auf true setzen. */
+var SHOW_IMAGES=false;
+function nameFromUrl(u){
+ var b=String(u||"").split(/[?#]/)[0].replace(/\/+$/,"").split("/").pop()||"Produkt";
+ return b.replace(/-/g," ").replace(/\b\w/g,function(c){return c.toUpperCase()});
+}
+var ALIAS={"anti-aging":"antiaging","anti aging":"antiaging","anti_aging":"antiaging","antiaging":"antiaging","retinol":"antiaging","retinal":"antiaging","make-up":"makeup","make up":"makeup","schminke":"makeup","unreinheiten":"akne","pickel":"akne","rötungen":"roetungen","feine linien":"falten","linien":"falten","pigmentflecken":"pigment","pigmentierung":"pigment","große poren":"poren","grosse poren":"poren"};
+function cmpName(a,b){return a.localeCompare(b,undefined,{numeric:true})}
+function baseUrl(){return location.origin+location.pathname.replace(/[^\/]*$/,"")}
+function getJSON(u){return fetch(u).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()})}
+function repoInfo(){
+ var m=location.hostname.match(/^([^.]+)\.github\.io$/i),p=location.pathname.split("/").filter(Boolean);
+ return m?{owner:m[1],repo:p[0]||(m[1]+".github.io")}:null;
+}
+function listFiles(){
+ var ck=null;
+ try{ck=JSON.parse(localStorage.getItem("sg-files")||"null")}catch(e){}
+ if(ck&&Date.now()-ck.t<120000)return Promise.resolve(ck.l);
+ var fallback=function(){
+  return getJSON(baseUrl()+CFG.ordner+"/dateien.json").catch(function(){return ck?ck.l:[]});
+ };
+ var ri=repoInfo();
+ if(!ri)return fallback();
+ return getJSON("https://api.github.com/repos/"+ri.owner+"/"+ri.repo+"/contents/"+CFG.ordner)
+  .then(function(a){
+   var l=a.filter(function(f){return f.type==="file"&&/\.json$/i.test(f.name)&&f.name.charAt(0)!=="_"&&f.name!=="dateien.json"})
+    .map(function(f){return f.name}).sort(cmpName);
+   try{localStorage.setItem("sg-files",JSON.stringify({t:Date.now(),l:l}))}catch(e){}
+   return l;
+  })
+  .catch(fallback);
+}
+var SA={"salbe":"Salbe","salben":"Salbe","peeling":"Peeling","aha":"Peeling","aha-peeling":"Peeling","reinigung":"Reinigungs-Cleanser","reinigung-cleanser":"Reinigungs-Cleanser","cleanser":"Reinigungs-Cleanser","reinigungs-öle":"Reinigungs-Öle","reinigungsöle":"Reinigungs-Öle","reinigungsöl":"Reinigungs-Öle","reinigungs-oele":"Reinigungs-Öle","reinigungsoel":"Reinigungs-Öle","öl":"Reinigungs-Öle","oel":"Reinigungs-Öle","balsam":"Reinigungs-Öle","reinigungsbalsam":"Reinigungs-Öle","retinol":"Retinol / Anti-Aging","retinal":"Retinol / Anti-Aging","anti-aging":"Retinol / Anti-Aging","anti aging":"Retinol / Anti-Aging","retinol/anti-aging":"Retinol / Anti-Aging"};
+function stepName(v){
+ var st=String(v||"").trim();
+ st=SA[st.toLowerCase()]||st;
+ STEPS.forEach(function(x){if(x.k.toLowerCase()===st.toLowerCase())st=x.k});
+ return st;
+}
+function norm(r){
+ var tags=(r.tags||[]).map(function(t){t=String(t).toLowerCase().trim();return ALIAS[t]||t});
+ var st=stepName(r.schritt);
+ var lv=[].concat(r.erfahrung||[]).map(function(x){x=String(x).toLowerCase().replace(/ä/g,"ae").replace(/\s+/g,"");return LEVELS[x]?x:null}).filter(Boolean);
+ var z=[].concat(r.zeit||[]).join(" ").toLowerCase(),when=null;
+ if(z){when=[];if(z.indexOf("morgen")>-1)when.push("am");if(z.indexOf("abend")>-1)when.push("pm");if(!when.length)when=null}
+ return{
+  url:r.link,old:(function(v){if(v===undefined||v===null||v==="")return null;var n=parseFloat(String(v).replace(",","."));return isNaN(n)?null:n})(r.preis_alt),price:(function(v){if(v===undefined||v===null||v==="")return null;var n=parseFloat(String(v).replace(",","."));return isNaN(n)?null:n})(r.preis),name:r.name||"",info:String(r.hinweis||"").trim(),use:String(r.anwendung||"").trim(),det:String(r.details||"").trim(),ing:[].concat(r.inhaltsstoffe||[]).join(", ").trim(),step:st,when:when,levels:lv.length?lv:null,conflict:[].concat(r.konflikt||[]).map(stepName),note:r.beschreibung||"",img:r.bild||"",
+  types:tags.filter(function(t){return t!=="alle"&&TYPES[t]}),
+  concerns:tags.filter(function(t,i,a){return CONCERNS[t]&&a.indexOf(t)===i}).concat(st==="Retinol / Anti-Aging"&&tags.indexOf("antiaging")<0?["antiaging"]:[])
+ };
+}
+/* Spätere Dateien überschreiben frühere Einträge mit gleichem Link (Felder werden zusammengeführt). */
+function mergeFiles(files){
+ var order=[],map={};
+ files.forEach(function(f){
+  (Array.isArray(f)?f:(f&&f.produkte)||[]).forEach(function(r){
+   if(!r||!r.link)return;
+   var k=String(r.link).trim();
+   if(!map[k]){map[k]={};order.push(k)}
+   for(var key in r)map[k][key]=r[key];
+   map[k].link=k;
+  });
+ });
+ var list=order.map(function(k){return map[k]}).filter(function(r){return r.aktiv!==false}).map(norm),seen={};
+ list.forEach(function(p){
+  var b=String(p.url).split(/[?#]/)[0].replace(/\/+$/,"").split("/").pop().toLowerCase().replace(/[^a-z0-9-]+/g,"-").replace(/^-+|-+$/g,"")||"produkt",k=b,n=1;
+  while(seen[k]){n++;k=b+"-"+n}
+  seen[k]=1;p.slug=k;
+ });
+ return list;
+}
+var ERRORS=[];
+function errText(e){var m=(e&&e.message)||String(e);return/^\d+$/.test(m)?"Datei nicht erreichbar (HTTP "+m+")":m}
+function loadProducts(done){
+ listFiles().then(function(names){
+  var t=Math.floor(Date.now()/60000);
+  return Promise.all(names.map(function(n){
+   return getJSON(baseUrl()+CFG.ordner+"/"+encodeURIComponent(n)+"?t="+t).catch(function(e){
+    ERRORS.push(n+": "+errText(e));
+    try{console.error("Produktdatei fehlerhaft: "+n,e)}catch(x){}
+    return[];
+   });
+  }));
+ }).then(function(files){
+  var list=mergeFiles(files);
+  /* Automatisch geholte Produktdetails (Anwendung, Inhaltsstoffe, Zusammenfassung). Von Hand eingetragene Felder haben Vorrang. */
+  return getJSON(baseUrl()+CFG.ordner+"/_auto-details.json?t="+Math.floor(Date.now()/60000)).catch(function(){return{}}).then(function(auto){
+   list.forEach(function(p){
+    var a=auto&&auto[p.url];if(!a)return;
+    if(!p.use&&a.anwendung)p.use=String(a.anwendung);
+    if(!p.det&&a.details)p.det=String(a.details);
+    if(!p.ing&&a.inhaltsstoffe)p.ing=[].concat(a.inhaltsstoffe).join(", ");
+    p.src=a.quelle||"";p.stand=a.stand||"";
+   });
+   done(list);
+  });
+ },function(e){ERRORS.push("Dateiliste: "+errText(e));done([])});
+}
+/* Mit ?debug hinter der Adresse zeigt die Seite Dateifehler an. */
+var DEBUG=/[?&]debug/.test(location.search);
+function errBox(){
+ if(!DEBUG||!ERRORS.length)return null;
+ var d=document.createElement("div");d.className="warn";d.style.margin="0 0 28px";
+ d.innerHTML="<b>Fehler in den Produktdateien:</b><br>"+ERRORS.map(esc).join("<br>");
+ return d;
+}
+function emptyHtml(){
+ return '<p class="empty">'+(ERRORS.length?"Die Produktliste konnte nicht vollständig geladen werden.":"Es sind noch keine Produkte hinterlegt.")+'</p>';
+}
+
+var RET="Retinol / Anti-Aging",DROPPED=[],CURPLAN=null;
+/* Override: Mit dem Thema "Anti Aging" gilt für den Retinol-Schritt der Hauttyp nicht als Ausschluss. */
+function typeFits(p){return selT==="alle"||!p.types||!p.types.length||p.types.indexOf(selT)>-1}
+function typeOk(p){
+ if(p.step==="Sonnenschutz")return true;/* Sonnenschutz kommt immer, egal welche Auswahl */
+ return(typeFits(p)||(p.step==="Reinigungs-Öle"&&selT==="empfindlich")||(p.step===RET&&selC.indexOf("antiaging")>-1))&&(tab==="produkte"||ignoreLvl||!p.levels||p.levels.indexOf(selL)>-1);
+}
+/* Erfahrung wird nur abgefragt, wenn die Routine ein Produkt mit Erfahrungswert enthalten würde (egal welcher Stufe). */
+function levelRelevant(){
+ ignoreLvl=true;
+ try{return["am","pm"].some(function(t){return buildRows(t).some(function(r){return r.x.p.levels&&r.x.p.levels.length})})}
+ finally{ignoreLvl=false}
+}
+/* Hinweistext, wenn wegen des Overrides ein Retinol-Produkt gezeigt wird, das für den Hauttyp eigentlich nicht vorgesehen ist. */
+function retDisclaimer(d){
+ if(selC.indexOf("antiaging")<0)return"";
+ var over=["am","pm"].some(function(k){return d[k].some(function(r){return r.s.k===RET&&!typeFits(r.x.p)})});
+ return over?"Dieses Retinol-Produkt ist für deinen Hauttyp eigentlich nicht vorgesehen. Hier ist Vorsicht geboten: Taste dich langsam heran, wende es anfangs nur selten an und halte gerne vorher mit mir Rücksprache.":"";
+}
+function hits(p){return selC.filter(function(c){return p.concerns&&p.concerns.indexOf(c)>-1})}
+
+/* ---------- Produktbilder ---------- */
+/* Bild + Titel kommen automatisch über microlink.io. Logos und Platzhalter werden erkannt und nie angezeigt:
+   dann wird erneut gesucht (mit Browser-Rendering), und wenn auch das scheitert, steht nur der Produktname da. */
+var BADSET={};
+try{BADSET=JSON.parse(localStorage.getItem("sg-badimg")||"{}")}catch(e){}
+function saveBad(){try{localStorage.setItem("sg-badimg",JSON.stringify(BADSET))}catch(e){}}
+var BADTOK=/(^|[\/_\-.,])(logo|favicon|apple-touch-icon|sprite|placeholder|noimage|no-image)([\/_\-.,?]|$)/i;
+var BADNAME=/dauerhaft günstig online kaufen|^dm-drogerie markt$/i;
+function badImage(u,d){
+ if(!u||BADSET[u])return true;
+ if(BADTOK.test(u)||/\.svg(\?|$)/i.test(u))return true;
+ if(d&&d.logo&&d.logo.url&&d.logo.url===u)return true;
+ var im=d&&d.image;
+ if(im&&im.width&&im.height&&Math.max(im.width,im.height)<250)return true;
+ return false;
+}
+/* Dasselbe Bild bei Produkten aus verschiedenen Schritten ist ein Logo oder Platzhalter, kein Produktfoto. */
+function sharedOther(p,u){
+ for(var k in CACHE){var c=CACHE[k];if(k!==p.url&&c&&c.img===u&&c.step!==p.step)return true}
+ return false;
+}
+var rerenderTimer=null;
+function rerenderSoon(){if(rerenderTimer)return;rerenderTimer=setTimeout(function(){rerenderTimer=null;render()},50)}
+function blockImage(u){
+ BADSET[u]=1;saveBad();
+ for(var k in CACHE){if(CACHE[k]&&CACHE[k].img===u)delete CACHE[k]}
+ save();rerenderSoon();
+}
+function meta(p,done){
+ if(!SHOW_IMAGES)return done({img:"",name:p.name||nameFromUrl(p.url)});
+ if(p.img&&p.name)return done({img:p.img,name:p.name});
+ var m=CACHE[p.url];
+ if(m&&((m.img&&!badImage(m.img))||(m.fail&&Date.now()-m.t<21600000)))return done({img:p.img||m.img,name:p.name||m.name});
+ var tries=["","&prerender=true"],i=0,name="";
+ function finish(u){
+  CACHE[p.url]={img:u,name:name,step:p.step,t:Date.now(),fail:!u};save();
+  done({img:p.img||u,name:p.name||name});
+ }
+ function retry(){if(++i<tries.length)next();else finish("")}
+ function next(){
+  fetch("https://api.microlink.io/?url="+encodeURIComponent(p.url)+tries[i])
+   .then(function(r){return r.json()})
+   .then(function(j){
+    var d=(j&&j.data)||{},t=d.title||"";
+    if(!name&&t&&!BADNAME.test(t))name=t;
+    var u=d.image&&d.image.url||"";
+    if(badImage(u,d))return retry();
+    if(sharedOther(p,u)){blockImage(u);return retry()}
+    finish(u);
+   })
+   .catch(retry);
+ }
+ next();
+}
+function fillImage(box,m){
+ if(!SHOW_IMAGES){box.innerHTML="";return}
+ if(m.img){box.innerHTML='<img alt="'+esc(m.name)+'" src="'+esc(m.img)+'" loading="lazy">';
+  box.querySelector("img").onerror=function(){box.innerHTML="<span>"+esc(m.name||"Produkt")+"</span>"}}
+ else box.innerHTML="<span>"+esc(m.name||"Produkt")+"</span>";
+}
+
+function mkChips(el,items,isOn,cb){
+ el.innerHTML="";
+ items.forEach(function(it){
+  var b=document.createElement("button");b.className="chip";b.type="button";b.textContent=it[1];
+  b.setAttribute("aria-pressed",String(isOn(it[0])));
+  b.onclick=function(){cb(it[0])};el.appendChild(b);
+ });
+}
+function pairs(map){return Object.keys(map).map(function(k){return [k,map[k]]})}
+
+/* Routine zusammenstellen */
+function pick(s,t,skip){
+ skip=skip||[];
+ var pool=PRODUCTS.filter(function(p){return p.step===s.k&&typeOk(p)&&(!p.when||p.when.indexOf(t)>-1)&&!(p.conflict||[]).some(function(c){return skip.indexOf(c)>-1})}).map(function(p){return{p:p,hit:hits(p)}});
+ if(s.allHits)pool=pool.filter(function(x){return(x.p.concerns||[]).every(function(c){return selC.indexOf(c)>-1})&&(x.p.concerns||[]).length>0});
+ if((selC.length||s.onlyHit)&&!s.base)pool=pool.filter(function(x){return x.hit.length>0});
+ var chosen=[],covered=[];
+ function gain(x){return x.hit.filter(function(c){return covered.indexOf(c)<0}).length}
+ while(chosen.length<s.max&&pool.length){
+  pool.sort(function(a,b){return gain(b)-gain(a)||b.hit.length-a.hit.length});
+  var best=pool.shift();
+  if(chosen.length&&gain(best)===0){pool.unshift(best);break}
+  chosen.push(best);covered=covered.concat(best.hit);
+ }
+/* Bei Feuchtigkeit dürfen mehrere feuchtigkeitsspendende Toner und Seren kombiniert werden (s.layer = Obergrenze). */
+ if(s.layer&&selC.indexOf("feuchtigkeit")>-1)pool.forEach(function(x){if(chosen.length<s.layer&&chosen.indexOf(x)<0&&x.hit.indexOf("feuchtigkeit")>-1)chosen.push(x)});
+ return chosen;
+}
+/* Ein feuchtigkeitsspendender Toner oder ein Serum ersetzt die Creme. */
+function hydrating(rows){
+ return rows.some(function(r){return(r.s.k==="Toner"||r.s.k==="Serum")&&r.x.p.concerns&&r.x.p.concerns.indexOf("feuchtigkeit")>-1});
+}
+function buildRows(t){
+ var rows=[],mk=selC.indexOf("makeup")>-1,oil=false;
+ STEPS.forEach(function(s){
+  if(s.when.indexOf(t)<0)return;
+  var pk=pick(s,t);
+  if(s.oil&&pk.length)oil=true;
+  /* Abends: mit Make-up erst Öl, dann Cleanser (Double Cleansing). Ohne Make-up nur das Öl, sofern eines passt. */
+  if(s.cleanser&&t==="pm"&&oil&&!mk)return;
+  pk.forEach(function(x){rows.push({s:s,x:x,t:t})});
+ });
+ if(hydrating(rows))rows=rows.filter(function(r){return!r.s.repl});
+ return rows;
+}
+/* Konflikte: "konflikt" enthält Schrittnamen oder Produkt-Links. Die Warnung erscheint bei beiden Produkten. */
+function clash(a,b){
+ function hit(x,y){return(x.conflict||[]).some(function(c){return c===y.step||c===y.url})}
+ return hit(a,b)||hit(b,a);
+}
+function conflictRows(rows,i){
+ if(lvlRel&&selL==="experte")return[];
+ return rows.filter(function(o,j){return j!==i&&clash(rows[i].x.p,o.x.p)});
+}
+/* Alternative: gleicher Schritt, passt zum Hauttyp und zur Tageszeit, steht noch nicht in der Routine und kollidiert mit keinem anderen Produkt. */
+function altFor(rows,i){
+ if(!conflictRows(rows,i).length)return null;
+ var r=rows[i],p=r.x.p,others=rows.filter(function(o,j){return j!==i}),used=rows.map(function(o){return o.x.p.url});
+ var pool=PRODUCTS.filter(function(q){
+  return q.step===p.step&&used.indexOf(q.url)<0&&typeOk(q)&&(!q.when||q.when.indexOf(r.t)>-1)&&!others.some(function(o){return clash(q,o.x.p)});
+ });
+ pool.sort(function(a,b){return hits(b).length-hits(a).length});
+ return pool[0]||null;
+}
+/* Alternativen im Menü: gleicher Schritt, passt zu Hauttyp, Tageszeit und Themen, ähnliche Preisklasse (oder leicht darüber/darunter). */
+function similarAlts(rows,i){
+ var r=rows[i],p=r.x.p,used={},others=rows.filter(function(o,j){return j!==i}),exp=lvlRel&&selL==="experte";
+ ["am","pm"].forEach(function(k){(CURPLAN?CURPLAN[k]:rows).forEach(function(o){used[o.x.p.url]=1})});
+ var sd=STEPS.filter(function(x){return x.k===p.step})[0]||{};
+ var pool=PRODUCTS.filter(function(q){
+  if(q.step!==p.step||q.url===p.url||used[q.url]||!typeOk(q)||(q.when&&q.when.indexOf(r.t)<0))return false;
+  if(!exp&&others.some(function(o){return clash(q,o.x.p)}))return false;
+  if(sd.allHits&&!((q.concerns||[]).length&&q.concerns.every(function(c){return selC.indexOf(c)>-1})))return false;
+  if(selC.length&&!sd.base&&hits(q).length===0)return false;
+  if(p.price!=null&&q.price!=null&&Math.abs(q.price-p.price)>Math.max(3,p.price*0.5))return false;
+  return true;
+ });
+ pool.sort(function(a,b){
+  var d=hits(b).length-hits(a).length;if(d)return d;
+  return(a.price==null||p.price==null?9999:Math.abs(a.price-p.price))-(b.price==null||p.price==null?9999:Math.abs(b.price-p.price));
+ });
+ return pool.slice(0,4);
+}
+function warnText(names){
+ return "Dieses Produkt ist in der Anwendung mit "+names.map(function(n){return"'"+n+"'"}).join(" und ")+" nicht empfehlenswert, da es die Haut stark strapazieren könnte. Halte hier gerne einmal mit mir Rücksprache :)";
+}
+function missingBase(rows,t){
+ var mk=selC.indexOf("makeup")>-1,oil=rows.some(function(r){return r.s.oil});
+ return STEPS.filter(function(s){
+  if(!s.base||s.when.indexOf(t)<0||DROPPED.indexOf(s.k)>-1)return false;
+  if(s.repl&&hydrating(rows))return false;
+  if(s.cleanser&&t==="pm"&&oil&&!mk)return false;
+  return !rows.some(function(r){return r.s.k===s.k});
+ }).map(function(s){return s.k});
+}
+
+/* ---------- Kosten und Budget ---------- */
+function fmt(n){try{return n.toLocaleString("de-DE",{style:"currency",currency:"EUR"})}catch(e){return n.toFixed(2).replace(".",",")+" €"}}
+function price(p){return p.price==null?0:p.price}
+function hasPrices(){return PRODUCTS.some(function(p){return p.price!=null})}
+function priceHtml(p){
+ if(p.price==null)return"";
+ if(p.old!=null&&p.old>p.price)return'<span class="price"><del>'+fmt(p.old)+'</del> <b>'+fmt(p.price)+'</b> <span class="off">−'+Math.round((1-p.price/p.old)*100)+' %</span></span>';
+ return'<span class="price">'+fmt(p.price)+'</span>';
+}
+function priceText(p){
+ if(p.price==null)return"";
+ return" ("+fmt(p.price)+(p.old!=null&&p.old>p.price?" statt "+fmt(p.old):"")+")";
+}
+function planTotal(d){
+ var seen={},sum=0;
+ ["am","pm"].forEach(function(k){d[k].forEach(function(r){var u=r.x.p.url;if(!seen[u]){seen[u]=1;sum+=price(r.x.p)}})});
+ return sum;
+}
+/* Liegt die Routine über dem Budget, werden Produkte durch günstigere Alternativen desselben Schritts ersetzt
+   (mit möglichst wenig Verlust bei den Themen). Reicht das nicht, entfallen optionale Schritte. Basis-Schritte bleiben. */
+function buildPlan(){
+ var d={am:buildRows("am"),pm:buildRows("pm")},info={swaps:0,drops:0,over:false,origin:{},moves:{}},guard=0;
+ if(selB!=null&&hasPrices()){
+  while(planTotal(d)>selB&&guard++<80){
+   var best=null,seen={};
+   var cand=function(a){if(!best||a.cost<best.cost||(a.cost===best.cost&&a.save>best.save))best=a};
+   ["am","pm"].forEach(function(k){d[k].forEach(function(r){
+    var p=r.x.p;if(seen[p.url])return;seen[p.url]=1;
+    PRODUCTS.forEach(function(q){
+     if(q.step!==p.step||q.url===p.url||q.price==null||q.price>=price(p)||!typeOk(q))return;
+     var ok=true;
+     ["am","pm"].forEach(function(k2){d[k2].forEach(function(r2){
+      if(r2.x.p.url===p.url&&q.when&&q.when.indexOf(r2.t)<0)ok=false;
+      if(r2.x.p.url===q.url)ok=false;
+     })});
+     if(ok)cand({t:"swap",p:p,q:q,cost:Math.max(0,hits(p).length-hits(q).length),save:price(p)-q.price});
+    });
+    var sd=STEPS.filter(function(x){return x.k===p.step})[0];
+    /* Mit Anti Aging bleibt das Retinol im Budget-Fall erhalten, dafür darf notfalls die Creme entfallen. */
+    var aa=selC.indexOf("antiaging")>-1;
+    if(sd&&price(p)>0){
+     if(!sd.base&&!(aa&&sd.k===RET))cand({t:"drop",p:p,cost:hits(p).length+3,save:price(p)});
+     else if(aa&&sd.repl)cand({t:"drop",p:p,cost:hits(p).length+4,save:price(p)});
+    }
+   })});
+   if(!best)break;
+   var org=info.origin[best.p.url]||best.p;
+   var tm=["am","pm"].filter(function(k){return d[k].some(function(r){return r.x.p.url===best.p.url})});
+   if(best.t==="swap"){
+    ["am","pm"].forEach(function(k){d[k].forEach(function(r){if(r.x.p.url===best.p.url)r.x={p:best.q,hit:hits(best.q)}})});
+    info.origin[best.q.url]=org;
+    info.moves[org.url]={orig:org,now:best.q,times:tm};
+   }else{
+    ["am","pm"].forEach(function(k){d[k]=d[k].filter(function(r){return r.x.p.url!==best.p.url})});
+    info.moves[org.url]={orig:org,now:null,times:tm};
+   }
+  }
+  info.over=planTotal(d)>selB;
+  Object.keys(info.moves).forEach(function(k){if(info.moves[k].now)info.swaps++;else info.drops++});
+ }
+ return{d:d,info:info};
+}
+function costHtml(plan){
+ var d=plan.d,tot=planTotal(d),seen={},np=0,n;
+ ["am","pm"].forEach(function(k){d[k].forEach(function(r){if(!seen[r.x.p.url]){seen[r.x.p.url]=1;if(r.x.p.price==null)np++}})});
+ var h="Gesamtkosten der Routine (morgens und abends): <b>"+fmt(tot)+"</b>.";
+ if(np)h+=" Bei "+np+(np===1?" Produkt fehlt der Preis, es ist":" Produkten fehlt der Preis, sie sind")+" nicht eingerechnet.";
+ if(selB!=null){
+  h+=" Dein Budget: bis <b>"+fmt(selB)+"</b>.";
+  var a=[];
+  if(plan.info.swaps)a.push(plan.info.swaps+(plan.info.swaps===1?" Produkt durch ein günstigeres ersetzt":" Produkte durch günstigere ersetzt"));
+  if(plan.info.drops)a.push(plan.info.drops+(plan.info.drops===1?" optionalen Schritt weggelassen":" optionale Schritte weggelassen"));
+  if(a.length)h+=" Dafür habe ich "+a.join(" und ")+".";
+  if(plan.info.over)h+=" Mit diesem Budget ist keine vollständige Routine möglich, die günstigste Zusammenstellung kostet "+fmt(tot)+".";
+ }
+ return h;
+}
+/* Ausklappbares Menü: was wegen des Budgets ersetzt oder gestrichen wurde */
+function debugBox(plan){
+ var L=Object.keys(plan.info.moves).map(function(k){return plan.info.moves[k]});
+ if(!L.length)return null;
+ var box=document.createElement("details");box.className="dbg";
+ function setBody(h){box.innerHTML='<summary>Aber welche sind denn nicht dabei?</summary><div class="dbgbody">'+h+'</div>'}
+ setBody("Namen werden geladen …");
+ var byUrl={},u=[],names={},n=0;
+ L.forEach(function(e){[e.orig,e.now].forEach(function(p){if(p&&!byUrl[p.url]){byUrl[p.url]=p;u.push(p.url)}})});
+ function link(p){return'<a href="'+esc(p.url)+'" target="_blank" rel="noopener sponsored">'+esc(names[p.url])+'</a>'}
+ function fill(){
+  var h="Wegen deines Budgets (bis "+esc(fmt(selB))+") habe ich Folgendes angepasst:<ul>";
+  L.forEach(function(e){
+   var when=e.times.map(function(k){return TIMES[k]}).join(" und ");
+   var now=e.now?hits(e.now):[];
+   var lost=hits(e.orig).filter(function(c){return now.indexOf(c)<0}).map(function(c){return CONCERNS[c]});
+   var save=price(e.orig)-(e.now?price(e.now):0);
+   h+="<li><b>"+(e.now?"Ersetzt":"Gestrichen")+"</b> ("+esc(e.orig.step)+", "+esc(when)+"): Ursprünglich "+link(e.orig)+" ("+esc(fmt(price(e.orig)))+")"
+    +(e.now?", jetzt "+link(e.now)+" ("+esc(fmt(price(e.now)))+")":", ohne Ersatz")
+    +". Spart "+esc(fmt(save))+"."+(lost.length?" Nicht mehr abgedeckt: "+esc(lost.join(", "))+".":"")+"</li>";
+  });
+  h+="</ul>"+(plan.info.over?"Das Budget wird trotzdem überschritten, es gibt keine weitere Einsparung.":"");
+  setBody(h);
+ }
+ u.forEach(function(url){meta(byUrl[url],function(m){names[url]=m.name||byUrl[url].name||url;if(++n===u.length)fill()})});
+ return box;
+}
+/* Regler für das Budget (erscheint erst, wenn Produkte einen Preis haben) */
+var BUD=null,budTimer=null;
+function budgetMax(){
+ var sum=0;
+ STEPS.forEach(function(s){var m=0;PRODUCTS.forEach(function(p){if(p.step===s.k&&p.price!=null&&p.price>m)m=p.price});sum+=m});
+ return Math.max(5,Math.ceil(sum));
+}
+function budgetLabel(){$("sg-bval").textContent=selB==null?"kein Limit":"bis "+fmt(selB)}
+function renderBudget(){
+ var box=$("sg-budget"),h=$("sg-bh"),has=hasPrices()&&tab==="routine";
+ box.hidden=!has;h.hidden=!has;
+ if(!has)return;
+ var M=budgetMax();
+ if(selB!=null&&selB>=M)selB=null;
+ if(!BUD||BUD.max!==M){
+  box.innerHTML="";
+  var inp=document.createElement("input");
+  inp.type="range";inp.min="1";inp.max=String(M);inp.step="0.5";
+  inp.setAttribute("aria-label","Maximales Budget der Routine");
+  inp.oninput=function(){
+   var v=Number(inp.value);selB=v>=M?null:v;budgetLabel();
+   clearTimeout(budTimer);budTimer=setTimeout(render,150);
+  };
+  var lb=document.createElement("div");lb.className="blabels";
+  lb.innerHTML="<span>1 €</span><span>kein Limit</span>";
+  box.appendChild(inp);box.appendChild(lb);
+  BUD={max:M,inp:inp};
+ }
+ BUD.inp.value=String(selB==null?M:selB);
+ budgetLabel();
+}
+
+/* ---------- Routine speichern ---------- */
+function selLine(d){
+ var c=selC.length?selC.map(function(k){return CONCERNS[k]}).join(", "):"Basic";
+ var l="Hauttyp: "+TYPES[selT]+"  |  Themen: "+c+(lvlRel?"  |  Erfahrung: "+LEVELS[selL]:"");
+ if(d&&hasPrices()){
+  if(selB!=null)l+="  |  Budget: bis "+fmt(selB);
+  l+="  |  Gesamtkosten: "+fmt(planTotal(d));
+ }
+ return l;
+}
+function resolveNames(rows,cb){
+ var jobs=[];
+ rows.forEach(function(r,i){
+  jobs.push({p:r.x.p,set:function(n){r.name=n}});
+  var a=altFor(rows,i);
+  if(a)jobs.push({p:a,set:function(n){r.alt={p:a,name:n}}});
+ });
+ var n=jobs.length,c=0;
+ if(!n)return cb();
+ jobs.forEach(function(j){meta(j.p,function(m){j.set(m.name||j.p.name||"Produkt");if(++c===n)cb()})});
+}
+function resolveBoth(d,cb){resolveNames(d.am,function(){resolveNames(d.pm,cb)})}
+function msg(area,t){area.innerHTML='<p class="savemsg">'+esc(t)+'</p>'}
+function saveBar(){
+ var box=document.createElement("div");
+ var bar=document.createElement("div");bar.className="savebar";
+ var area=document.createElement("div");
+ var b1=document.createElement("button");b1.type="button";b1.className="btn";
+ b1.innerHTML='<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10.5l5 5 5-5M5 20h14"/></svg><span>Als Bild speichern</span>';
+ var b2=document.createElement("button");b2.type="button";b2.className="btn ghost";b2.textContent="Als Text kopieren";
+ b1.onclick=function(){saveImage(area)};
+ b2.onclick=function(){saveText(area)};
+ bar.appendChild(b1);bar.appendChild(b2);
+ box.appendChild(bar);box.appendChild(area);
+ return box;
+}
+function saveText(area){
+ var d=buildPlan().d;
+ resolveBoth(d,function(){
+  var t="Deine Skincare Routine\n"+selLine(d)+"\n";
+  var rdt=retDisclaimer(d);if(rdt)t+="Vorsicht: "+rdt+"\n";
+  ["am","pm"].forEach(function(k){
+   if(!d[k].length)return;
+   t+="\n"+TIMES[k]+"\n";
+   d[k].forEach(function(r,i){
+    t+=(i+1)+". "+r.s.k+": "+r.name+priceText(r.x.p)+" – "+r.x.p.url+"\n";
+    if(r.x.p.info)t+="   Hinweis: "+r.x.p.info+"\n";
+    var cr=conflictRows(d[k],i);
+    if(cr.length){
+     t+="   Achtung: "+warnText(cr.map(function(o){return o.name}))+"\n";
+     if(r.alt)t+="   Alternative: "+r.alt.name+" – "+r.alt.p.url+"\n";
+    }
+   });
+  });
+  var done=function(){msg(area,"Routine kopiert. Du kannst sie jetzt irgendwo einfügen.")};
+  var fallback=function(){
+   area.innerHTML='<p class="savemsg">Automatisches Kopieren ist hier blockiert. Kopiere den Text von Hand:</p><textarea class="copybox" readonly></textarea>';
+   var ta=area.querySelector("textarea");ta.value=t;ta.focus();ta.select();
+  };
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(done,fallback);else fallback();
+ });
+}
+function saveImage(area){
+ msg(area,"Bild wird erstellt …");
+ var d=buildPlan().d;
+ resolveBoth(d,function(){
+  var go=function(){try{drawImage(area,d)}catch(e){msg(area,"Das Bild konnte nicht erstellt werden. Nutze stattdessen „Als Text kopieren“.")}};
+  var f=["300 54px Montserrat","400 20px Montserrat","500 26px Montserrat"];
+  if(document.fonts&&document.fonts.load)Promise.all(f.map(function(x){return document.fonts.load(x)})).then(go,go);else go();
+ });
+}
+function wrapText(ctx,text,x,y,maxW,lh,maxLines){
+ var words=String(text||"").split(/\s+/),line="",lines=[];
+ words.forEach(function(w){
+  var t=line?line+" "+w:w;
+  if(ctx.measureText(t).width>maxW&&line){lines.push(line);line=w}else line=t;
+ });
+ if(line)lines.push(line);
+ if(lines.length>maxLines){
+  lines=lines.slice(0,maxLines);
+  var l=lines[maxLines-1];
+  while(l.length&&ctx.measureText(l+"…").width>maxW)l=l.slice(0,-1);
+  lines[maxLines-1]=l+"…";
+ }
+ lines.forEach(function(l,i){ctx.fillText(l,x,y+i*lh)});
+ return y+lines.length*lh;
+}
+function drawImage(area,d){
+ var W=1080,pad=72,tx=pad+68,maxW=W-pad-tx,F="Montserrat, system-ui, sans-serif";
+ var C={bg:"#eceee9",ink:"#262a26",soft:"#6c736b",moss:"#58654f",blush:"#e6d6d0",line:"#d5d9d1"};
+ var cv=document.createElement("canvas");cv.width=W;cv.height=7000;
+ var ctx=cv.getContext("2d");
+ ctx.fillStyle=C.bg;ctx.fillRect(0,0,W,7000);
+ var y=pad+54;
+ ctx.fillStyle=C.ink;ctx.font="300 54px "+F;ctx.fillText("Deine Skincare Routine",pad,y);
+ y+=44;
+ ctx.fillStyle=C.soft;ctx.font="400 20px "+F;
+ y=wrapText(ctx,selLine(d),pad,y,W-2*pad,28,2);
+ var rdi=retDisclaimer(d);
+ if(rdi){ctx.fillStyle="#8a4b3d";ctx.font="400 18px "+F;y=wrapText(ctx,"Vorsicht: "+rdi,pad,y+14,W-2*pad,26,4)}
+ ["am","pm"].forEach(function(k){
+  var rows=d[k];if(!rows.length)return;
+  y+=44;
+  ctx.fillStyle=C.ink;ctx.font="500 32px "+F;ctx.fillText(TIMES[k],pad,y);
+  y+=26;
+  ctx.strokeStyle=C.line;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(W-pad,y);ctx.stroke();
+  y+=32;
+  rows.forEach(function(r,i){
+   var top=y;
+   ctx.fillStyle=C.moss;ctx.beginPath();ctx.arc(pad+20,top+11,20,0,Math.PI*2);ctx.fill();
+   ctx.fillStyle="#fff";ctx.font="500 18px "+F;ctx.textAlign="center";ctx.textBaseline="middle";
+   ctx.fillText(String(i+1),pad+20,top+12);
+   ctx.textAlign="left";ctx.textBaseline="alphabetic";
+   ctx.fillStyle=C.moss;ctx.font="500 17px "+F;ctx.fillText(r.s.k,tx,top+16);
+   if(r.x.p.price!=null){ctx.textAlign="right";ctx.fillStyle=C.soft;ctx.font="400 17px "+F;ctx.fillText(fmt(r.x.p.price),W-pad,top+16);ctx.textAlign="left"}
+   ctx.fillStyle=C.ink;ctx.font="500 26px "+F;
+   var yy=wrapText(ctx,r.name,tx,top+52,maxW,34,2);
+   var last=yy-34;
+   ctx.fillStyle=C.soft;ctx.font="400 19px "+F;
+   var yn=r.x.p.note?wrapText(ctx,r.x.p.note,tx,last+32,maxW,27,2):last;
+   var lastLine=r.x.p.note?yn-27:last;
+   var bottom=lastLine;
+   if(r.x.hit.length){
+    ctx.font="400 16px "+F;
+    var px=tx,py=lastLine+18;
+    r.x.hit.forEach(function(c){
+     var w=ctx.measureText(CONCERNS[c]).width+26;
+     if(px+w>W-pad){px=tx;py+=38}
+     ctx.fillStyle=C.blush;ctx.beginPath();
+     if(ctx.roundRect)ctx.roundRect(px,py,w,30,15);else ctx.rect(px,py,w,30);
+     ctx.fill();
+     ctx.fillStyle=C.ink;ctx.fillText(CONCERNS[c],px+13,py+21);
+     px+=w+8;
+    });
+    bottom=py+30;
+   }
+   if(r.x.p.info){
+    ctx.fillStyle="#3f6a8a";ctx.font="400 17px "+F;
+    var iy=wrapText(ctx,"Hinweis: "+r.x.p.info,tx,bottom+26,maxW,24,3);
+    bottom=iy-24+6;
+   }
+   var cr=conflictRows(rows,i);
+   if(cr.length){
+    ctx.fillStyle="#8a4b3d";ctx.font="400 17px "+F;
+    var we=wrapText(ctx,warnText(cr.map(function(o){return o.name})),tx,bottom+26,maxW,24,5);
+    if(r.alt)we=wrapText(ctx,"Alternative: "+r.alt.name,tx,we,maxW,24,2);
+    bottom=we-24+6;
+   }
+   /* Schreiblinie für handschriftliche Anwendungshinweise */
+   var wy=bottom+50;
+   ctx.fillStyle=C.soft;ctx.font="400 16px "+F;ctx.fillText("Anwendung:",tx,wy);
+   var lx=tx+ctx.measureText("Anwendung:").width+12;
+   ctx.strokeStyle=C.soft;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(lx,wy+3);ctx.lineTo(W-pad,wy+3);ctx.stroke();
+   ctx.lineWidth=1.5;
+   bottom=wy+3;
+   y=bottom+30;
+   ctx.strokeStyle=C.line;ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(W-pad,y);ctx.stroke();
+   y+=32;
+  });
+ });
+ var H=Math.ceil(y+pad-10);
+ var out=document.createElement("canvas");out.width=W;out.height=H;
+ out.getContext("2d").drawImage(cv,0,0);
+ var url=out.toDataURL("image/png");
+ area.innerHTML='<p class="savemsg">Deine Routine als Bild. Am Handy hältst du das Bild gedrückt und speicherst es, am Computer nutzt du die rechte Maustaste oder den Link darunter.</p><div class="preview"><img alt="Deine Skincare Routine" src="'+url+'"><a href="'+url+'" download="skincare-routine.png">Bild herunterladen</a></div>';
+}
+
+/* Tags eines Produkts (Reiter "Alle Produkte"): gewählte Filter sind hervorgehoben, die Erfahrung steht klein dahinter */
+function lvlHtml(p){
+ /* Bei mehreren Stufen wird nur die niedrigste gezeigt. Empfohlen bleibt das Produkt für alle eingetragenen Stufen. */
+ var ks=Object.keys(LEVELS),low=null;
+ (p.levels||[]).forEach(function(k){if(low===null||ks.indexOf(k)<ks.indexOf(low))low=k});
+ return low?'<span class="lvl" title="Empfohlene Erfahrung">'+esc(LEVELS[low])+'</span>':"";
+}
+function cardTags(p){
+ var h="";
+ (p.types||[]).forEach(function(k){h+='<span class="tag'+(k===selT?' on':'')+'">'+esc(TYPES[k])+'</span>'});
+ (p.concerns||[]).forEach(function(k){h+='<span class="tag'+(selC.indexOf(k)>-1?' on':'')+'">'+esc(CONCERNS[k])+'</span>'});
+ return h?'<div class="tags">'+h+'</div>':'';
+}
+function infoHtml(t){
+ return '<p class="info"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.5v.01"/></svg><span>'+esc(t)+'</span></p>';
+}
+function renderRoutine(out){
+ if(loading){out.innerHTML='<p class="empty">Produkte werden geladen …</p>';return}
+ if(!PRODUCTS.length){out.innerHTML=emptyHtml();return}
+ var wrap=document.createElement("div");
+ var tg=document.createElement("div");tg.className="daytoggle";tg.setAttribute("role","group");tg.setAttribute("aria-label","Tageszeit");
+ ["am","pm"].forEach(function(k){
+  var b=document.createElement("button");b.type="button";b.className="dt";b.setAttribute("aria-pressed",String(k===time));
+  b.innerHTML=ICON[k]+"<span>"+TIMES[k]+"</span>";
+  b.onclick=function(){time=k;render()};tg.appendChild(b);
+ });
+ wrap.appendChild(tg);
+ var plan=buildPlan(),rows=plan.d[time],covered=[];
+ CURPLAN=plan.d;
+ DROPPED=Object.keys(plan.info.moves).map(function(k){return plan.info.moves[k]}).filter(function(m){return!m.now}).map(function(m){return m.orig.step});
+ ["am","pm"].forEach(function(k){plan.d[k].forEach(function(r){covered=covered.concat(r.x.hit)})});
+ if(!rows.length){var e=document.createElement("p");e.className="empty";e.textContent="Für diese Auswahl gibt es noch keine Produkte. Probiere einen anderen Hauttyp oder andere Themen.";wrap.appendChild(e);out.appendChild(wrap);return}
+ var rd=retDisclaimer(plan.d);
+ if(rd){var rb=document.createElement("div");rb.className="warn";rb.style.margin="0 0 20px";rb.innerHTML="<b>Vorsicht:</b> "+esc(rd);wrap.insertBefore(rb,wrap.children[1]||null)}
+ if(selC.length){
+  var miss=selC.filter(function(c){return covered.indexOf(c)<0}).map(function(c){return CONCERNS[c]});
+  var ok=selC.filter(function(c){return covered.indexOf(c)>-1}).map(function(c){return CONCERNS[c]});
+  var s=document.createElement("p");s.className="sum";
+  s.innerHTML=(ok.length?"Diese Routine deckt <b>"+esc(ok.join(", "))+"</b> ab. ":"")+(miss.length?"Dafür habe ich noch kein passendes Produkt: <b>"+esc(miss.join(", "))+"</b>.":"");
+  var mb=missingBase(rows,time);
+  if(mb.length)s.innerHTML+=" Für deinen Hauttyp fehlt mir noch ein Produkt für: <b>"+esc(mb.join(", "))+"</b>.";
+  wrap.appendChild(s);
+ }else{
+  var s2=document.createElement("p");s2.className="sum";s2.textContent="Wähle oben ein oder mehrere Themen, dann passt sich die Routine an.";
+  var mb2=missingBase(rows,time);
+  if(mb2.length)s2.textContent+=" Für deinen Hauttyp fehlt mir noch ein Produkt für: "+mb2.join(", ")+".";
+  wrap.appendChild(s2);
+ }
+ if(hasPrices()){var cp=document.createElement("p");cp.className="sum";cp.innerHTML=costHtml(plan);wrap.appendChild(cp)}
+ if(hasPrices()){var nb=debugBox(plan);if(nb)wrap.appendChild(nb)}
+ var ol=document.createElement("ol");ol.className="routine";
+ rows.forEach(function(r,i){
+  var p=r.x.p,li=document.createElement("li");li.className="row";
+  var tags=r.x.hit.map(function(c){return '<span class="tag">'+esc(CONCERNS[c])+'</span>'}).join("");
+  li.innerHTML='<a class="rowlink" href="#produkt='+esc(p.slug)+'"><div class="num">'+(i+1)+'</div><div class="rimg"><span>Bild wird geladen</span></div><div><div class="step">'+esc(r.s.k)+'</div><p class="name">'+esc(p.name||"")+'</p><p class="note">'+esc(p.note)+'</p>'+(p.info?infoHtml(p.info):'')+(r.s.hint?infoHtml(r.s.hint):'')+(tags?'<div class="tags">'+tags+'</div>':'')+'<span class="go">Details</span>'+priceHtml(p)+'</div></a><div class="extra" hidden><p class="warn"></p><div class="alt"></div></div><details class="altmenu" hidden><summary></summary><div class="altlist"></div></details>';
+  ol.appendChild(li);
+  meta(p,function(m){fillImage(li.querySelector(".rimg"),m);li.querySelector(".name").textContent=m.name||"Produkt ansehen"});
+  var sim=similarAlts(rows,i);
+  if(sim.length){
+   var am=li.querySelector(".altmenu");am.hidden=false;
+   am.querySelector("summary").textContent="Alternativen ("+sim.length+")";
+   var lst=am.querySelector(".altlist");
+   sim.forEach(function(q){
+    var a=document.createElement("a");a.className="altlink";a.href="#produkt="+q.slug;
+    a.innerHTML='<span class="aimg"><span>…</span></span><span><span class="aname"></span>'+(q.price!=null?'<span class="aprice">'+priceText(q).trim().replace(/^\(|\)$/g,"")+'</span>':"")+'</span>';
+    lst.appendChild(a);
+    meta(q,function(m){fillImage(a.querySelector(".aimg"),m);a.querySelector(".aname").textContent=m.name||"Produkt ansehen"});
+   });
+  }
+  var others=conflictRows(rows,i);
+  if(others.length){
+   var ex=li.querySelector(".extra"),w=li.querySelector(".warn"),names=[],n=0,ap=altFor(rows,i);
+   others.forEach(function(o,k){meta(o.x.p,function(m){
+    names[k]=m.name||o.x.p.name||"anderes Produkt";
+    if(++n===others.length){w.textContent=warnText(names);ex.hidden=false}
+   })});
+   if(ap){
+    var al=li.querySelector(".alt");
+    al.innerHTML='<a class="altlink" href="#produkt='+esc(ap.slug)+'"><span class="aimg"><span>…</span></span><span><span class="alabel">Alternative</span><span class="aname"></span></span></a>';
+    meta(ap,function(m){fillImage(al.querySelector(".aimg"),m);al.querySelector(".aname").textContent=m.name||"Produkt ansehen"});
+   }
+  }
+ });
+ wrap.appendChild(ol);wrap.appendChild(saveBar());out.appendChild(wrap);
+}
+
+/* Alle Produkte (gefiltert) */
+function renderProducts(out){
+ if(loading){out.innerHTML='<p class="empty">Produkte werden geladen …</p>';return}
+ if(!PRODUCTS.length){out.innerHTML=emptyHtml();return}
+ var list=PRODUCTS.filter(function(p){return typeOk(p)&&(!selC.length||hits(p).length>0)&&(selS==="alle"||p.step===selS)});
+ function stepIdx(p){for(var i=0;i<STEPS.length;i++)if(STEPS[i].k===p.step)return i;return STEPS.length}
+ list.sort(function(a,b){return stepIdx(a)-stepIdx(b)||hits(b).length-hits(a).length});
+ if(!list.length){out.innerHTML='<p class="empty">Dafür gibt es noch keine Empfehlung. Wähle ein anderes Thema.</p>';return}
+ var grid=document.createElement("div");grid.className="grid";
+ list.forEach(function(p){
+  var a=document.createElement("a");a.className="card";a.href="#produkt="+p.slug;
+  a.innerHTML='<div class="img"><span>Bild wird geladen</span></div><div class="step">'+esc(p.step)+lvlHtml(p)+'</div><p class="name">'+esc(p.name||"")+'</p><p class="note">'+esc(p.note)+'</p>'+cardTags(p)+(p.info?infoHtml(p.info):'')+'<span class="go">Details</span>'+priceHtml(p);
+  grid.appendChild(a);
+  meta(p,function(m){fillImage(a.querySelector(".img"),m);a.querySelector(".name").textContent=m.name||"Produkt ansehen"});
+ });
+ out.appendChild(grid);
+}
+
+/* ---------- Produkt-Detailseite ---------- */
+var curSlug=null,lastY=0;
+function findSlug(sl){for(var i=0;i<PRODUCTS.length;i++)if(PRODUCTS[i].slug===sl)return PRODUCTS[i];return null}
+function readHash(){var m=location.hash.match(/^#produkt=([^&]+)/);curSlug=m?decodeURIComponent(m[1]):null}
+function leaveDetail(){
+ try{history.replaceState(null,"",location.pathname+location.search)}catch(e){location.hash=""}
+ readHash();render();window.scrollTo(0,lastY);
+}
+function renderDetail(out,p){
+ document.title=(p.name||"Produkt")+" – Uschi's Skincare Guide";
+ var wrap=document.createElement("div");
+ var tags=(p.types||[]).map(function(k){return'<span class="tag">'+esc(TYPES[k])+'</span>'}).concat((p.concerns||[]).map(function(k){return'<span class="tag">'+esc(CONCERNS[k])+'</span>'})).join("");
+ var h='<button class="back" type="button">← Zurück</button><div class="dgrid"><div class="dimg"><span>Bild wird geladen</span></div><div class="dbody">'
+  +'<div class="step">'+esc(p.step)+lvlHtml(p)+'</div><h2 class="dname">'+esc(p.name||"")+'</h2>'
+  +(tags?'<div class="dtags">'+tags+'</div>':'')
+  +(p.note?'<p class="dnote">'+esc(p.note)+'</p>':'')
+  +(p.info?infoHtml(p.info):'')
+  +(p.det?'<h4 class="dh">Details</h4><p class="dtext">'+esc(p.det)+'</p>':'')
+  +(p.use?'<h4 class="dh">Anwendung</h4><p class="dtext">'+esc(p.use)+'</p>':'')
+  +(p.ing?'<h4 class="dh">Inhaltsstoffe</h4><p class="dtext">'+esc(p.ing)+'</p>':'')
+  +(p.price!=null?'<p class="dnote" style="margin-top:20px">'+priceHtml(p).replace('class="price"','class="price" style="margin-left:0"')+'</p>':'')
+  +'<a class="btn dbtn" href="'+esc(p.url)+'" target="_blank" rel="noopener sponsored">Zum Produkt</a>'
+  +((p.stand||p.src)?'<p class="dsrc">Angaben'+(p.src?' von '+esc(p.src):'')+(p.stand?', Stand '+esc(p.stand):'')+'. Bitte vor der Anwendung auch die Packungsangaben beachten.</p>':'')
+  +'<div id="sg-dsim"></div></div></div>';
+ wrap.innerHTML=h;
+ out.appendChild(wrap);
+ wrap.querySelector(".back").onclick=leaveDetail;
+ meta(p,function(m){fillImage(wrap.querySelector(".dimg"),m);var n=wrap.querySelector(".dname");if(!p.name)n.textContent=m.name||"Produkt";});
+ var sim=PRODUCTS.filter(function(q){return q.step===p.step&&q.url!==p.url}).slice(0,3);
+ if(sim.length){
+  var box=wrap.querySelector("#sg-dsim");box.innerHTML='<h4 class="dh">Ähnliche Produkte</h4><div class="dsim"></div>';
+  var lst=box.querySelector(".dsim");
+  sim.forEach(function(q){
+   var a=document.createElement("a");a.className="altlink";a.href="#produkt="+q.slug;
+   a.innerHTML='<span class="aimg"><span>…</span></span><span><span class="aname"></span>'+(q.price!=null?'<span class="aprice" style="display:block;font-size:12px;color:var(--soft)">'+esc(fmt(q.price))+'</span>':"")+'</span>';
+   lst.appendChild(a);
+   meta(q,function(m){fillImage(a.querySelector(".aimg"),m);a.querySelector(".aname").textContent=m.name||q.name||"Produkt ansehen"});
+  });
+ }
+}
+/* Klick neben die Detailansicht oder Esc führt zurück zur Übersicht. */
+document.addEventListener("click",function(e){
+ if(!curSlug||!$("sg").classList.contains("indetail"))return;
+ var t=e.target;
+ if(t&&t.closest&&t.closest(".dgrid,.themebtn,.back"))return;
+ leaveDetail();
+},true);
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&curSlug)leaveDetail()});
+window.addEventListener("hashchange",function(){
+ if(!unlocked)return;
+ var was=curSlug;readHash();
+ if(curSlug&&!was)lastY=window.scrollY||0;
+ render();
+ window.scrollTo(0,curSlug?0:lastY);
+});
+
+function render(){
+ if(!unlocked)return;
+ var dpr=null;
+ if(curSlug&&!loading){dpr=findSlug(curSlug);if(!dpr){curSlug=null}}
+ $("sg").classList.toggle("indetail",!!(curSlug&&(loading||dpr)));
+ if(curSlug&&(loading||dpr)){
+  var dout=$("sg-out");dout.innerHTML="";
+  if(loading)dout.innerHTML='<p class="empty">Produkte werden geladen …</p>';else renderDetail(dout,dpr);
+  return;
+ }
+ document.title="Uschi's Skincare Guide";
+ try{localStorage.setItem("sg-sel",JSON.stringify({t:selT,c:selC,m:time,l:selL,b:selB}))}catch(e){}
+ var tb=$("sg-tabs");tb.innerHTML="";
+ Object.keys(TABS).forEach(function(k){
+  var b=document.createElement("button");b.className="tab";b.type="button";b.setAttribute("role","tab");
+  b.setAttribute("aria-selected",String(k===tab));b.textContent=TABS[k];
+  b.onclick=function(){tab=k;render()};tb.appendChild(b);
+ });
+ mkChips($("sg-types"),pairs(TYPES),function(k){return k===selT},function(k){selT=k;render()});
+ var cItems=[["alle",tab==="produkte"?"Alle":"Basic"]].concat(pairs(CONCERNS));
+ mkChips($("sg-concerns"),cItems,function(k){return k==="alle"?selC.length===0:selC.indexOf(k)>-1},function(k){
+  if(k==="alle")selC=[];
+  else{var i=selC.indexOf(k);if(i>-1)selC.splice(i,1);else selC.push(k)}
+  render();
+ });
+ mkChips($("sg-levels"),pairs(LEVELS),function(k){return k===selL},function(k){selL=k;render()});
+ var onP=tab==="produkte";
+ lvlRel=onP?false:levelRelevant();
+ $("sg-lh").hidden=!lvlRel;$("sg-levels").hidden=!lvlRel;
+ $("sg-sth").hidden=!onP;$("sg-steps").hidden=!onP;
+ if(onP){
+  var have={};PRODUCTS.forEach(function(q){have[q.step]=1});
+  if(selS!=="alle"&&!have[selS])selS="alle";
+  var sItems=[["alle","Alle"]].concat(STEPS.filter(function(x){return have[x.k]}).map(function(x){return[x.k,x.k]}));
+  mkChips($("sg-steps"),sItems,function(k){return k===selS},function(k){selS=k;render()});
+ }
+ var ln=$("sg-lnote");
+ if(selL==="experte"&&lvlRel){ln.hidden=false;ln.textContent="Im Experten-Modus sind Warnhinweise und Alternativen ausgeblendet."}else ln.hidden=true;
+ renderBudget();
+ var tip=$("sg-tip");
+ if(TIPS[selT]){tip.hidden=false;tip.innerHTML="<b>"+TIPS[selT][0]+"</b>"+TIPS[selT][1]}else tip.hidden=true;
+ var out=$("sg-out");out.innerHTML="";
+ if(tab==="routine")renderRoutine(out);else renderProducts(out);
+ var eb=errBox();if(eb)out.insertBefore(eb,out.firstChild);
+}
+/* Darkmode: folgt der Geräteeinstellung, der Schalter oben rechts überschreibt sie (wird im Browser gemerkt). */
+var themeSel=null;
+try{themeSel=localStorage.getItem("sg-theme")}catch(e){}
+function sysDark(){try{return window.matchMedia("(prefers-color-scheme: dark)").matches}catch(e){return false}}
+function curTheme(){return themeSel==="dark"||themeSel==="light"?themeSel:(sysDark()?"dark":"light")}
+function applyTheme(){
+ var t=curTheme(),bg=t==="dark"?"#151815":"#eceee9";
+ $("sg").setAttribute("data-theme",t);
+ document.documentElement.style.background=bg;document.body.style.background=bg;
+ var b=$("sg-theme");b.innerHTML=t==="dark"?ICON.am:ICON.pm;
+ b.title=t==="dark"?"Heller Modus":"Dunkler Modus";
+}
+$("sg-theme").onclick=function(){
+ themeSel=curTheme()==="dark"?"light":"dark";
+ try{localStorage.setItem("sg-theme",themeSel)}catch(e){}
+ applyTheme();
+};
+try{window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",function(){if(!themeSel)applyTheme()})}catch(e){}
+if(!SHOW_IMAGES)$("sg").classList.add("noimg");
+applyTheme();
+readHash();
+/* Passwortschutz: Die Seite prüft einen SHA-256-Hash im Browser. Das hält Zufallsbesucher fern, ist aber keine echte Sicherheit. */
+var PW_HASH="e2633d0881f2a850fe60a465f04bb37d99af62fade6cb126131f245ab04fe2c3",unlocked=false;
+function sha(t){
+ if(!window.crypto||!crypto.subtle)return Promise.reject(new Error("nocrypto"));
+ return crypto.subtle.digest("SHA-256",new TextEncoder().encode("sg-uschi:"+t)).then(function(b){
+  return Array.prototype.map.call(new Uint8Array(b),function(x){return("0"+x.toString(16)).slice(-2)}).join("");
+ });
+}
+function startGuide(){
+ unlocked=true;
+ $("sg").classList.remove("locked");$("sg-gate").hidden=true;
+ render();
+ loadProducts(function(list){PRODUCTS=list;loading=false;render()});
+}
+var stored=null;try{stored=localStorage.getItem("sg-auth")}catch(e){}
+if(stored===PW_HASH){startGuide()}
+else{
+ $("sg").classList.add("locked");$("sg-gate").hidden=false;
+ $("sg-gform").onsubmit=function(e){
+  e.preventDefault();
+  var err=$("sg-gerr");
+  sha($("sg-gpw").value).then(function(h){
+   if(h===PW_HASH){try{localStorage.setItem("sg-auth",h)}catch(x){}startGuide()}
+   else{err.textContent="Das Passwort stimmt nicht.";err.hidden=false;$("sg-gpw").select()}
+  },function(){err.textContent="Bitte öffne die Seite über https, sonst kann das Passwort nicht geprüft werden.";err.hidden=false});
+ };
+}
+})();
+</script>
+</div>
+
+</body>
+</html>
