@@ -128,7 +128,7 @@ Neue Illustrationen erzeugst du im Repository-Ordner mit:
 python scripts/make_illustrations.py
 ```
 
-Das legt nur fehlende Dateien an (`--ueberschreiben` erneuert alle). Eigene Fotos gehen vor: Trage `"bild": "bilder/mein-foto.jpg"` beim Produkt ein. Die Bilder liegen in der Routine mit 95 % Deckkraft über der großen Zahl.
+Das legt nur fehlende Dateien an (`--ueberschreiben` erneuert alle). Eigene Fotos gehen vor: Trage `"bild": "bilder/mein-foto.jpg"` beim Produkt ein. Die Bilder liegen in der Routine mit 85 % Deckkraft über der großen Zahl.
 
 ## Detailseiten
 
