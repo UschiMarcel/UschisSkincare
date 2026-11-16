@@ -334,11 +334,11 @@
 #sg .mk .ml{border-bottom-color:currentColor}
 @media (max-width:720px){#sg .rowlink{grid-template-columns:120px 1fr}#sg .rowlink>.num{left:60px}#sg .extra,#sg .altmenu{margin-left:134px}}
 /* Kleinere Flaschen, kleine Schrift mittig auf dem Körper */
-#sg .rowlink{grid-template-columns:128px 1fr}
-#sg .rowlink>.num{left:64px}
-#sg .extra,#sg .altmenu{margin-left:152px}
-#sg .card .img{height:215px}
-#sg .card .img .hw{height:215px}
+#sg .rowlink{grid-template-columns:190px 1fr}
+#sg .rowlink>.num{left:95px}
+#sg .extra,#sg .altmenu{margin-left:214px}
+#sg .card .img{height:300px}
+#sg .card .img .hw{height:300px}
 #sg .mk{transform:translate(-50%,-50%) rotate(-3deg);transform-origin:center;text-align:center;-webkit-text-stroke:.15px currentColor}
 #sg .mk .ml{margin-left:auto;margin-right:auto}
 @media (max-width:720px){#sg .rowlink{grid-template-columns:96px 1fr}#sg .rowlink>.num{left:48px}#sg .extra,#sg .altmenu{margin-left:110px}}
@@ -568,7 +568,7 @@ function fillImage(box,m){
  var ls=String(m.label).split("\n"),mx=0;ls.forEach(function(x){if(x.length>mx)mx=x.length});
  var L=(LAYOUT&&LAYOUT[m.slug])||[22,58,36,"#111111"];
  t.style.color=L[3]||"#111";t.style.left=(L[0]+L[2]/2)+"%";t.style.top=L[1]+"%";t.style.width=L[2]+"%";
- t.style.fontSize=Math.max(3.6,Math.min(6.4,L[2]/(Math.max(mx,3)*.62)*.62)).toFixed(2)+"cqw";t.setAttribute("data-w",L[2]);
+ t.style.fontSize=Math.max(2.4,Math.min(4.3,L[2]/(Math.max(mx,3)*.62)*.42)).toFixed(2)+"cqw";t.setAttribute("data-w",L[2]);
  ls.forEach(function(x){var sp=document.createElement("span");sp.className="ml";sp.textContent=x;t.appendChild(sp)});
  w.appendChild(t);
  box.appendChild(w);
