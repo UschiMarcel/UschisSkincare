@@ -8,9 +8,15 @@ Live: https://uschimarcel.github.io/UschisSkincare/
 
 ```
 index.html          Seite, Logik und Design (selten ändern)
+impressum.html      Impressum
 produkte/
   002-….json        Produktdateien (hier kommen neue Produkte rein)
   _vorlage.json     Vorlage mit allen Feldern (wird nicht geladen)
+bilder/
+  <kennung>.svg     Illustration pro Produkt (automatisch gefunden)
+scripts/
+  make_illustrations.py   erzeugt fehlende Illustrationen
+ARCHIV/             Stand der Seite vor dem Redesign (wird nicht geladen)
 ```
 
 Die Seite lädt alle `.json`-Dateien aus `produkte/` automatisch, sortiert nach Dateinamen (`002` vor `010`). Dateien, die mit `_` beginnen, und `dateien.json` werden ignoriert. Es ist keine Änderung an der `index.html` nötig, wenn Produkte dazukommen.
@@ -19,7 +25,8 @@ Die Seite lädt alle `.json`-Dateien aus `produkte/` automatisch, sortiert nach 
 
 1. Kopiere `_vorlage.json`, benenne die Kopie versioniert (z. B. `007-24-10-2026.json`) und fülle sie aus.
 2. Lade die Datei im Ordner `produkte/` des Repositories hoch (Add file → Upload files → Commit).
-3. Nach ein bis zwei Minuten und einem Neuladen ist das Produkt live.
+3. Erzeuge die Illustration (siehe „Bilder") und lade sie in `bilder/` hoch.
+4. Nach ein bis zwei Minuten und einem Neuladen ist das Produkt live.
 
 Eine Datei ist eine Liste von Produkten:
 
@@ -42,11 +49,11 @@ Eine Datei ist eine Liste von Produkten:
 | Feld | Pflicht | Bedeutung |
 |---|---|---|
 | `link` | ja | Produktlink. Dient auch als eindeutige ID. |
-| `name` | nein | Überschreibt den Namen, den die Seite selbst holt. |
+| `name` | nein | Anzeigename. Ohne Angabe wird er aus dem Link abgeleitet. |
 | `schritt` | ja | Schritt der Routine (siehe unten). |
 | `beschreibung` | nein | Kurzer Text auf der Karte. |
 | `tags` | nein | Hauttypen und Themen gemischt (siehe unten). |
-| `bild` | nein | Eigener Bildlink. Ohne Angabe holt sich die Seite das Bild automatisch. |
+| `bild` | nein | Eigener Bildpfad oder -link (z. B. `bilder/mein-foto.jpg`). Ohne Angabe wird `bilder/<kennung>.svg` genutzt. |
 | `zeit` | nein | `"morgens"` oder `"abends"`. Ohne Angabe: beides. |
 | `erfahrung` | nein | Liste aus `anfaenger`, `erfahren`, `fortgeschritten`, `experte`. Ohne Angabe: für alle. |
 | `konflikt` | nein | Schrittnamen oder Produktlinks, mit denen das Produkt nicht kombiniert werden soll. |
@@ -106,15 +113,32 @@ Unter der Routine kann man sie als Bild speichern (mit Schreiblinie „Anwendung
 
 - **Keine Produkte sichtbar:** Meist ist eine JSON-Datei fehlerhaft (fehlendes Komma, fehlende Klammer). Hänge `?debug` an die Adresse (`…/UschisSkincare/?debug`), dann zeigt die Seite den Fehler samt Dateinamen an. Eine fehlerhafte Datei wird komplett übersprungen.
 - **Änderung nicht sichtbar:** Bis zu zwei Minuten warten, dann mit Strg+F5 (Cmd+Shift+R) neu laden. Die Dateiliste wird kurz zwischengespeichert.
-- **Falsches Bild oder Logo:** Trage bei dem Produkt einen eigenen Bildlink in `bild` ein.
+- **Kein Bild bei einem Produkt:** Es fehlt `bilder/<kennung>.svg`. Mit `python scripts/make_illustrations.py` erzeugen oder einen eigenen Pfad in `bild` eintragen.
 - **Budget-Regler fehlt:** Kein Produkt hat einen `preis`.
 
 ## Bilder
 
-Produktbilder und Namen holt die Seite über microlink.io. Logos und Platzhalter werden erkannt und nie angezeigt. Wird kein Produktbild gefunden, erscheint nur der Name. Der „freigestellte" Look entsteht per CSS (weiße Bildhintergründe verschwinden). Ein echtes Freistellen funktioniert nur mit einem transparenten PNG im Feld `bild`.
+Jedes Produkt bekommt eine allgemeine Illustration (Pumpflasche, Tube, Dose, Pipettenflasche usw.), bewusst ohne echte Verpackung, Marke oder Logo. Die Seite sucht die Datei `bilder/<kennung>.svg`. Die Kennung ist der letzte Teil des Produktlinks in Kleinbuchstaben (z. B. `…/mivolis-panthenol-salbe` wird `bilder/mivolis-panthenol-salbe.svg`).
+
+Neue Illustrationen erzeugst du im Repository-Ordner mit:
+
+```
+python scripts/make_illustrations.py
+```
+
+Das legt nur fehlende Dateien an (`--ueberschreiben` erneuert alle). Eigene Fotos gehen vor: Trage `"bild": "bilder/mein-foto.jpg"` beim Produkt ein. Die Bilder liegen in der Routine mit 95 % Deckkraft über der großen Zahl.
+
+## Detailseiten
+
+Ein Klick auf ein Produkt öffnet die Detailseite (`#produkt=<kennung>`) mit Anwendung, Inhaltsstoffen und Preis, sofern in der JSON hinterlegt (`anwendung`, `details`, `inhaltsstoffe`). Ein Klick neben die Seite oder Esc führt zurück zur Übersicht.
+
+## Darkmode
+
+Der Schalter oben rechts wechselt zwischen hell und dunkel. Ohne Auswahl folgt die Seite der Systemeinstellung.
 
 ## Hinweise
 
 - Alle Texte sind auf Deutsch und im Du-Ton geschrieben.
 - Die Seite enthält Empfehlungen und keine medizinische Beratung.
-- Der Besucher-Zustand (Auswahl, Bildcache) liegt nur im Browser (localStorage).
+- Der Besucher-Zustand (Auswahl, Darkmode) liegt nur im Browser (localStorage).
+- Es gibt keinen Passwortschutz mehr. Das Design hat orange Akzente auf Creme, runde Kacheln und nummerierte Abschnitte.
