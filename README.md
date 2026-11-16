@@ -143,4 +143,4 @@ Der Schalter oben rechts wechselt zwischen hell und dunkel. Ohne Auswahl folgt d
 - Alle Texte sind auf Deutsch und im Du-Ton geschrieben.
 - Die Seite enthält Empfehlungen und keine medizinische Beratung.
 - Der Besucher-Zustand (Auswahl, Darkmode) liegt nur im Browser (localStorage).
-- Es gibt keinen Passwortschutz mehr. Das Design hat orange Akzente auf Creme, runde Kacheln und nummerierte Abschnitte.
+- Es gibt keinen Passwortschutz mehr. Das Design ist brutalistisch-editorial: Haarlinien-Raster, eckige Elemente ohne Rundungen, riesige Überschrift und nummerierte Abschnitte (01/ …).

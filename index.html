@@ -255,6 +255,66 @@
 #sg .card .img .hw{width:auto;height:240px;aspect-ratio:300/380}
 #sg .card .img .hw img{height:100%;width:100%}
 #sg .rimg img{max-height:none}
+/* Brutalistisch-editorial: Haarlinien-Raster, eckige Elemente, riesige Überschrift */
+#sg{--bg:#f4f4f0;--paper:#f4f4f0;--line:rgba(28,28,26,.42);--ink:#1c1c1a;--soft:#6f6d66;
+  display:grid;grid-template-columns:minmax(150px,230px) 1fr;column-gap:0;max-width:1240px;padding:clamp(14px,2.4vw,32px)}
+#sg[data-theme="dark"]{--bg:#121211;--paper:#121211;--line:rgba(239,236,228,.34);--soft:#a09c91}
+#sg *,#sg *::before,#sg *::after{border-radius:0!important}
+#sg>*{grid-column:1/-1;min-width:0}
+#sg h2{position:relative;font-family:"Archivo","Montserrat",system-ui,sans-serif;font-stretch:125%;font-weight:800;text-transform:uppercase;font-size:clamp(38px,11.2vw,150px);line-height:.88;letter-spacing:-.035em;margin:clamp(34px,6vw,70px) 0 26px;max-width:none;padding-right:clamp(56px,11vw,150px)}
+#sg h2::after{content:"";position:absolute;right:0;top:.04em;width:clamp(48px,9vw,120px);aspect-ratio:1;background:var(--ink);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 1v22M2.5 6.5l19 11M2.5 17.5l19-11' stroke='black' stroke-width='3.4' fill='none'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 1v22M2.5 6.5l19 11M2.5 17.5l19-11' stroke='black' stroke-width='3.4' fill='none'/%3E%3C/svg%3E") center/contain no-repeat}
+#sg .pillw{border:0;padding:0;display:inline;gap:0}
+#sg .pillw svg{display:none}
+#sg .intro{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:14px 0;margin:0;max-width:none;font-size:12px;letter-spacing:.04em;text-transform:uppercase;display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
+#sg .intro b{font-weight:600}
+#sg .tabs{display:flex;gap:0;border:0;border-bottom:1px solid var(--line);margin:0;padding:0;background:transparent}
+#sg .tab{border:0;border-right:1px solid var(--line);padding:16px 26px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;background:transparent;font-weight:500}
+#sg .tab[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+#sg h3{grid-column:1;border-top:0;border-bottom:1px solid var(--line);margin:0;padding:20px 16px 20px 0;font-size:11px;letter-spacing:.14em;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+#sg h3 small{font-size:10px;letter-spacing:.06em;color:var(--soft)}
+#sg h3::before{margin:0;font-size:11px}
+#sg .chips,#sg .budget{grid-column:2;border-bottom:1px solid var(--line);margin:0;padding:14px 0;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+#sg .budget{display:block}
+#sg .chip{border:1px solid var(--line);background:transparent;padding:9px 14px;font-size:11px;letter-spacing:.1em}
+#sg .chip:hover{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+#sg .chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+#sg .sum{grid-column:1/-1;margin:14px 0 0}
+#sg .tip{border:0;border-bottom:1px solid var(--line);padding:18px 0;background:transparent}
+#sg .daytoggle{border:1px solid var(--line);background:transparent;padding:0;display:inline-flex;margin:26px 0 8px}
+#sg .dt{padding:12px 22px;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+#sg .dt+.dt{border-left:1px solid var(--line)}
+#sg .btn{border:1px solid var(--ink);padding:14px 22px;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+#sg .btn.ghost{background:transparent;color:var(--ink)}
+#sg .btn:hover{background:var(--bg);color:var(--ink)}
+#sg .btn.ghost:hover{background:var(--ink);color:var(--bg)}
+#sg .routine{border-top:1px solid var(--line);margin-top:18px}
+#sg .row,#sg .row:last-child{border-bottom:1px solid var(--line)}
+#sg .rowlink::after{content:"\2197";position:absolute;right:6px;top:22px;font-size:22px;line-height:1;transition:transform .25s ease}
+#sg .rowlink:hover::after{transform:translate(3px,-3px)}
+#sg .grid{border-top:1px solid var(--line);border-left:1px solid var(--line)}
+#sg .card{border-right:1px solid var(--line);border-bottom:1px solid var(--line);position:relative}
+#sg .card::after{content:"\2197";position:absolute;right:14px;top:12px;font-size:18px}
+#sg .info,#sg .warn{border-left-width:3px}
+#sg .back{border:1px solid var(--line);padding:10px 16px;font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+#sg .dgrid{border:1px solid var(--line);background:transparent}
+#sg .dname{font-family:"Archivo","Montserrat",sans-serif;font-stretch:125%;text-transform:uppercase;letter-spacing:-.02em}
+#sg .themebtn{width:38px;height:38px;border:1px solid var(--line);background:var(--bg)}
+#sg .foot{border-top:1px solid var(--line);margin-top:56px;padding:14px 0}
+#sg .budget input[type=range]{-webkit-appearance:none;appearance:none;height:2px;background:var(--ink);width:min(520px,100%);display:block;margin:14px 0 8px}
+#sg .budget input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;background:var(--ink);border:0}
+#sg .budget input[type=range]::-moz-range-thumb{width:16px;height:16px;background:var(--ink);border:0;border-radius:0}
+@media (max-width:720px){
+ #sg{grid-template-columns:1fr}
+ #sg h3,#sg .chips,#sg .budget{grid-column:1/-1}
+ #sg h3{border-bottom:0;padding:16px 0 0;flex-direction:row;gap:10px;align-items:baseline}
+ #sg .tab{padding:14px 16px}
+}
+#sg [hidden]{display:none!important}
+#sg .rowlink{grid-template-columns:200px 1fr;gap:6px 24px;padding:20px 8px 20px 0}
+#sg .rowlink>.num{left:100px}
+#sg .extra,#sg .altmenu{margin-left:224px}
+@media (max-width:720px){#sg .rowlink{grid-template-columns:120px 1fr;gap:6px 14px}#sg .rowlink>.num{left:60px;font-size:100px}#sg .extra,#sg .altmenu{margin-left:134px}}
+#sg .budget,#sg .tip,#sg .sum{max-width:none}
 @media (prefers-reduced-motion:reduce){#sg *{transition:none!important;animation:none!important}}
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Montserrat:wght@300;400;500;600;700&family=Archivo:wdth,wght@125,800&display=swap">
