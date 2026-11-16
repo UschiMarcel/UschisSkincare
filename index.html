@@ -389,7 +389,7 @@ function $(id){return document.getElementById(id)}
 /* ---------- Produkte aus Dateien laden ---------- */
 var CFG={ordner:"produkte"};
 /* Produktbilder: false = keine Bilder anzeigen und keine Bilddienste abfragen. Zum Einschalten auf true setzen. */
-var SHOW_IMAGES=true;
+var SHOW_IMAGES=true,SHOW_LABELS=false;/* SHOW_LABELS=true blendet die Marker-Beschriftung auf den Flaschen wieder ein */
 function nameFromUrl(u){
  var b=String(u||"").split(/[?#]/)[0].replace(/\/+$/,"").split("/").pop()||"Produkt";
  return b.replace(/-/g," ").replace(/\b\w/g,function(c){return c.toUpperCase()});
@@ -538,7 +538,7 @@ function fillImage(box,m){
  var im=new Image();im.alt=m.name||"";im.loading="lazy";
  im.onerror=function(){box.innerHTML=""};
  im.src=m.img;box.innerHTML="";
- if(box.classList.contains("aimg")||!m.label){box.appendChild(im);return}
+ if(!SHOW_LABELS||box.classList.contains("aimg")||!m.label){box.appendChild(im);return}
  var w=document.createElement("span");w.className="hw";w.appendChild(im);
  var t=document.createElement("span");t.className="mk";
  var ls=String(m.label).split("\n"),mx=0;ls.forEach(function(x){if(x.length>mx)mx=x.length});

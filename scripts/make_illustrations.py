@@ -54,18 +54,32 @@ def slugs(ordner):
     return out
 
 
+ALIAS = {"reinigung": "Reinigungs-Cleanser", "reinigung-cleanser": "Reinigungs-Cleanser", "cleanser": "Reinigungs-Cleanser",
+         "öl": "Reinigungs-Öle", "oel": "Reinigungs-Öle", "reinigungsöl": "Reinigungs-Öle", "retinol": "Retinol / Anti-Aging",
+         "anti-aging": "Retinol / Anti-Aging", "aha": "Peeling", "salben": "Salbe"}
+
+
+def norm_step(step):
+    t = (step or "").strip()
+    return ALIAS.get(t.lower(), t)
+
+
 def form(name, step):
+    """Verpackungsform nach dem, was die Händlerseiten beschreiben (Tube, Dose, Sprühflasche, Pipette …)."""
+    step = norm_step(step)
     n = (name or "").lower()
-    if "pad" in n:
-        return "padjar"
+    if "liquid hydration" in n:
+        return "spray"          # weiße Sprühflasche, 110 ml
     if re.search(r"balsam|balm|melt", n):
-        return "tin"
+        return "tin"            # Dose
+    if "happier barrier" in n or re.search(r"\bvas\b", n) or "zero feel" in n:
+        return "tube"           # Tuben
     if step == "Reinigungs-Öle":
         return "pump"
     if step == "Reinigungs-Cleanser":
-        return "pump" if re.search(r"jelly|gel", n) else "tube"
+        return "tube"           # Balea Beauty Expert Cleanser: Tuben
     if step in ("Peeling", "Serum", "Retinol / Anti-Aging"):
-        return "dropper"
+        return "tube" if re.search(r"creme|cream", n) else "dropper"
     if step == "Toner":
         return "flip"
     if step == "Creme":
@@ -90,7 +104,7 @@ def hexa(c, dl=0.0):
 
 
 FARBEN = [  # (Stichwort im Link/Namen, Farbe) – grobe Annäherung, mit dem Feld "farbe" im Produkt überschreibbar
-    ("arganoel", "#e8b45a"), ("mighty-melt", "#f2c98a"), ("cleansing-balm", "#bfe3d3"),
+    ("arganoel", "#e8b45a"), ("jelly", "#8fd6c8"), ("balea-peeling-cleanser", "#a8e0cf"), ("happier-barrier", "#f3c9a8"), ("cordes", "#efe6d8"), ("mighty-melt", "#f2c98a"), ("cleansing-balm", "#bfe3d3"),
     ("balea-peeling", "#8fd6bd"), ("balea", "#9bdcc6"),
     ("c-glow", "#f5a95e"), ("a-game", "#e59aa8"), ("apad", "#cdb7e8"), ("happier-barrier", "#f3d3d6"),
     ("zero-feel", "#f6dfb0"), ("liquid-hydration", "#bfdcef"), ("geek-und-gorgeous", "#f0c2cc"),
@@ -169,6 +183,18 @@ def shape(kind, col):
         s += f'<path d="M{cx - 16} 140 L{cx - 16} 92 Q{cx - 16} 58 {cx} 58 Q{cx + 16} 58 {cx + 16} 92 L{cx + 16} 140 Z" fill="url(#bk)"/>'
         s += f'<rect x="{cx - 10}" y="72" width="4" height="56" rx="2" fill="#fff" opacity=".4" filter="url(#bl)"/>'
         return s
+    if kind == "spray":
+        l = cx - 48
+        s = (
+            f'<rect x="{l}" y="150" width="96" height="180" rx="14" fill="url(#fg)"/>'
+            f'<rect x="{l}" y="262" width="96" height="46" fill="{col}" opacity=".85"/>'
+            f'<rect x="{l + 6}" y="166" width="7" height="150" rx="3.5" fill="#fff" opacity=".7" filter="url(#bl)"/>'
+            f'<rect x="{l}" y="150" width="96" height="180" rx="14" fill="none" stroke="#9a9d97" stroke-opacity=".35"/>'
+        )
+        s += f'<rect x="{cx - 30}" y="118" width="60" height="36" rx="5" fill="url(#fg)" stroke="#9a9d97" stroke-opacity=".4"/>'
+        s += f'<rect x="{cx - 20}" y="84" width="40" height="36" rx="6" fill="url(#fg)" stroke="#9a9d97" stroke-opacity=".4"/>'
+        s += f'<path d="M{cx - 20} 90 L{cx - 38} 90 Q{cx - 42} 90 {cx - 42} 94 L{cx - 42} 100 L{cx - 20} 100 Z" fill="url(#fg)" stroke="#9a9d97" stroke-opacity=".4"/>'
+        return s
     if kind == "flip":
         s = frosted(cx, 98, 150, 330, 190)
         s += silver(cx - 34, 96, 68, 58, 6)
@@ -195,11 +221,12 @@ def shape(kind, col):
         + '<path d="M118 294 L102 118 L116 118 L128 296 Z" fill="#fff" opacity=".35" filter="url(#bl)"/>'
         + '<rect x="84" y="82" width="132" height="32" rx="5" fill="url(#lq)"/><rect x="84" y="82" width="132" height="32" rx="5" fill="#000" opacity=".12"/>'
         + "".join(f'<rect x="{x}" y="86" width="1.6" height="26" fill="#000" opacity=".18"/>' for x in range(96, 206, 6))
-        + silver(cx - 34, 298, 68, 36, 6)
+        + f'<rect x="{cx - 34}" y="298" width="68" height="36" rx="6" fill="url(#fg)" stroke="#9a9d97" stroke-opacity=".45"/>'
     )
 
 
 def svg(slug, name, step, vorgabe=None):
+    step = norm_step(step)
     k = form(name, step)
     col = farbe(slug, name, step, vorgabe)
     return (

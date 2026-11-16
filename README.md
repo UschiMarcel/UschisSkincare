@@ -60,7 +60,7 @@ Eine Datei ist eine Liste von Produkten:
 | `hinweis` | nein | Hellblaue Box, z. B. zur Lagerung (Kühlschrank). |
 | `preis` | nein | Aktueller Preis, als Zahl oder Text (`12.95` oder `"12,95"`). |
 | `preis_alt` | nein | Alter Preis. Wird durchgestrichen mit Rabatt in Prozent angezeigt. |
-| `etikett` | nein | Handschrift-Beschriftung auf der Flasche, `\n` = Zeilenumbruch (z. B. `"Mighty\nMelt"`). Ohne Angabe wird sie aus dem Namen gekürzt. |
+| `etikett` | nein | (nur sichtbar mit `SHOW_LABELS=true` in der `index.html`, aktuell aus) Handschrift-Beschriftung auf der Flasche, `\n` = Zeilenumbruch (z. B. `"Mighty\nMelt"`). Ohne Angabe wird sie aus dem Namen gekürzt. |
 | `farbe` | nein | Farbe der Flüssigkeit in der Illustration als Hex-Wert (z. B. `"#f0c2cc"`). Wirkt beim Erzeugen mit `make_illustrations.py`. |
 | `aktiv` | nein | `false` blendet das Produkt aus. |
 
