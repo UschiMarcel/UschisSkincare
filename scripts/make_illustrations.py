@@ -12,7 +12,7 @@ trage im Produkt "bild": "bilder/mein-foto.jpg" ein.
 import argparse, colorsys, glob, hashlib, json, os, re
 
 # Pastellfarben je Schritt: Kreis, Behälter, Verschluss
-PALETTE = {
+PALETTE_ALT = {
     "Reinigungs-Öle": ("#f8e0b4", "#eab968", "#2b2a27"),
     "Reinigungs-Cleanser": ("#dbe9d6", "#b4d2ab", "#33423a"),
     "Peeling": ("#f9d8cb", "#f09c7e", "#2b2a27"),
@@ -89,144 +89,124 @@ def hexa(c, dl=0.0):
     return shade(c, dl)
 
 
-def gdefs(body, capk):
-    """Gemeinsame Verläufe: Glas, Flüssigkeit, Verschluss, Metall, Schatten, Weichzeichner."""
-    g = (hexa(body, -.30), hexa(body, -.10), hexa(body, .10), hexa(body, .16), hexa(body, -.04), hexa(body, -.34))
-    caps = {
-        "black": ("#050505", "#3b3b3b", "#161616", "#000"),
-        "white": ("#bfbdb6", "#ffffff", "#e8e6df", "#a9a79f"),
-        "gold": ("#7d6232", "#e9cf92", "#b8975a", "#6b5127"),
-    }[capk]
+FARBEN = [  # (Stichwort im Link/Namen, Farbe) – grobe Annäherung, mit dem Feld "farbe" im Produkt überschreibbar
+    ("arganoel", "#e8b45a"), ("mighty-melt", "#f2c98a"), ("cleansing-balm", "#bfe3d3"),
+    ("balea-peeling", "#8fd6bd"), ("balea", "#9bdcc6"),
+    ("c-glow", "#f5a95e"), ("a-game", "#e59aa8"), ("apad", "#cdb7e8"), ("happier-barrier", "#f3d3d6"),
+    ("zero-feel", "#f6dfb0"), ("liquid-hydration", "#bfdcef"), ("geek-und-gorgeous", "#f0c2cc"),
+    ("aha-peeling", "#f2a27f"), ("120h", "#9ccbe8"), ("niacinamid", "#c2aee3"), ("isana", "#a9d3ec"),
+    ("zinksalbe", "#cfe3f1"), ("panthenol", "#f1de8e"), ("cordes", "#e8d0b2"),
+]
+STEPFARBE = {"Sonnenschutz": "#f6dfb0", "Creme": "#f3e6dc", "Serum": "#cdb7e8", "Toner": "#bfdcef", "Salbe": "#f1de8e"}
+
+
+def farbe(slug, name, step, vorgabe=None):
+    if vorgabe:
+        return vorgabe
+    key = (slug + " " + (name or "")).lower()
+    for k, c in FARBEN:
+        if k in key:
+            return c
+    return STEPFARBE.get(step, "#d9d6cb")
+
+
+def gdefs(col):
     return (
         "<defs>"
-        f'<linearGradient id="gl" x1="0" x2="1"><stop offset="0" stop-color="{g[0]}"/><stop offset=".14" stop-color="{g[1]}"/><stop offset=".38" stop-color="{g[2]}"/><stop offset=".55" stop-color="{g[3]}"/><stop offset=".82" stop-color="{g[4]}"/><stop offset="1" stop-color="{g[5]}"/></linearGradient>'
-        f'<linearGradient id="lq" x1="0" x2="1"><stop offset="0" stop-color="{hexa(body, -.38)}"/><stop offset=".4" stop-color="{hexa(body, -.12)}"/><stop offset="1" stop-color="{hexa(body, -.42)}"/></linearGradient>'
-        f'<linearGradient id="cp" x1="0" x2="1"><stop offset="0" stop-color="{caps[0]}"/><stop offset=".28" stop-color="{caps[1]}"/><stop offset=".6" stop-color="{caps[2]}"/><stop offset="1" stop-color="{caps[3]}"/></linearGradient>'
-        '<linearGradient id="mt" x1="0" x2="1"><stop offset="0" stop-color="#8a8c8e"/><stop offset=".25" stop-color="#f4f5f6"/><stop offset=".5" stop-color="#b9bbbd"/><stop offset=".78" stop-color="#eceeef"/><stop offset="1" stop-color="#7d7f82"/></linearGradient>'
-        '<radialGradient id="sh" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#000" stop-opacity=".38"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>'
-        '<filter id="bl" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.6"/></filter>'
+        f'<linearGradient id="fg" x1="0" x2="1"><stop offset="0" stop-color="#cfd2cd"/><stop offset=".08" stop-color="#eceeea"/><stop offset=".5" stop-color="#f7f8f5"/><stop offset=".9" stop-color="#e3e5e0"/><stop offset="1" stop-color="#c3c6c0"/></linearGradient>'
+        f'<linearGradient id="lq" x1="0" x2="1"><stop offset="0" stop-color="{shade(col, -.14)}"/><stop offset=".35" stop-color="{shade(col, .06)}"/><stop offset=".7" stop-color="{col}"/><stop offset="1" stop-color="{shade(col, -.18)}"/></linearGradient>'
+        '<linearGradient id="mt" x1="0" x2="1"><stop offset="0" stop-color="#7d8083"/><stop offset=".18" stop-color="#d9dbdd"/><stop offset=".42" stop-color="#f6f7f8"/><stop offset=".62" stop-color="#b4b7ba"/><stop offset=".85" stop-color="#e3e5e7"/><stop offset="1" stop-color="#6f7275"/></linearGradient>'
+        '<linearGradient id="bk" x1="0" x2="1"><stop offset="0" stop-color="#0c0c0c"/><stop offset=".3" stop-color="#4a4a4a"/><stop offset=".6" stop-color="#1a1a1a"/><stop offset="1" stop-color="#050505"/></linearGradient>'
+        '<radialGradient id="sh" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#000" stop-opacity=".34"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>'
+        '<filter id="bl" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="1.8"/></filter>'
         "</defs>"
     )
 
 
-def bottle_path(cx, w, nw, ny, ys, yb, r=18):
-    l, rr, nl, nr = cx - w / 2, cx + w / 2, cx - nw / 2, cx + nw / 2
-    return (f"M{nl} {ny} L{nl} {ys} C{nl} {ys + 16} {l} {ys + 6} {l} {ys + 40} L{l} {yb - r} Q{l} {yb} {l + r} {yb} "
-            f"L{rr - r} {yb} Q{rr} {yb} {rr} {yb - r} L{rr} {ys + 40} C{rr} {ys + 6} {nr} {ys + 16} {nr} {ys} L{nr} {ny} Z")
+def brushed(x, y, w, h, n=18):
+    g = w / n
+    return "".join(f'<rect x="{x + i * g + g / 2:.1f}" y="{y}" width=".8" height="{h}" fill="#fff" opacity="{.35 if i % 3 else .1}"/>' for i in range(n))
 
 
-def glass(cx, w, nw, ny, ys, yb, fill=.62, milk=False):
-    """Glaskörper mit Flüssigkeit, Reflexen und dickem Boden."""
-    d = bottle_path(cx, w, nw, ny, ys, yb)
-    top = yb - (yb - ys) * fill
-    l, rr = cx - w / 2, cx + w / 2
-    o = (
-        f'<clipPath id="bc"><path d="{d}"/></clipPath>'
-        f'<path d="{d}" fill="url(#gl)"/>'
-        f'<g clip-path="url(#bc)">'
-        f'<rect x="{l}" y="{top:.1f}" width="{w}" height="{yb - top + 2:.1f}" fill="url(#lq)" opacity="{.96 if milk else .85}"/>'
-        f'<ellipse cx="{cx}" cy="{top:.1f}" rx="{w / 2}" ry="3.2" fill="#fff" opacity=".28"/>'
-        f'<rect x="{l}" y="{yb - 11}" width="{w}" height="12" fill="#000" opacity=".26"/>'
-        f'<rect x="{l + 7}" y="{ys + 26}" width="7" height="{yb - ys - 54}" rx="3.5" fill="#fff" opacity=".6" filter="url(#bl)"/>'
-        f'<rect x="{rr - 13}" y="{ys + 36}" width="3.5" height="{yb - ys - 70}" rx="1.7" fill="#fff" opacity=".3" filter="url(#bl)"/>'
-        f'<path d="M{l + 12} {ys + 18} Q{cx - 8} {ys + 4} {cx + 4} {ys + 10}" stroke="#fff" stroke-width="3" fill="none" opacity=".45" filter="url(#bl)"/>'
-        f'<rect x="{l}" y="{ys + 40}" width="{w}" height="{yb - ys - 40}" fill="none" stroke="#000" stroke-opacity=".18" stroke-width="2"/>'
+def silver(x, y, w, h, r=3):
+    return (f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{r}" fill="url(#mt)"/>' + brushed(x, y, w, h)
+            + f'<rect x="{x}" y="{y}" width="{w}" height="2.5" rx="1.2" fill="#fff" opacity=".7"/>'
+            f'<rect x="{x}" y="{y + h - 2.5}" width="{w}" height="2.5" fill="#000" opacity=".18"/>')
+
+
+def frosted(cx, w, y0, y1, fill_top, r=10):
+    """Mattierter Glaszylinder: milchiges Glas, Flüssigkeit in Produktfarbe, dicker Boden."""
+    l = cx - w / 2
+    h = y1 - y0
+    return (
+        f'<clipPath id="fc"><rect x="{l}" y="{y0}" width="{w}" height="{h}" rx="{r}"/></clipPath>'
+        f'<rect x="{l}" y="{y0}" width="{w}" height="{h}" rx="{r}" fill="url(#fg)"/>'
+        f'<g clip-path="url(#fc)">'
+        f'<rect x="{l + 5}" y="{fill_top}" width="{w - 10}" height="{y1 - fill_top - 17}" rx="7" fill="url(#lq)" opacity=".92"/>'
+        f'<rect x="{l + 5}" y="{fill_top}" width="{w - 10}" height="{y1 - fill_top - 17}" rx="7" fill="#fff" opacity=".28"/>'
+        f'<ellipse cx="{cx}" cy="{fill_top + 1}" rx="{w / 2 - 6}" ry="3" fill="#fff" opacity=".45"/>'
+        f'<rect x="{l}" y="{y1 - 18}" width="{w}" height="18" fill="#fff" opacity=".55"/>'
+        f'<rect x="{l}" y="{y1 - 18}" width="{w}" height="1.5" fill="#000" opacity=".1"/>'
+        f'<rect x="{l + 6}" y="{y0 + 14}" width="7" height="{h - 36}" rx="3.5" fill="#fff" opacity=".7" filter="url(#bl)"/>'
+        f'<rect x="{l + w - 12}" y="{y0 + 18}" width="4" height="{h - 44}" rx="2" fill="#fff" opacity=".4" filter="url(#bl)"/>'
         "</g>"
+        f'<rect x="{l}" y="{y0}" width="{w}" height="{h}" rx="{r}" fill="none" stroke="#9a9d97" stroke-opacity=".35"/>'
     )
-    return o
 
 
-def ribs(x, y, w, h, n, op=.22):
-    gap = w / n
-    return "".join(f'<rect x="{x + i * gap + gap / 2 - .6:.1f}" y="{y}" width="1.2" height="{h}" fill="#000" opacity="{op}"/>' for i in range(n))
-
-
-def cap_block(x, y, w, h, r=6, fill="url(#cp)"):
-    return (f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{r}" fill="{fill}"/>'
-            f'<rect x="{x + 5}" y="{y + 2}" width="3.2" height="{h - 4}" rx="1.6" fill="#fff" opacity=".35" filter="url(#bl)"/>')
-
-
-def shape(kind, body, capk):
+def shape(kind, col):
     cx = 150
-    if kind == "dropper":
-        s = glass(cx, 96, 40, 176, 200, 330, .66)
-        s += f'<rect x="{cx - 3}" y="178" width="6" height="140" rx="3" fill="#fff" opacity=".14"/>'
-        s += cap_block(cx - 27, 142, 54, 36, 5) + ribs(cx - 27, 146, 54, 28, 11)
-        s += f'<path d="M{cx - 15} 144 L{cx - 15} 96 Q{cx - 15} 62 {cx} 62 Q{cx + 15} 62 {cx + 15} 96 L{cx + 15} 144 Z" fill="url(#cp)"/>'
-        s += f'<rect x="{cx - 9}" y="76" width="4" height="56" rx="2" fill="#fff" opacity=".4" filter="url(#bl)"/>'
-        return s
     if kind == "pump":
-        s = glass(cx, 104, 40, 166, 192, 330, .68)
-        s += cap_block(cx - 28, 138, 56, 34, 5) + ribs(cx - 28, 142, 56, 26, 12)
-        s += f'<rect x="{cx - 5}" y="104" width="10" height="38" fill="url(#cp)"/>'
-        s += cap_block(cx - 30, 80, 60, 26, 8) + f'<path d="M{cx + 28} 86 L{cx + 58} 86 Q{cx + 64} 86 {cx + 64} 92 L{cx + 64} 96 L{cx + 28} 96 Z" fill="url(#cp)"/>'
-        s += f'<rect x="{cx - 4}" y="150" width="8" height="150" rx="4" fill="#fff" opacity=".12"/>'
+        s = frosted(cx, 100, 160, 330, 196)
+        s += silver(cx - 31, 118, 62, 44, 4) + silver(cx - 27, 100, 54, 20, 3)
+        s += silver(cx - 24, 52, 48, 50, 4)
+        s += f'<path d="M{cx - 24} 58 L{cx - 46} 58 Q{cx - 52} 58 {cx - 52} 64 L{cx - 52} 70 L{cx - 24} 70 Z" fill="url(#mt)"/>'
+        return s
+    if kind == "dropper":
+        s = frosted(cx, 96, 170, 330, 204)
+        s += f'<rect x="{cx - 2.5}" y="176" width="5" height="136" rx="2.5" fill="#fff" opacity=".35"/>'
+        s += silver(cx - 28, 138, 56, 34, 4)
+        s += f'<path d="M{cx - 16} 140 L{cx - 16} 92 Q{cx - 16} 58 {cx} 58 Q{cx + 16} 58 {cx + 16} 92 L{cx + 16} 140 Z" fill="url(#bk)"/>'
+        s += f'<rect x="{cx - 10}" y="72" width="4" height="56" rx="2" fill="#fff" opacity=".4" filter="url(#bl)"/>'
         return s
     if kind == "flip":
-        s = glass(cx, 96, 44, 152, 176, 330, .72)
-        s += cap_block(cx - 31, 100, 62, 56, 9) + ribs(cx - 31, 108, 62, 40, 13, .18)
-        s += f'<rect x="{cx - 31}" y="122" width="62" height="2.5" fill="#000" opacity=".25"/>'
+        s = frosted(cx, 98, 150, 330, 190)
+        s += silver(cx - 34, 96, 68, 58, 6)
         return s
     if kind == "jar":
-        s = (
-            f'<clipPath id="jc"><rect x="{cx - 68}" y="236" width="136" height="94" rx="22"/></clipPath>'
-            f'<rect x="{cx - 68}" y="236" width="136" height="94" rx="22" fill="url(#gl)"/>'
-            f'<g clip-path="url(#jc)"><rect x="{cx - 68}" y="240" width="136" height="90" fill="url(#lq)" opacity=".92"/>'
-            f'<rect x="{cx - 68}" y="318" width="136" height="14" fill="#000" opacity=".24"/>'
-            f'<rect x="{cx - 56}" y="250" width="8" height="64" rx="4" fill="#fff" opacity=".55" filter="url(#bl)"/>'
-            f'<rect x="{cx + 50}" y="254" width="4" height="56" rx="2" fill="#fff" opacity=".28" filter="url(#bl)"/></g>'
-        )
-        s += cap_block(cx - 72, 190, 144, 52, 10) + ribs(cx - 72, 198, 144, 36, 28, .16)
-        s += f'<rect x="{cx - 72}" y="236" width="144" height="3" fill="#000" opacity=".3"/>'
+        s = frosted(cx, 140, 238, 330, 262, 20)
+        s += silver(cx - 74, 194, 148, 46, 8)
         return s
     if kind == "padjar":
-        s = (
-            f'<clipPath id="jc"><rect x="{cx - 62}" y="170" width="124" height="160" rx="24"/></clipPath>'
-            f'<rect x="{cx - 62}" y="170" width="124" height="160" rx="24" fill="url(#gl)"/>'
-            f'<g clip-path="url(#jc)"><rect x="{cx - 62}" y="215" width="124" height="115" fill="url(#lq)" opacity=".85"/>'
-            f'<rect x="{cx - 62}" y="318" width="124" height="14" fill="#000" opacity=".24"/>'
-            f'<rect x="{cx - 51}" y="190" width="8" height="120" rx="4" fill="#fff" opacity=".55" filter="url(#bl)"/></g>'
-        )
-        s += cap_block(cx - 66, 128, 132, 48, 10) + ribs(cx - 66, 136, 132, 32, 26, .16)
+        s = frosted(cx, 124, 168, 330, 214, 22)
+        s += silver(cx - 68, 124, 136, 48, 8)
         return s
     if kind == "tin":
         return (
-            f'<rect x="{cx - 84}" y="282" width="168" height="48" rx="12" fill="url(#mt)"/>'
-            f'<rect x="{cx - 84}" y="318" width="168" height="12" rx="6" fill="#000" opacity=".18"/>'
-            f'<rect x="{cx - 88}" y="244" width="176" height="44" rx="12" fill="url(#cp)"/>'
-            f'<rect x="{cx - 80}" y="249" width="160" height="4" rx="2" fill="#fff" opacity=".4" filter="url(#bl)"/>'
-            f'<rect x="{cx - 88}" y="282" width="176" height="3" fill="#000" opacity=".35"/>'
+            f'<rect x="{cx - 84}" y="284" width="168" height="46" rx="12" fill="url(#mt)"/>' + brushed(cx - 84, 284, 168, 46, 30)
+            + f'<rect x="{cx - 88}" y="246" width="176" height="44" rx="12" fill="url(#mt)"/>' + brushed(cx - 88, 246, 176, 44, 30)
+            + f'<rect x="{cx - 80}" y="251" width="160" height="4" rx="2" fill="#fff" opacity=".7" filter="url(#bl)"/>'
+            f'<rect x="{cx - 88}" y="285" width="176" height="3" fill="#000" opacity=".3"/>'
         )
-    # tube (Kunststoff, matt)
-    stripes = "".join(f'<rect x="{x}" y="86" width="1.6" height="26" fill="#000" opacity=".18"/>' for x in range(96, 206, 6))
+    # Tube
+    body = f'<path d="M104 296 Q150 306 196 296 L212 112 L88 112 Z" fill="url(#lq)"/>'
     return (
-        f'<path d="M104 296 Q150 306 196 296 L212 112 L88 112 Z" fill="url(#gl)"/>'
-        f'<path d="M118 294 L102 118 L116 118 L128 296 Z" fill="#fff" opacity=".28" filter="url(#bl)"/>'
-        f'<rect x="84" y="82" width="132" height="32" rx="5" fill="url(#gl)"/><rect x="84" y="82" width="132" height="32" rx="5" fill="#000" opacity=".12"/>' + stripes
-        + cap_block(cx - 36, 296, 72, 38, 7)
+        body
+        + '<path d="M118 294 L102 118 L116 118 L128 296 Z" fill="#fff" opacity=".35" filter="url(#bl)"/>'
+        + '<rect x="84" y="82" width="132" height="32" rx="5" fill="url(#lq)"/><rect x="84" y="82" width="132" height="32" rx="5" fill="#000" opacity=".12"/>'
+        + "".join(f'<rect x="{x}" y="86" width="1.6" height="26" fill="#000" opacity=".18"/>' for x in range(96, 206, 6))
+        + silver(cx - 34, 298, 68, 36, 6)
     )
 
 
-def svg(slug, name, step):
-    circ, body, capc = PALETTE.get(step, DEFAULT)
-    seed = int(hashlib.md5(slug.encode()).hexdigest()[:6], 16)
-    dh = ((seed % 13) - 6) / 360
-    dl = (((seed // 13) % 7) - 3) / 100
+def svg(slug, name, step, vorgabe=None):
     k = form(name, step)
-    base = shade(circ if k in ("jar", "padjar") and step == "Creme" else body, dl, dh)
-    capk = "gold" if step in ("Creme", "Toner") else ("white" if k == "tube" else "black")
-    if k == "tin":
-        capk = "black"
-    if step in ("Serum", "Retinol / Anti-Aging", "Reinigungs-Öle", "Sonnenschutz", "Peeling") and k != "tube":
-        base = shade(base, -.1)
-    if k in ("jar", "padjar"):
-        base = shade(base, .2)
-    inner = shape(k, base, capk)
+    col = farbe(slug, name, step, vorgabe)
     return (
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 380" role="img" aria-label="Illustration">'
-        + gdefs(base, capk)
+        + gdefs(col)
         + '<ellipse cx="150" cy="334" rx="92" ry="11" fill="url(#sh)"/>'
-        + inner
+        + shape(k, col)
         + "</svg>\n"
     )
 
@@ -243,7 +223,7 @@ def main():
         f = os.path.join(a.ziel, slug + ".svg")
         if os.path.exists(f) and not a.ueberschreiben:
             continue
-        open(f, "w", encoding="utf-8").write(svg(slug, p.get("name", ""), p.get("schritt", "")))
+        open(f, "w", encoding="utf-8").write(svg(slug, p.get("name", ""), p.get("schritt", ""), p.get("farbe")))
         n += 1
         print("✓", f, "(", form(p.get("name", ""), p.get("schritt", "")), ")")
     print(n, "Illustrationen erstellt")

@@ -60,6 +60,8 @@ Eine Datei ist eine Liste von Produkten:
 | `hinweis` | nein | Hellblaue Box, z. B. zur Lagerung (Kühlschrank). |
 | `preis` | nein | Aktueller Preis, als Zahl oder Text (`12.95` oder `"12,95"`). |
 | `preis_alt` | nein | Alter Preis. Wird durchgestrichen mit Rabatt in Prozent angezeigt. |
+| `etikett` | nein | Handschrift-Beschriftung auf der Flasche, `\n` = Zeilenumbruch (z. B. `"Mighty\nMelt"`). Ohne Angabe wird sie aus dem Namen gekürzt. |
+| `farbe` | nein | Farbe der Flüssigkeit in der Illustration als Hex-Wert (z. B. `"#f0c2cc"`). Wirkt beim Erzeugen mit `make_illustrations.py`. |
 | `aktiv` | nein | `false` blendet das Produkt aus. |
 
 ### Schritte (`schritt`)
@@ -118,7 +120,7 @@ Unter der Routine kann man sie als Bild speichern (mit Schreiblinie „Anwendung
 
 ## Bilder
 
-Jedes Produkt bekommt eine realistisch gerenderte, neutrale Glasflasche, einen Tiegel oder eine Tube (Pumpflasche, Pipettenflasche, Tiegel usw.), bewusst ohne Label, Marke oder Logo. Die Seite sucht die Datei `bilder/<kennung>.svg`. Die Kennung ist der letzte Teil des Produktlinks in Kleinbuchstaben (z. B. `…/mivolis-panthenol-salbe` wird `bilder/mivolis-panthenol-salbe.svg`).
+Jedes Produkt bekommt eine realistisch gerenderte, neutrale Flasche aus mattem Glas mit Silberkappe (oder einen Tiegel bzw. eine Tube), bewusst ohne Marke oder Logo. Die Flüssigkeit hat die Produktfarbe, den Namen schreibt die Seite per Handschrift (Feld `etikett`) wie mit Edding darauf. Die Seite sucht die Datei `bilder/<kennung>.svg`. Die Kennung ist der letzte Teil des Produktlinks in Kleinbuchstaben (z. B. `…/mivolis-panthenol-salbe` wird `bilder/mivolis-panthenol-salbe.svg`).
 
 Neue Illustrationen erzeugst du im Repository-Ordner mit:
 

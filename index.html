@@ -247,9 +247,17 @@
 @media (max-width:520px){#sg .extra,#sg .altmenu{margin-left:110px}#sg .rowlink{padding:24px 0}}
 #sg .card .img{height:240px;display:flex;align-items:flex-end;justify-content:center}
 #sg .card .img img{height:100%;width:auto;max-width:100%;max-height:none;object-fit:contain}
+/* Handschrift auf der Flasche */
+#sg .hw{position:relative;display:block;width:100%;container-type:inline-size;line-height:0}
+#sg .hw img{display:block;width:100%;height:auto;max-height:none}
+#sg .mk{position:absolute;left:50%;top:67%;transform:translate(-50%,-50%) rotate(-4deg);width:36%;text-align:center;font:700 11.5cqw/.9 'Caveat','Segoe Print','Bradley Hand',cursive;color:#1c2a4a;white-space:pre-line;opacity:.88;letter-spacing:.01em;pointer-events:none}
+#sg[data-theme="dark"] .mk{color:#1c2a4a}
+#sg .card .img .hw{width:auto;height:240px;aspect-ratio:300/380}
+#sg .card .img .hw img{height:100%;width:100%}
+#sg .rimg img{max-height:none}
 @media (prefers-reduced-motion:reduce){#sg *{transition:none!important;animation:none!important}}
 </style>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Archivo:wdth,wght@125,800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Montserrat:wght@300;400;500;600;700&family=Archivo:wdth,wght@125,800&display=swap">
 
 <h2>Uschi's <span class="pillw"><svg viewBox="0 0 24 24" width=".62em" height=".62em" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9"/></svg>Skincare</span> Guide</h2>
 <p class="intro"><b>Ich hab hier wat janz Spezielles. Nur für dich &lt;3</b><br>Garantiert ohne L'Oréal, Neutrogena und ähnliche große Kosmetikhäuser</p>
@@ -361,7 +369,7 @@ function norm(r){
  var z=[].concat(r.zeit||[]).join(" ").toLowerCase(),when=null;
  if(z){when=[];if(z.indexOf("morgen")>-1)when.push("am");if(z.indexOf("abend")>-1)when.push("pm");if(!when.length)when=null}
  return{
-  url:r.link,old:(function(v){if(v===undefined||v===null||v==="")return null;var n=parseFloat(String(v).replace(",","."));return isNaN(n)?null:n})(r.preis_alt),price:(function(v){if(v===undefined||v===null||v==="")return null;var n=parseFloat(String(v).replace(",","."));return isNaN(n)?null:n})(r.preis),name:r.name||"",info:String(r.hinweis||"").trim(),use:String(r.anwendung||"").trim(),det:String(r.details||"").trim(),ing:[].concat(r.inhaltsstoffe||[]).join(", ").trim(),step:st,when:when,levels:lv.length?lv:null,conflict:[].concat(r.konflikt||[]).map(stepName),note:r.beschreibung||"",img:(typeof r.bild==="string"&&!/^(https?:)?\/\//i.test(r.bild.trim()))?r.bild.trim():"",
+  label:(typeof r.etikett==="string"?r.etikett:""),url:r.link,old:(function(v){if(v===undefined||v===null||v==="")return null;var n=parseFloat(String(v).replace(",","."));return isNaN(n)?null:n})(r.preis_alt),price:(function(v){if(v===undefined||v===null||v==="")return null;var n=parseFloat(String(v).replace(",","."));return isNaN(n)?null:n})(r.preis),name:r.name||"",info:String(r.hinweis||"").trim(),use:String(r.anwendung||"").trim(),det:String(r.details||"").trim(),ing:[].concat(r.inhaltsstoffe||[]).join(", ").trim(),step:st,when:when,levels:lv.length?lv:null,conflict:[].concat(r.konflikt||[]).map(stepName),note:r.beschreibung||"",img:(typeof r.bild==="string"&&!/^(https?:)?\/\//i.test(r.bild.trim()))?r.bild.trim():"",
   types:tags.filter(function(t){return t!=="alle"&&TYPES[t]}),
   concerns:tags.filter(function(t,i,a){return CONCERNS[t]&&a.indexOf(t)===i}).concat(st==="Retinol / Anti-Aging"&&tags.indexOf("antiaging")<0?["antiaging"]:[])
  };
@@ -448,14 +456,26 @@ function hits(p){return selC.filter(function(c){return p.concerns&&p.concerns.in
 
 /* ---------- Produktbilder ---------- */
 /* Bilder liegen im Ordner "bilder/" (bilder/<kennung>.svg). Mit dem Feld "bild" im Produkt lässt sich ein eigener Pfad setzen. */
+/* Handschrift-Etikett: wie mit Edding auf die Flasche geschrieben. Eigenes Feld "etikett" (\n = Zeilenumbruch), sonst aus dem Namen gekürzt. */
+function autoLabel(n){
+ var t=String(n||"").replace(/geek\s*&\s*gorgeous|balea|isana|mivolis|cordes|beauty expert|gesichts\w*|reinigungs\w*|konzentrat|\bmit\b/ig,"").replace(/\s+/g," ").trim();
+ var w=t.split(" ").filter(Boolean).slice(0,4);
+ if(w.length<2)return w.join("");
+ var h=Math.ceil(w.length/2);return w.slice(0,h).join(" ")+"\n"+w.slice(h).join(" ");
+}
 function meta(p,done){
- done({img:SHOW_IMAGES?(p.img||("bilder/"+p.slug+".svg")):"",name:p.name||nameFromUrl(p.url)});
+ var nm=p.name||nameFromUrl(p.url);
+ done({img:SHOW_IMAGES?(p.img||("bilder/"+p.slug+".svg")):"",name:nm,label:p.label||autoLabel(nm)});
 }
 function fillImage(box,m){
  if(!SHOW_IMAGES||!m.img){box.innerHTML="";return}
  var im=new Image();im.alt=m.name||"";im.loading="lazy";
  im.onerror=function(){box.innerHTML=""};
- im.src=m.img;box.innerHTML="";box.appendChild(im);
+ im.src=m.img;box.innerHTML="";
+ if(box.classList.contains("aimg")||!m.label){box.appendChild(im);return}
+ var w=document.createElement("span");w.className="hw";w.appendChild(im);
+ var t=document.createElement("span");t.className="mk";t.textContent=m.label;w.appendChild(t);
+ box.appendChild(w);
 }
 
 function mkChips(el,items,isOn,cb){
