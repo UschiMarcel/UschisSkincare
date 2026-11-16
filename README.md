@@ -13,7 +13,7 @@ produkte/
   002-….json        Produktdateien (hier kommen neue Produkte rein)
   _vorlage.json     Vorlage mit allen Feldern (wird nicht geladen)
 bilder/
-  <kennung>.svg     Illustration pro Produkt (automatisch gefunden)
+  <kennung>.svg     Glas-Illustration pro Produkt (automatisch gefunden)
 scripts/
   make_illustrations.py   erzeugt fehlende Illustrationen
 ARCHIV/             Stand der Seite vor dem Redesign (wird nicht geladen)
@@ -118,7 +118,7 @@ Unter der Routine kann man sie als Bild speichern (mit Schreiblinie „Anwendung
 
 ## Bilder
 
-Jedes Produkt bekommt eine allgemeine Illustration (Pumpflasche, Tube, Dose, Pipettenflasche usw.), bewusst ohne echte Verpackung, Marke oder Logo. Die Seite sucht die Datei `bilder/<kennung>.svg`. Die Kennung ist der letzte Teil des Produktlinks in Kleinbuchstaben (z. B. `…/mivolis-panthenol-salbe` wird `bilder/mivolis-panthenol-salbe.svg`).
+Jedes Produkt bekommt eine realistisch gerenderte, neutrale Glasflasche, einen Tiegel oder eine Tube (Pumpflasche, Pipettenflasche, Tiegel usw.), bewusst ohne Label, Marke oder Logo. Die Seite sucht die Datei `bilder/<kennung>.svg`. Die Kennung ist der letzte Teil des Produktlinks in Kleinbuchstaben (z. B. `…/mivolis-panthenol-salbe` wird `bilder/mivolis-panthenol-salbe.svg`).
 
 Neue Illustrationen erzeugst du im Repository-Ordner mit:
 
