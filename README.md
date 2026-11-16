@@ -14,6 +14,7 @@ produkte/
   _vorlage.json     Vorlage mit allen Feldern (wird nicht geladen)
 bilder/
   <kennung>.svg     Glas-Illustration pro Produkt (automatisch gefunden)
+  _layout.json      Position der Beschriftung je Flasche (vom Skript erzeugt)
 scripts/
   make_illustrations.py   erzeugt fehlende Illustrationen
 ARCHIV/             Stand der Seite vor dem Redesign (wird nicht geladen)
@@ -60,7 +61,7 @@ Eine Datei ist eine Liste von Produkten:
 | `hinweis` | nein | Hellblaue Box, z. B. zur Lagerung (Kühlschrank). |
 | `preis` | nein | Aktueller Preis, als Zahl oder Text (`12.95` oder `"12,95"`). |
 | `preis_alt` | nein | Alter Preis. Wird durchgestrichen mit Rabatt in Prozent angezeigt. |
-| `etikett` | nein | (nur sichtbar mit `SHOW_LABELS=true` in der `index.html`, aktuell aus) Handschrift-Beschriftung auf der Flasche, `\n` = Zeilenumbruch (z. B. `"Mighty\nMelt"`). Ohne Angabe wird sie aus dem Namen gekürzt. |
+| `etikett` | nein | Handschrift-Beschriftung auf der Flasche (mit `SHOW_LABELS=false` in der `index.html` abschaltbar), auf der Flasche, `\n` = Zeilenumbruch (z. B. `"Mighty\nMelt"`). Ohne Angabe wird sie aus dem Namen gekürzt. |
 | `farbe` | nein | Farbe der Flüssigkeit in der Illustration als Hex-Wert (z. B. `"#f0c2cc"`). Wirkt beim Erzeugen mit `make_illustrations.py`. |
 | `aktiv` | nein | `false` blendet das Produkt aus. |
 

@@ -71,7 +71,7 @@ def form(name, step):
     if "liquid hydration" in n:
         return "spray"          # weiße Sprühflasche, 110 ml
     if re.search(r"balsam|balm|melt", n):
-        return "tin"            # Dose
+        return "jar"            # Glastiegel (Deckel in lila Stahl-Optik, siehe svg())
     if "happier barrier" in n or re.search(r"\bvas\b", n) or "zero feel" in n:
         return "tube"           # Tuben
     if step == "Reinigungs-Öle":
@@ -104,7 +104,7 @@ def hexa(c, dl=0.0):
 
 
 FARBEN = [  # (Stichwort im Link/Namen, Farbe) – grobe Annäherung, mit dem Feld "farbe" im Produkt überschreibbar
-    ("arganoel", "#e8b45a"), ("jelly", "#8fd6c8"), ("balea-peeling-cleanser", "#a8e0cf"), ("happier-barrier", "#f3c9a8"), ("cordes", "#efe6d8"), ("mighty-melt", "#f2c98a"), ("cleansing-balm", "#bfe3d3"),
+    ("arganoel", "#e8b45a"), ("jelly", "#8fd6c8"), ("balea-peeling-cleanser", "#a8e0cf"), ("happier-barrier", "#f3c9a8"), ("cordes", "#efe6d8"), ("mighty-melt", "#f4dcae"), ("cleansing-balm", "#cfe9de"),
     ("balea-peeling", "#8fd6bd"), ("balea", "#9bdcc6"),
     ("c-glow", "#f5a95e"), ("a-game", "#e59aa8"), ("apad", "#cdb7e8"), ("happier-barrier", "#f3d3d6"),
     ("zero-feel", "#f6dfb0"), ("liquid-hydration", "#bfdcef"), ("geek-und-gorgeous", "#f0c2cc"),
@@ -124,9 +124,12 @@ def farbe(slug, name, step, vorgabe=None):
     return STEPFARBE.get(step, "#d9d6cb")
 
 
-def gdefs(col):
+def gdefs(col, lid=None):
+    lg = ""
+    if lid:
+        lg = (f'<linearGradient id="lp" x1="0" x2="1"><stop offset="0" stop-color="{shade(lid, -.3)}"/><stop offset=".2" stop-color="{shade(lid, .05)}"/><stop offset=".42" stop-color="{shade(lid, .3)}"/><stop offset=".62" stop-color="{shade(lid, -.08)}"/><stop offset=".85" stop-color="{shade(lid, .14)}"/><stop offset="1" stop-color="{shade(lid, -.34)}"/></linearGradient>')
     return (
-        "<defs>"
+        "<defs>" + lg +
         f'<linearGradient id="fg" x1="0" x2="1"><stop offset="0" stop-color="#cfd2cd"/><stop offset=".08" stop-color="#eceeea"/><stop offset=".5" stop-color="#f7f8f5"/><stop offset=".9" stop-color="#e3e5e0"/><stop offset="1" stop-color="#c3c6c0"/></linearGradient>'
         f'<linearGradient id="lq" x1="0" x2="1"><stop offset="0" stop-color="{shade(col, -.14)}"/><stop offset=".35" stop-color="{shade(col, .06)}"/><stop offset=".7" stop-color="{col}"/><stop offset="1" stop-color="{shade(col, -.18)}"/></linearGradient>'
         '<linearGradient id="mt" x1="0" x2="1"><stop offset="0" stop-color="#7d8083"/><stop offset=".18" stop-color="#d9dbdd"/><stop offset=".42" stop-color="#f6f7f8"/><stop offset=".62" stop-color="#b4b7ba"/><stop offset=".85" stop-color="#e3e5e7"/><stop offset="1" stop-color="#6f7275"/></linearGradient>'
@@ -142,8 +145,8 @@ def brushed(x, y, w, h, n=18):
     return "".join(f'<rect x="{x + i * g + g / 2:.1f}" y="{y}" width=".8" height="{h}" fill="#fff" opacity="{.35 if i % 3 else .1}"/>' for i in range(n))
 
 
-def silver(x, y, w, h, r=3):
-    return (f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{r}" fill="url(#mt)"/>' + brushed(x, y, w, h)
+def silver(x, y, w, h, r=3, fill="url(#mt)"):
+    return (f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{r}" fill="{fill}"/>' + brushed(x, y, w, h)
             + f'<rect x="{x}" y="{y}" width="{w}" height="2.5" rx="1.2" fill="#fff" opacity=".7"/>'
             f'<rect x="{x}" y="{y + h - 2.5}" width="{w}" height="2.5" fill="#000" opacity=".18"/>')
 
@@ -168,7 +171,7 @@ def frosted(cx, w, y0, y1, fill_top, r=10):
     )
 
 
-def shape(kind, col):
+def shape(kind, col, lid=None):
     cx = 150
     if kind == "pump":
         s = frosted(cx, 100, 160, 330, 196)
@@ -201,7 +204,7 @@ def shape(kind, col):
         return s
     if kind == "jar":
         s = frosted(cx, 140, 238, 330, 262, 20)
-        s += silver(cx - 74, 194, 148, 46, 8)
+        s += silver(cx - 74, 194, 148, 46, 8, "url(#lp)" if lid else "url(#mt)")
         return s
     if kind == "padjar":
         s = frosted(cx, 124, 168, 330, 214, 22)
@@ -229,13 +232,19 @@ def svg(slug, name, step, vorgabe=None):
     step = norm_step(step)
     k = form(name, step)
     col = farbe(slug, name, step, vorgabe)
+    lid = "#8a63c9" if re.search(r"balsam|balm|melt", (name or "").lower()) else None
     return (
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 380" role="img" aria-label="Illustration">'
-        + gdefs(col)
+        + gdefs(col, lid)
         + '<ellipse cx="150" cy="334" rx="92" ry="11" fill="url(#sh)"/>'
-        + shape(k, col)
+        + shape(k, col, lid)
         + "</svg>\n"
     )
+
+
+# Beschriftungsfläche je Form in Prozent des Bildes: (links, Mitte oben, Breite)
+LABELBOX = {"pump": (35.5, 62, 30), "dropper": (35.5, 63, 30), "flip": (35.5, 60, 30), "spray": (35.5, 63, 30),
+            "jar": (33, 77, 36), "padjar": (33, 68, 34), "tin": (33, 78, 36), "tube": (36.5, 56, 27)}
 
 
 def main():
@@ -246,13 +255,16 @@ def main():
     a = ap.parse_args()
     os.makedirs(a.ziel, exist_ok=True)
     n = 0
+    layout = {}
     for slug, p in slugs(a.produkte):
+        layout[slug] = LABELBOX[form(p.get("name", ""), p.get("schritt", ""))]
         f = os.path.join(a.ziel, slug + ".svg")
         if os.path.exists(f) and not a.ueberschreiben:
             continue
         open(f, "w", encoding="utf-8").write(svg(slug, p.get("name", ""), p.get("schritt", ""), p.get("farbe")))
         n += 1
         print("✓", f, "(", form(p.get("name", ""), p.get("schritt", "")), ")")
+    json.dump(layout, open(os.path.join(a.ziel, "_layout.json"), "w"))
     print(n, "Illustrationen erstellt")
 
 

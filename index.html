@@ -320,9 +320,14 @@
 #sg .mk small{display:block;margin-top:.55em;font:500 3.4cqw/1.2 'Montserrat',system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#222;white-space:nowrap}
 @keyframes sgFade85{from{opacity:0}to{opacity:.85}}
 #sg .rimg img{opacity:.85;animation:sgFade85 .45s ease both}
+#sg .mk{left:auto;top:auto;transform:translateY(-50%) rotate(-3deg);transform-origin:left center;text-align:left;font-family:'Gloria Hallelujah','Marker Felt','Segoe Print','Comic Sans MS',cursive;font-weight:400;text-transform:uppercase;color:#111;opacity:.95;line-height:1.08;letter-spacing:.02em}
+#sg .mk .ml{display:block;width:fit-content;max-width:none;white-space:nowrap;border-bottom:.13em solid #111;padding-bottom:.04em;margin-bottom:.16em;border-radius:0}
+#sg .mk .ml:nth-child(2){transform:rotate(-1.6deg) translateX(.12em)}
+#sg .mk .ml:nth-child(3){transform:rotate(1.2deg) translateX(-.05em)}
+#sg .mk .mkm,#sg .mk small{display:none}
 @media (prefers-reduced-motion:reduce){#sg *{transition:none!important;animation:none!important}}
 </style>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Montserrat:wght@300;400;500;600;700&family=Archivo:wdth,wght@125,800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&family=Montserrat:wght@300;400;500;600;700&family=Archivo:wdth,wght@125,800&display=swap">
 
 <h2>Uschi's <span class="pillw"><svg viewBox="0 0 24 24" width=".62em" height=".62em" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9"/></svg>Skincare</span> Guide</h2>
 <p class="intro"><b>Ich hab hier wat janz Spezielles. Nur für dich &lt;3</b><br>Garantiert ohne L'Oréal, Neutrogena und ähnliche große Kosmetikhäuser</p>
@@ -389,7 +394,7 @@ function $(id){return document.getElementById(id)}
 /* ---------- Produkte aus Dateien laden ---------- */
 var CFG={ordner:"produkte"};
 /* Produktbilder: false = keine Bilder anzeigen und keine Bilddienste abfragen. Zum Einschalten auf true setzen. */
-var SHOW_IMAGES=true,SHOW_LABELS=false;/* SHOW_LABELS=true blendet die Marker-Beschriftung auf den Flaschen wieder ein */
+var SHOW_IMAGES=true,SHOW_LABELS=true;/* SHOW_LABELS=true blendet die Marker-Beschriftung auf den Flaschen wieder ein */
 function nameFromUrl(u){
  var b=String(u||"").split(/[?#]/)[0].replace(/\/+$/,"").split("/").pop()||"Produkt";
  return b.replace(/-/g," ").replace(/\b\w/g,function(c){return c.toUpperCase()});
@@ -528,10 +533,12 @@ function autoLabel(n){
  if(w.length<2)return w.join("");
  var h=Math.ceil(w.length/2);return w.slice(0,h).join(" ")+"\n"+w.slice(h).join(" ");
 }
+var LAYOUT=null;
+try{fetch("bilder/_layout.json").then(function(r){return r.json()}).then(function(j){LAYOUT=j;if(typeof render==="function"&&unlocked)render()}).catch(function(){})}catch(e){}
 var SUBL={"Reinigungs-Öle":"Reinigungsöl","Reinigungs-Cleanser":"Cleanser","Peeling":"Peeling","Toner":"Toner","Serum":"Serum","Retinol / Anti-Aging":"Anti-Aging","Creme":"Creme","Salbe":"Salbe","Sonnenschutz":"SPF"};
 function meta(p,done){
  var nm=p.name||nameFromUrl(p.url);
- done({img:SHOW_IMAGES?(p.img||("bilder/"+p.slug+".svg")):"",name:nm,label:p.label||autoLabel(nm),sub:SUBL[p.step]||""});
+ done({img:SHOW_IMAGES?(p.img||("bilder/"+p.slug+".svg")):"",name:nm,label:p.label||autoLabel(nm),slug:p.slug});
 }
 function fillImage(box,m){
  if(!SHOW_IMAGES||!m.img){box.innerHTML="";return}
@@ -542,9 +549,10 @@ function fillImage(box,m){
  var w=document.createElement("span");w.className="hw";w.appendChild(im);
  var t=document.createElement("span");t.className="mk";
  var ls=String(m.label).split("\n"),mx=0;ls.forEach(function(x){if(x.length>mx)mx=x.length});
- t.style.fontSize=Math.min(10.5,31/(Math.max(mx,4)*.64)).toFixed(2)+"cqw";
- var main=document.createElement("span");main.className="mkm";main.textContent=m.label;t.appendChild(main);
- if(m.sub){var sm=document.createElement("small");sm.textContent=m.sub;t.appendChild(sm)}
+ var L=(LAYOUT&&LAYOUT[m.slug])||[35.5,62,30];
+ t.style.left=L[0]+"%";t.style.top=L[1]+"%";t.style.width=L[2]+"%";
+ t.style.fontSize=Math.max(3.4,Math.min(9.5,L[2]/(Math.max(mx,3)*.62))).toFixed(2)+"cqw";
+ ls.forEach(function(x){var sp=document.createElement("span");sp.className="ml";sp.textContent=x;t.appendChild(sp)});
  w.appendChild(t);
  box.appendChild(w);
 }
