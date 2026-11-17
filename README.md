@@ -129,7 +129,7 @@ Neue Illustrationen erzeugst du im Repository-Ordner mit:
 python scripts/make_illustrations.py
 ```
 
-Das legt nur fehlende Dateien an (`--ueberschreiben` erneuert alle). Eigene Fotos gehen vor: Trage `"bild": "bilder/mein-foto.jpg"` beim Produkt ein. Die Bilder liegen in der Routine mit 80 % Deckkraft und im Multiplizieren-Modus (Dark Mode: Aufhellen) über der großen Zahl.
+Das legt nur fehlende Dateien an (`--ueberschreiben` erneuert alle). Eigene Fotos gehen vor: Trage `"bild": "bilder/mein-foto.jpg"` beim Produkt ein. Die Bilder liegen in der Routine mit 90 % Deckkraft (normaler Modus) über der großen Zahl. Die Marker-Beschriftung auf den Flaschen ist ausgeschaltet (`SHOW_LABELS=false` in der index.html).
 
 ## Detailseiten
 

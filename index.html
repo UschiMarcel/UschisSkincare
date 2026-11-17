@@ -345,10 +345,10 @@
 /* Microtext: winzig, fester Wert für alle, dünne Linie */
 #sg .mk{-webkit-text-stroke:0;letter-spacing:.07em;line-height:1.1}
 #sg .mk .ml{border-bottom-width:.07em;margin-bottom:.22em}
-/* Routine: Flasche liegt per Multiplizieren über der großen Zahl (Photoshop-Modus), Deckkraft 80 %; Karten und Detail bleiben unberührt */
-#sg .rimg{mix-blend-mode:multiply}
-#sg .rimg img{opacity:.8;animation:none}
-#sg[data-theme="dark"] .rimg{mix-blend-mode:screen}
+/* Routine: Flasche normal (kein Blendmodus) mit 90 % Deckkraft; Karten und Detail bleiben unberührt */
+#sg .rimg{mix-blend-mode:normal}
+#sg .rimg img{opacity:.9;animation:none}
+#sg[data-theme="dark"] .rimg{mix-blend-mode:normal}
 #sg .rowlink>.num{color:rgba(28,28,26,.2)}
 #sg[data-theme="dark"] .rowlink>.num{color:rgba(239,236,228,.2)}
 #sg[data-theme="dark"] .rimg .mk{color:#fff!important}
@@ -421,7 +421,7 @@ function $(id){return document.getElementById(id)}
 /* ---------- Produkte aus Dateien laden ---------- */
 var CFG={ordner:"produkte"};
 /* Produktbilder: false = keine Bilder anzeigen und keine Bilddienste abfragen. Zum Einschalten auf true setzen. */
-var SHOW_IMAGES=true,SHOW_LABELS=true;/* SHOW_LABELS=true blendet die Marker-Beschriftung auf den Flaschen wieder ein */
+var SHOW_IMAGES=true,SHOW_LABELS=false;/* SHOW_LABELS=true blendet die Marker-Beschriftung auf den Flaschen wieder ein */
 function nameFromUrl(u){
  var b=String(u||"").split(/[?#]/)[0].replace(/\/+$/,"").split("/").pop()||"Produkt";
  return b.replace(/-/g," ").replace(/\b\w/g,function(c){return c.toUpperCase()});
