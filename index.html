@@ -354,6 +354,9 @@
 #sg[data-theme="dark"] .rimg .mk{color:#fff!important}
 #sg .phnote{font-size:12px;line-height:1.55;color:var(--soft);border:1px solid var(--line);padding:12px 14px;margin:32px 0 0;max-width:62ch}
 #sg .phnote b{color:var(--ink)}
+#sg .codebig{font:800 34px/1 Archivo,Montserrat,sans-serif;letter-spacing:.18em;margin:14px 0 0;user-select:all}
+#sg .rdr{grid-column:1/-1;border:1px solid var(--ink);padding:14px;margin:0 0 20px}
+#sg .rdr input{font:800 22px Archivo,sans-serif;letter-spacing:.18em;text-transform:uppercase;width:9ch;border:1px solid var(--ink);padding:8px 10px;background:var(--paper)}
 #sg .phnote+.savebar{margin-top:14px}
 @media (prefers-reduced-motion:reduce){#sg *{transition:none!important;animation:none!important}}
 </style>
@@ -432,12 +435,15 @@ function nameFromUrl(u){
 var ALIAS={"anti-aging":"antiaging","anti aging":"antiaging","anti_aging":"antiaging","antiaging":"antiaging","retinol":"antiaging","retinal":"antiaging","make-up":"makeup","make up":"makeup","schminke":"makeup","unreinheiten":"akne","pickel":"akne","rötungen":"roetungen","feine linien":"falten","linien":"falten","pigmentflecken":"pigment","pigmentierung":"pigment","große poren":"poren","grosse poren":"poren"};
 function cmpName(a,b){return a.localeCompare(b,undefined,{numeric:true})}
 function baseUrl(){return location.origin+location.pathname.replace(/[^\/]*$/,"")}
-function getJSON(u){return fetch(u).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()})}
+function getJSON(u){
+ if(window.SG_READER){var m=String(u).match(/inline(?::|%3A)(\d+)/);if(m)return Promise.resolve(window.SG_FILES[+m[1]]);if(/_auto-details/.test(u))return Promise.resolve(window.SG_AUTO||{});return Promise.reject(new Error("offline"))}
+ return fetch(u).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()})}
 function repoInfo(){
  var m=location.hostname.match(/^([^.]+)\.github\.io$/i),p=location.pathname.split("/").filter(Boolean);
  return m?{owner:m[1],repo:p[0]||(m[1]+".github.io")}:null;
 }
 function listFiles(){
+ if(window.SG_READER)return Promise.resolve((window.SG_FILES||[]).map(function(x,i){return"inline:"+i}));
  var ck=null;
  try{ck=JSON.parse(localStorage.getItem("sg-files")||"null")}catch(e){}
  if(ck&&Date.now()-ck.t<120000)return Promise.resolve(ck.l);
@@ -573,6 +579,12 @@ function meta(p,done){
 function fillImage(box,m){
  if(!SHOW_IMAGES||!m.img){box.innerHTML="";return}
  var im=new Image();im.alt=m.name||"";im.loading="lazy";
+ if(window.SG_READER){
+  /* Routine-Leser: erst eigene Fotos (bilder/<kennung>.jpg usw.), zuletzt die Platzhalter-Illustration */
+  var ex=["jpg","jpeg","png","webp","avif"],k=0;
+  im.onerror=function(){if(k<ex.length)im.src="bilder/"+m.slug+"."+ex[k++];else if(k++===ex.length)im.src="bilder/_platzhalter/"+m.slug+".svg";else box.innerHTML=""};
+  im.onerror();box.innerHTML="";box.appendChild(im);return;
+ }
  im.onerror=function(){box.innerHTML=""};
  im.src=m.img;box.innerHTML="";
  if(!SHOW_LABELS||box.classList.contains("aimg")||!m.label){box.appendChild(im);return}
@@ -863,7 +875,7 @@ function saveBar(){
  b3.onclick=function(){saveCode(area)};
  bar.appendChild(b1);bar.appendChild(b2);bar.appendChild(b3);
  var nt=document.createElement("p");nt.className="phnote";
- nt.innerHTML="<b>Warum Platzhalter?</b> Die Flaschen hier sind neutrale Illustrationen. Echte Produktfotos darf ich auf einer öffentlichen Seite nicht einfach zeigen (Bildrechte der Hersteller und Shops). Damit trotzdem nichts verloren geht, kannst du unten einen Code erzeugen und mir schicken. Ich sehe deine Routine dann bei mir mit den echten Produktbildern und allen Infos.";
+ nt.innerHTML="<b>Warum Platzhalter?</b> Die Flaschen hier sind neutrale Illustrationen. Echte Produktfotos darf ich auf einer öffentlichen Seite nicht einfach zeigen (Bildrechte der Hersteller und Shops). Damit trotzdem nichts verloren geht, kannst du unten einen kurzen Code erzeugen und mir schicken. Ich sehe deine Routine dann bei mir mit den echten Produktbildern und allen Infos.";
  box.appendChild(nt);
  box.appendChild(bar);box.appendChild(area);
  return box;
@@ -895,55 +907,40 @@ function saveText(area){
  });
 }
 
-/* ---------- Code: alle Angaben der Routine als Text (wird im lokalen Tool "Routine-Leser" wieder eingelesen) ---------- */
-function b64u(bytes){var b="";for(var i=0;i<bytes.length;i++)b+=String.fromCharCode(bytes[i]);return btoa(b).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")}
-function codePayload(d){
- var plan=buildPlan(),moves=Object.keys(plan.info.moves).map(function(k){return plan.info.moves[k]});
- function prod(p,nm){return{u:p.url,sl:p.slug,n:nm||p.name||nameFromUrl(p.url),p:p.price,po:p.old,st:p.step}}
- var o={v:1,z:new Date().toISOString().slice(0,10),
-  a:{t:selT,tn:TYPES[selT],c:selC,cn:selC.map(function(k){return CONCERNS[k]}),l:lvlRel?selL:null,ln:lvlRel?LEVELS[selL]:null,b:selB,k:hasPrices()?planTotal(d):null},
-  r:retDisclaimer(d)||"",
-  m:moves.map(function(e){return{o:prod(e.orig),n:e.now?prod(e.now):null,w:e.times}}),
-  d:{}};
- ["am","pm"].forEach(function(k){
-  o.d[k]=d[k].map(function(r,i){
-   var p=r.x.p,cr=conflictRows(d[k],i),sim=similarAlts(d[k],i),pr=prod(p,r.name);
-   pr.s=r.s.k;pr.h=r.x.hit.map(function(c){return CONCERNS[c]});pr.no=p.note||"";pr.i=p.info||"";pr.us=p.use||"";pr.de=p.det||"";pr.ing=p.ing||"";
-   pr.w=cr.length?warnText(cr.map(function(x){return x.name||x.x.p.name||nameFromUrl(x.x.p.url)})):"";
-   pr.a=sim.map(function(q){return prod(q)});
-   if(r.alt)pr.ak=prod(r.alt.p,r.alt.name);
-   pr.hn=(STEPS.filter(function(x){return x.k===r.s.k})[0]||{}).hint||"";
-   return pr;
-  });
- });
+/* ---------- Kurzcode: nur die Auswahl (Hauttyp, Themen, Erfahrung, Budget) + Prüfziffer der Produktdaten, 6 Zeichen.
+   Der lokale Routine-Leser enthält dieselbe Seite samt Produktdaten und baut daraus die gleiche Routine mit echten Bildern. ---------- */
+var B32="0123456789ABCDEFGHJKMNPQRSTVWXYZ";
+function prodHash(){
+ var s=PRODUCTS.map(function(p){return[p.url,p.price,p.step,(p.concerns||[]).join(","),(p.types||[]).join(","),(p.when||[]).join(","),(p.levels||[]).join(","),(p.conflict||[]).join(",")].join("|")}).sort().join("\n"),h=2166136261;
+ for(var i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)>>>0}
+ return h%32;
+}
+function makeCode(){
+ var t=Object.keys(TYPES).indexOf(selT),cm=0,l=Object.keys(LEVELS).indexOf(selL);
+ Object.keys(CONCERNS).forEach(function(k,i){if(selC.indexOf(k)>-1)cm|=1<<i});
+ var b=selB==null?0:Math.round(selB*2);
+ var v=(((t*256+cm)*4+l)*512+b)*32+prodHash(),o="";
+ for(var i=0;i<6;i++){o=B32.charAt(v%32)+o;v=Math.floor(v/32)}
  return o;
 }
-function encodeCode(o,cb){
- var raw=new TextEncoder().encode(JSON.stringify(o));
- if(window.CompressionStream){
-  try{
-   var cs=new CompressionStream("deflate-raw"),w=cs.writable.getWriter();w.write(raw);w.close();
-   new Response(cs.readable).arrayBuffer().then(function(b){cb("USK2."+b64u(new Uint8Array(b)))},function(){cb("USK1."+b64u(raw))});
-   return;
-  }catch(e){}
- }
- cb("USK1."+b64u(raw));
+function readCode(c){
+ c=String(c||"").toUpperCase().replace(/[^0-9A-Z]/g,"").replace(/O/g,"0").replace(/[IL]/g,"1").replace(/U/g,"V");
+ if(c.length!==6)return null;
+ var v=0;for(var i=0;i<6;i++){var k=B32.indexOf(c.charAt(i));if(k<0)return null;v=v*32+k}
+ var h=v%32;v=Math.floor(v/32);var b=v%512;v=Math.floor(v/512);var l=v%4;v=Math.floor(v/4);var cm=v%256,t=Math.floor(v/256);
+ var tk=Object.keys(TYPES)[t],lk=Object.keys(LEVELS)[l];if(!tk||!lk)return null;
+ var cs=Object.keys(CONCERNS).filter(function(k,i){return cm&(1<<i)});
+ return{t:tk,c:cs,l:lk,b:b?b/2:null,h:h};
 }
 function saveCode(area){
- msg(area,"Code wird erstellt …");
- var d=buildPlan().d;
- resolveBoth(d,function(){
-  var o;try{o=codePayload(d)}catch(e){msg(area,"Der Code konnte nicht erstellt werden.");return}
-  encodeCode(o,function(code){
-   area.innerHTML='<p class="savemsg">Das ist der Code deiner Routine mit allen Angaben (Hauttyp, Themen, Erfahrung, Budget, morgens und abends mit Alternativen). Schick ihn mir, ich lese ihn bei mir ein.</p><textarea class="copybox" readonly></textarea><div class="savebar" style="margin-top:10px"><button type="button" class="btn">Code kopieren</button></div><p class="savemsg codeok" hidden></p>';
-   var ta=area.querySelector("textarea"),ok=area.querySelector(".codeok");ta.value=code;
-   area.querySelector("button").onclick=function(){
-    var done=function(){ok.hidden=false;ok.textContent="Code kopiert."};
-    var fb=function(){ta.focus();ta.select();ok.hidden=false;ok.textContent="Markiert. Kopiere ihn jetzt von Hand."};
-    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(code).then(done,fb);else fb();
-   };
-  });
- });
+ var code=makeCode();
+ area.innerHTML='<p class="savemsg">Das ist der Code deiner Routine. Schick ihn mir, ich sehe sie dann bei mir mit den echten Produktbildern.</p><div class="codebig">'+code+'</div><div class="savebar" style="margin-top:10px"><button type="button" class="btn">Code kopieren</button></div><p class="savemsg codeok" hidden></p>';
+ var ok=area.querySelector(".codeok");
+ area.querySelector("button").onclick=function(){
+  var done=function(){ok.hidden=false;ok.textContent="Code kopiert."};
+  var fb=function(){ok.hidden=false;ok.textContent="Markiere den Code und kopiere ihn von Hand."};
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(code).then(done,fb);else fb();
+ };
 }
 function saveImage(area){
  msg(area,"Bild wird erstellt …");
@@ -1277,8 +1274,22 @@ if(!SHOW_IMAGES)$("sg").classList.add("noimg");
 applyTheme();
 readHash();
 var unlocked=true;
+if(window.SG_READER){
+ var rp=document.createElement("div");rp.className="rdr";
+ rp.innerHTML='<b>Routine-Leser</b> – Code eingeben: <input id="sg-rc" maxlength="8" placeholder="ABC123" autocomplete="off"> <span id="sg-rm" class="savemsg"></span>';
+ $("sg").insertBefore(rp,$("sg-tabs"));
+ var applyCode=function(){
+  var r=readCode($("sg-rc").value),m=$("sg-rm");
+  if(!r){m.textContent=$("sg-rc").value.replace(/\s/g,"").length>=6?"Ungültiger Code.":"";return}
+  selT=r.t;selC=r.c;selL=r.l;selB=r.b;time="am";tab="routine";
+  m.textContent=(loading?"":(r.h!==prodHash()?"Achtung: Die Produktdaten im Tool weichen von der Seite ab. Bitte Tool neu bauen. ":"Code gelesen. "));
+  render();
+ };
+ $("sg-rc").oninput=applyCode;
+ window.SG_APPLY=applyCode;
+}
 render();
-loadProducts(function(list){PRODUCTS=list;loading=false;render()});
+loadProducts(function(list){PRODUCTS=list;loading=false;if(window.SG_READER&&$("sg-rc")&&$("sg-rc").value)window.SG_APPLY();else render()});
 })();
 </script>
 </div>

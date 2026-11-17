@@ -148,4 +148,6 @@ Der Schalter oben rechts wechselt zwischen hell und dunkel. Ohne Auswahl folgt d
 
 ## Code und Routine-Leser
 
-Unter der Routine gibt es neben „Als Bild speichern“ den Button „Code erzeugen“. Der Code (`USK2.…`) enthält alle Angaben der Person (Hauttyp, Themen, Erfahrung, Budget, Routine morgens/abends mit Alternativen, Hinweise, Kosten). Die Seite zeigt nur Platzhalter-Illustrationen, ein Hinweis darüber erklärt warum. Das separate, lokale Tool „Routine-Leser“ (nicht in diesem Repo) liest den Code ein und zeigt die Routine mit echten Produktbildern aus einem lokalen Ordner.
+Unter der Routine erzeugt „Code erzeugen“ einen 6-stelligen Code. Er enthält nur die Auswahl (Hauttyp, Themen, Erfahrung, Budget) plus eine Prüfziffer der Produktdaten. Die Seite zeigt Platzhalter-Illustrationen, ein Hinweis erklärt warum.
+
+`python3 scripts/build_leser.py` baut daraus den lokalen „Routine-Leser“ (Ordner `../routine-leser`): dieselbe Seite mit eingebetteten Produktdaten, Code-Eingabefeld und echten Fotos aus `bilder/<kennung>.jpg` (nicht ins Repo legen). Nach Änderungen an Produkten neu bauen.
