@@ -146,8 +146,6 @@ Der Schalter oben rechts wechselt zwischen hell und dunkel. Ohne Auswahl folgt d
 - Der Besucher-Zustand (Auswahl, Darkmode) liegt nur im Browser (localStorage).
 - Es gibt keinen Passwortschutz mehr. Das Design ist brutalistisch-editorial: Haarlinien-Raster, eckige Elemente ohne Rundungen, riesige Überschrift und nummerierte Abschnitte (01/ …).
 
-## Code und Routine-Leser
+## Code
 
-Unter der Routine erzeugt „Code erzeugen“ einen 6-stelligen Code. Er enthält nur die Auswahl (Hauttyp, Themen, Erfahrung, Budget) plus eine Prüfziffer der Produktdaten. Die Seite zeigt Platzhalter-Illustrationen, ein Hinweis erklärt warum.
-
-`python3 scripts/build_leser.py` baut daraus den lokalen „Routine-Leser“ (Ordner `../routine-leser`): dieselbe Seite mit eingebetteten Produktdaten, Code-Eingabefeld und echten Fotos aus `bilder/<kennung>.jpg` (nicht ins Repo legen). Nach Änderungen an Produkten neu bauen.
+Unter der Routine erzeugt „Code erzeugen“ einen 6-stelligen Code mit der Auswahl (Hauttyp, Themen, Erfahrung, Budget). Die Seite zeigt nur Platzhalter-Illustrationen, ein Hinweis erklärt warum.

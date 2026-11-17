@@ -355,22 +355,6 @@
 #sg .phnote{font-size:12px;line-height:1.55;color:var(--soft);border:1px solid var(--line);padding:12px 14px;margin:32px 0 0;max-width:62ch}
 #sg .phnote b{color:var(--ink)}
 #sg .codebig{font:800 34px/1 Archivo,Montserrat,sans-serif;letter-spacing:.18em;margin:14px 0 0;user-select:all}
-#sg .rdr{grid-column:1/-1;border:1px solid var(--ink);padding:14px;margin:0 0 20px}
-#sg.reader .phnote{display:none}
-#sg.reader h2::after{display:none!important}
-#sg .rdr .rrow{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:end}
-#sg .rdr label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);display:flex;flex-direction:column;gap:4px}
-#sg .rdr input.nm{font:500 16px Montserrat,sans-serif;letter-spacing:0;text-transform:none;width:min(260px,100%)}
-#sg .rdr .dir{margin-top:14px;border-top:1px solid var(--line);padding-top:10px}
-#sg .rdr .dir summary{cursor:pointer;font-size:12px;letter-spacing:.14em;text-transform:uppercase}
-#sg .rdr .drow{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}
-#sg .rdr .drow a{text-decoration:none;color:inherit}
-#sg .rdr .drow .soft{color:var(--soft);font-size:12px}
-#sg.reader .rimg{height:190px;display:flex;align-items:center;justify-content:center}
-#sg.reader .rimg img{height:190px;width:auto;max-width:100%;max-height:none;object-fit:contain}
-#sg.reader .card .img img,#sg.reader .aimg img{height:auto;width:100%;max-height:100%}
-#sg.reader h2{font-size:clamp(20px,3.2vw,30px);letter-spacing:-.01em;margin-bottom:20px}
-#sg .rdr input{color:var(--ink);-webkit-text-fill-color:var(--ink);font:800 22px Archivo,sans-serif;letter-spacing:.18em;text-transform:uppercase;width:11ch;border:1px solid var(--ink);padding:8px 10px;background:var(--paper)}
 #sg .phnote+.savebar{margin-top:14px}
 @media (prefers-reduced-motion:reduce){#sg *{transition:none!important;animation:none!important}}
 </style>
@@ -449,15 +433,12 @@ function nameFromUrl(u){
 var ALIAS={"anti-aging":"antiaging","anti aging":"antiaging","anti_aging":"antiaging","antiaging":"antiaging","retinol":"antiaging","retinal":"antiaging","make-up":"makeup","make up":"makeup","schminke":"makeup","unreinheiten":"akne","pickel":"akne","rötungen":"roetungen","feine linien":"falten","linien":"falten","pigmentflecken":"pigment","pigmentierung":"pigment","große poren":"poren","grosse poren":"poren"};
 function cmpName(a,b){return a.localeCompare(b,undefined,{numeric:true})}
 function baseUrl(){return location.origin+location.pathname.replace(/[^\/]*$/,"")}
-function getJSON(u){
- if(window.SG_READER){var m=String(u).match(/inline(?::|%3A)(\d+)/);if(m)return Promise.resolve(window.SG_FILES[+m[1]]);if(/_auto-details/.test(u))return Promise.resolve(window.SG_AUTO||{});return Promise.reject(new Error("offline"))}
- return fetch(u).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()})}
+function getJSON(u){return fetch(u).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()})}
 function repoInfo(){
  var m=location.hostname.match(/^([^.]+)\.github\.io$/i),p=location.pathname.split("/").filter(Boolean);
  return m?{owner:m[1],repo:p[0]||(m[1]+".github.io")}:null;
 }
 function listFiles(){
- if(window.SG_READER)return Promise.resolve((window.SG_FILES||[]).map(function(x,i){return"inline:"+i}));
  var ck=null;
  try{ck=JSON.parse(localStorage.getItem("sg-files")||"null")}catch(e){}
  if(ck&&Date.now()-ck.t<120000)return Promise.resolve(ck.l);
@@ -593,14 +574,6 @@ function meta(p,done){
 function fillImage(box,m){
  if(!SHOW_IMAGES||!m.img){box.innerHTML="";return}
  var im=new Image();im.alt=m.name||"";im.loading="lazy";
- if(window.SG_READER){
-  /* Routine-Leser: erst eigene Fotos (bilder/<kennung>.jpg usw.), zuletzt die Platzhalter-Illustration */
-  var ex=["jpg","jpeg","png","webp","avif"],k=0;
-  var rem=(window.SG_IMGURL||{})[m.slug];
-  im.referrerPolicy="no-referrer";
-  im.onerror=function(){if(k<ex.length)im.src="bilder/"+m.slug+"."+ex[k++];else if(k===ex.length&&rem){k++;im.src=rem}else if(k<=ex.length+1){k=ex.length+2;im.src="bilder/_platzhalter/"+m.slug+".svg"}else box.innerHTML=""};
-  im.onerror();box.innerHTML="";box.appendChild(im);return;
- }
  im.onerror=function(){box.innerHTML=""};
  im.src=m.img;box.innerHTML="";
  if(!SHOW_LABELS||box.classList.contains("aimg")||!m.label){box.appendChild(im);return}
@@ -877,10 +850,6 @@ function resolveNames(rows,cb){
  jobs.forEach(function(j){meta(j.p,function(m){j.set(m.name||j.p.name||"Produkt");if(++c===n)cb()})});
 }
 function resolveBoth(d,cb){resolveNames(d.am,function(){resolveNames(d.pm,cb)})}
-function routineTitle(){
- var v=window.SG_NAME||"";
- return v?v+(/[sßxz]$/i.test(v)?"'":"s")+" Skincare Routine":"Deine Skincare Routine";
-}
 function msg(area,t){area.innerHTML='<p class="savemsg">'+esc(t)+'</p>'}
 function saveBar(){
  var box=document.createElement("div");
@@ -894,8 +863,7 @@ function saveBar(){
  b2.onclick=function(){saveText(area)};
  b3.onclick=function(){saveCode(area)};
  bar.appendChild(b1);
- if(window.SG_READER){var b4=document.createElement("button");b4.type="button";b4.className="btn";b4.textContent="Mit Produktbildern exportieren";b4.onclick=function(){saveImage(area,true)};bar.appendChild(b4);bar.appendChild(b2)}
- else{bar.appendChild(b2);bar.appendChild(b3)}
+ bar.appendChild(b2);bar.appendChild(b3);
  var nt=document.createElement("p");nt.className="phnote";
  nt.innerHTML="<b>Warum Platzhalter?</b> Die Flaschen hier sind neutrale Illustrationen. Echte Produktfotos darf ich auf einer öffentlichen Seite nicht einfach zeigen (Bildrechte der Hersteller und Shops). Damit trotzdem nichts verloren geht, kannst du unten einen kurzen Code erzeugen und mir schicken. Ich sehe deine Routine dann bei mir mit den echten Produktbildern und allen Infos.";
  box.appendChild(nt);
@@ -905,7 +873,7 @@ function saveBar(){
 function saveText(area){
  var d=buildPlan().d;
  resolveBoth(d,function(){
-  var t=routineTitle()+"\n"+selLine(d)+"\n";
+  var t="Deine Skincare Routine\n"+selLine(d)+"\n";
   var rdt=retDisclaimer(d);if(rdt)t+="Vorsicht: "+rdt+"\n";
   ["am","pm"].forEach(function(k){
    if(!d[k].length)return;
@@ -930,7 +898,7 @@ function saveText(area){
 }
 
 /* ---------- Kurzcode: nur die Auswahl (Hauttyp, Themen, Erfahrung, Budget) + Prüfziffer der Produktdaten, 6 Zeichen.
-   Der lokale Routine-Leser enthält dieselbe Seite samt Produktdaten und baut daraus die gleiche Routine mit echten Bildern. ---------- */
+   Der Code enthält nur die Auswahl, keine Produktdaten. ---------- */
 var B32="0123456789ABCDEFGHJKMNPQRSTVWXYZ";
 function prodHash(){
  var s=PRODUCTS.map(function(p){return[p.url,p.price,p.step,(p.concerns||[]).join(","),(p.types||[]).join(","),(p.when||[]).join(","),(p.levels||[]).join(","),(p.conflict||[]).join(",")].join("|")}).sort().join("\n"),h=2166136261;
@@ -945,15 +913,6 @@ function makeCode(){
  for(var i=0;i<6;i++){o=B32.charAt(v%32)+o;v=Math.floor(v/32)}
  return o;
 }
-function readCode(c){
- c=String(c||"").toUpperCase().replace(/[^0-9A-Z]/g,"").replace(/O/g,"0").replace(/[IL]/g,"1").replace(/U/g,"V");
- if(c.length!==6)return null;
- var v=0;for(var i=0;i<6;i++){var k=B32.indexOf(c.charAt(i));if(k<0)return null;v=v*32+k}
- var h=v%32;v=Math.floor(v/32);var b=v%512;v=Math.floor(v/512);var l=v%4;v=Math.floor(v/4);var cm=v%256,t=Math.floor(v/256);
- var tk=Object.keys(TYPES)[t],lk=Object.keys(LEVELS)[l];if(!tk||!lk)return null;
- var cs=Object.keys(CONCERNS).filter(function(k,i){return cm&(1<<i)});
- return{t:tk,c:cs,l:lk,b:b?b/2:null,h:h};
-}
 function saveCode(area){
  var code=makeCode();
  area.innerHTML='<p class="savemsg">Das ist der Code deiner Routine. Schick ihn mir, ich sehe sie dann bei mir mit den echten Produktbildern.</p><div class="codebig">'+code+'</div><div class="savebar" style="margin-top:10px"><button type="button" class="btn">Code kopieren</button></div><p class="savemsg codeok" hidden></p>';
@@ -964,34 +923,13 @@ function saveCode(area){
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(code).then(done,fb);else fb();
  };
 }
-function exportImgs(d,cb){
- /* Produktbilder für den Export laden: erst Shop-Adresse (mit CORS), dann eigene Datei. Nicht exportierbare Bilder werden ausgelassen. */
- var jobs=[],res={};
- ["am","pm"].forEach(function(k){d[k].forEach(function(r){var p=r.x.p;if(!res.hasOwnProperty(p.slug)){res[p.slug]=null;jobs.push(p.slug)}})});
- var n=jobs.length,c=0;if(!n)return cb(res);
- jobs.forEach(function(sl){
-  var cand=[],rem=(window.SG_IMGURL||{})[sl];
-  ["jpg","jpeg","png","webp","avif"].forEach(function(e){cand.push("bilder/"+sl+"."+e)});
-  if(rem)cand.push(rem);
-  var i=0;
-  (function next(){
-   if(i>=cand.length){if(++c===n)cb(res);return}
-   var im=new Image();im.crossOrigin="anonymous";im.referrerPolicy="no-referrer";
-   im.onload=function(){
-    try{var t=document.createElement("canvas");t.width=t.height=2;var x=t.getContext("2d");x.drawImage(im,0,0,2,2);x.getImageData(0,0,1,1);res[sl]=im;if(++c===n)cb(res)}catch(e){next()}
-   };
-   im.onerror=next;im.src=cand[i++];
-  })();
- });
-}
-function saveImage(area,withImgs){
+function saveImage(area){
  msg(area,"Bild wird erstellt …");
  var d=buildPlan().d;
  resolveBoth(d,function(){
-  var go=function(imgs){try{drawImage(area,d,imgs)}catch(e){msg(area,"Das Bild konnte nicht erstellt werden. Nutze stattdessen „Als Text kopieren“.")}};
+  var go=function(){try{drawImage(area,d)}catch(e){msg(area,"Das Bild konnte nicht erstellt werden. Nutze stattdessen „Als Text kopieren“.")}};
   var f=["300 54px Montserrat","400 20px Montserrat","500 26px Montserrat"];
-  var start=function(){if(withImgs)exportImgs(d,function(im){var ok=Object.keys(im).filter(function(k){return im[k]}).length;go(im);if(!ok){var m=document.createElement("p");m.className="savemsg";m.textContent="Hinweis: Kein Produktbild ließ sich einbetten (Shop-Seite nicht erreichbar oder Browser blockiert lokale Dateien). Das Bild enthält deshalb nur Text.";area.appendChild(m)}});else go(null)};
-  if(document.fonts&&document.fonts.load)Promise.all(f.map(function(x){return document.fonts.load(x)})).then(start,start);else start();
+  if(document.fonts&&document.fonts.load)Promise.all(f.map(function(x){return document.fonts.load(x)})).then(go,go);else go();
  });
 }
 function wrapText(ctx,text,x,y,maxW,lh,maxLines){
@@ -1010,15 +948,14 @@ function wrapText(ctx,text,x,y,maxW,lh,maxLines){
  lines.forEach(function(l,i){ctx.fillText(l,x,y+i*lh)});
  return y+lines.length*lh;
 }
-function drawImage(area,d,imgs){
- var UI=!!imgs,IH=190,IW=150;
- var W=1080,pad=72,tx=pad+68+(UI?IW+16:0),maxW=W-pad-tx,F="Montserrat, system-ui, sans-serif";
+function drawImage(area,d){
+ var W=1080,pad=72,tx=pad+68,maxW=W-pad-tx,F="Montserrat, system-ui, sans-serif";
  var C={bg:"#f5f4f0",ink:"#1c1c1a",soft:"#77746b",moss:"#1c1c1a",blush:"#f0e3d6",line:"#ddd6c8"};
  var cv=document.createElement("canvas");cv.width=W;cv.height=7000;
  var ctx=cv.getContext("2d");
  ctx.fillStyle=C.bg;ctx.fillRect(0,0,W,7000);
  var y=pad+54;
- ctx.fillStyle=C.ink;ctx.font="300 54px "+F;ctx.fillText(routineTitle(),pad,y);
+ ctx.fillStyle=C.ink;ctx.font="300 54px "+F;ctx.fillText("Deine Skincare Routine",pad,y);
  y+=44;
  ctx.fillStyle=C.soft;ctx.font="400 20px "+F;
  y=wrapText(ctx,selLine(d),pad,y,W-2*pad,28,2);
@@ -1037,7 +974,6 @@ function drawImage(area,d,imgs){
    ctx.fillStyle="#fff";ctx.font="500 18px "+F;ctx.textAlign="center";ctx.textBaseline="middle";
    ctx.fillText(String(i+1),pad+20,top+12);
    ctx.textAlign="left";ctx.textBaseline="alphabetic";
-   if(UI){var pim=imgs[r.x.p.slug];if(pim&&pim.naturalHeight){var sc=Math.min(IH/pim.naturalHeight,IW/pim.naturalWidth),dw=pim.naturalWidth*sc,dh=pim.naturalHeight*sc;ctx.drawImage(pim,pad+56+(IW-dw)/2,top-4+(IH-dh)/2,dw,dh)}}
    ctx.fillStyle=C.moss;ctx.font="500 17px "+F;ctx.fillText(r.s.k,tx,top+16);
    if(r.x.p.price!=null){ctx.textAlign="right";ctx.fillStyle=C.soft;ctx.font="400 17px "+F;ctx.fillText(fmt(r.x.p.price),W-pad,top+16);ctx.textAlign="left"}
    ctx.fillStyle=C.ink;ctx.font="500 26px "+F;
@@ -1080,7 +1016,7 @@ function drawImage(area,d,imgs){
    ctx.strokeStyle=C.soft;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(lx,wy+3);ctx.lineTo(W-pad,wy+3);ctx.stroke();
    ctx.lineWidth=1.5;
    bottom=wy+3;
-   y=Math.max(bottom+30,UI?top+IH+34:0);
+   y=bottom+30;
    ctx.strokeStyle=C.line;ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(W-pad,y);ctx.stroke();
    y+=32;
   });
@@ -1089,9 +1025,7 @@ function drawImage(area,d,imgs){
  var out=document.createElement("canvas");out.width=W;out.height=H;
  out.getContext("2d").drawImage(cv,0,0);
  var url=out.toDataURL("image/png");
- area.innerHTML='<p class="savemsg">Deine Routine als Bild. Am Handy hältst du das Bild gedrückt und speicherst es, am Computer nutzt du die rechte Maustaste oder den Link darunter.</p><div class="preview"><img alt="'+esc(routineTitle())+'" src="'+url+'"><a href="'+url+'" download="'+esc((window.SG_NAME?window.SG_NAME.toLowerCase()+"-":"")+"skincare-routine")+'.png">Bild herunterladen</a></div>';
- var dl=area.querySelector(".preview a");
- if(dl&&window.AndroidBridge)dl.onclick=function(e){e.preventDefault();window.AndroidBridge.save(dl.getAttribute("download"),"image/png",url.split(",")[1])};
+ area.innerHTML='<p class="savemsg">Deine Routine als Bild. Am Handy hältst du das Bild gedrückt und speicherst es, am Computer nutzt du die rechte Maustaste oder den Link darunter.</p><div class="preview"><img alt="Deine Skincare Routine" src="'+url+'"><a href="'+url+'" download="skincare-routine.png">Bild herunterladen</a></div>';
 }
 
 /* Tags eines Produkts (Reiter "Alle Produkte"): gewählte Filter sind hervorgehoben, die Erfahrung steht klein dahinter */
@@ -1321,100 +1255,8 @@ if(!SHOW_IMAGES)$("sg").classList.add("noimg");
 applyTheme();
 readHash();
 var unlocked=true;
-if(window.SG_READER){
- $("sg").classList.add("reader");
- var h2=document.querySelector("#sg > h2");if(h2)h2.textContent="Mein Skincare-Guide-Auslesetool";
- document.title="Mein Skincare-Guide-Auslesetool";
- var PEOPLE={},curCode="",dirH=null;
- try{PEOPLE=JSON.parse(localStorage.getItem("sg-leser-personen")||"{}")||{}}catch(e){}
- var firstName=function(n){
-  n=String(n||"").trim();if(!n)return"";
-  if(n.indexOf(",")>-1)n=n.split(",").slice(1).join(" ").trim();/* "Nachname, Vorname" */
-  return n.split(/\s+/)[0]||"";
- };
- window.SG_NAME="";
- var rp=document.createElement("div");rp.className="rdr";
- rp.innerHTML='<div class="rrow"><label>Code <input id="sg-rc" maxlength="8" placeholder="ABC123" autocomplete="off"></label> <label>Name <input id="sg-rn" class="nm" placeholder="Nachname, Vorname" autocomplete="off"></label> <button type="button" class="btn" id="sg-rs">Speichern</button></div><div id="sg-rm" class="savemsg"></div>'
-  +'<details class="dir" open><summary>Verzeichnis (<span id="sg-dc">0</span>)</summary><div id="sg-dl"></div><div class="savebar" style="margin-top:10px"><button type="button" class="btn ghost" id="sg-fd">Ordner verbinden</button><button type="button" class="btn ghost" id="sg-fx">Exportieren</button><button type="button" class="btn ghost" id="sg-fi">Importieren</button></div><p class="savemsg" id="sg-fm"></p></details>';
- $("sg").insertBefore(rp,$("sg-tabs"));
- /* Speichern: immer im Browser, zusätzlich als personen.json im verbundenen Ordner */
- var fsWrite=function(){
-  if(!dirH)return Promise.resolve();
-  return dirH.getFileHandle("personen.json",{create:true}).then(function(f){return f.createWritable()}).then(function(w){return w.write(JSON.stringify(PEOPLE,null,1)).then(function(){return w.close()})});
- };
- var persist=function(){
-  try{localStorage.setItem("sg-leser-personen",JSON.stringify(PEOPLE))}catch(e){}
-  fsWrite().then(function(){if(dirH)$("sg-fm").textContent="Im Ordner „"+dirH.name+"“ gespeichert (personen.json)."},function(e){$("sg-fm").textContent="Ordner nicht beschreibbar: "+(e&&e.message||e)});
- };
- var sumOf=function(r){return(TYPES[r.t]||"")+" · "+(r.c.length?r.c.map(function(k){return CONCERNS[k]}).join(", "):"Basic")+" · "+(r.b!=null?"bis "+fmt(r.b):"kein Limit")};
- var drawDir=function(){
-  var ks=Object.keys(PEOPLE).sort(function(x,y){return String(PEOPLE[y].d).localeCompare(String(PEOPLE[x].d))});
-  $("sg-dc").textContent=ks.length;
-  var box=$("sg-dl");box.innerHTML="";
-  if(!ks.length){box.innerHTML='<p class="savemsg">Noch keine Personen gespeichert.</p>';return}
-  ks.forEach(function(k){
-   var e=PEOPLE[k],row=document.createElement("div");row.className="drow";
-   row.innerHTML='<a href="#" class="dn"><b>'+esc(e.n)+'</b> <span class="soft">'+esc(k)+' · '+esc(e.d)+'</span><br><span class="soft">'+esc(e.s||"")+'</span></a><button type="button" class="btn ghost" aria-label="Eintrag löschen">×</button>';
-   row.querySelector("a").onclick=function(ev){ev.preventDefault();$("sg-rc").value=k;applyCode();window.scrollTo(0,0)};
-   var xb=row.querySelector("button");xb.onclick=function(){if(xb.dataset.ask){delete PEOPLE[k];persist();drawDir();return}xb.dataset.ask=1;xb.textContent="Löschen?";setTimeout(function(){xb.dataset.ask="";xb.textContent="×"},3000)};
-   box.appendChild(row);
-  });
- };
- var applyCode=function(){
-  var raw=$("sg-rc").value,r=readCode(raw),m=$("sg-rm");
-  if(!r){curCode="";window.SG_NAME="";m.textContent=raw.replace(/\s/g,"").length>=6?"Ungültiger Code.":"";return}
-  curCode=raw.toUpperCase().replace(/[^0-9A-Z]/g,"").replace(/O/g,"0").replace(/[IL]/g,"1").replace(/U/g,"V");
-  selT=r.t;selC=r.c;selL=r.l;selB=r.b;time="am";tab="routine";
-  var e=PEOPLE[curCode];
-  $("sg-rn").value=e?e.n:"";window.SG_NAME=e?firstName(e.n):"";
-  m.textContent=(loading?"":(r.h!==prodHash()?"Achtung: Die Produktdaten im Tool weichen von der Seite ab. Bitte Tool neu bauen. ":"Code gelesen. "))+(e?"Gespeichert für "+e.n+".":"");
-  render();
- };
- var saveName=function(){
-  var r=readCode($("sg-rc").value),n=$("sg-rn").value.trim();
-  if(!r||!curCode){$("sg-rm").textContent="Bitte zuerst einen gültigen Code eingeben.";return}
-  if(!n){if(PEOPLE[curCode]){delete PEOPLE[curCode];persist();drawDir()}window.SG_NAME="";return}
-  PEOPLE[curCode]={n:n,d:(PEOPLE[curCode]&&PEOPLE[curCode].d)||new Date().toISOString().slice(0,10),s:sumOf(r)};
-  window.SG_NAME=firstName(n);persist();drawDir();$("sg-rm").textContent="Gespeichert: "+n+". Der Export heißt jetzt „"+routineTitle()+"“.";
- };
- $("sg-rc").oninput=applyCode;
- $("sg-rs").onclick=saveName;
- $("sg-rn").onkeydown=function(e){if(e.key==="Enter")saveName()};
- $("sg-rn").onchange=saveName;
- /* Ordner verbinden (Chrome/Edge): personen.json liegt dann im gewählten Ordner */
- var idb=function(mode,fn){return new Promise(function(res,rej){var q=indexedDB.open("sg-leser",1);q.onupgradeneeded=function(){q.result.createObjectStore("h")};q.onerror=function(){rej(q.error)};q.onsuccess=function(){var t=q.result.transaction("h",mode),st=t.objectStore("h"),rq=fn(st);t.oncomplete=function(){res(rq&&rq.result)};t.onerror=function(){rej(t.error)}}})};
- var mergeFromDir=function(){
-  return dirH.getFileHandle("personen.json").then(function(f){return f.getFile()}).then(function(f){return f.text()}).then(function(t){
-   var o=JSON.parse(t)||{};Object.keys(o).forEach(function(k){if(!PEOPLE[k])PEOPLE[k]=o[k]});
-  }).catch(function(){});
- };
- var useDir=function(h){dirH=h;$("sg-fd").textContent="Ordner: "+h.name;return mergeFromDir().then(function(){persist();drawDir()})};
- if(!window.showDirectoryPicker)$("sg-fd").style.display="none";
- $("sg-fd").onclick=function(){
-  var go=function(h){return h.requestPermission({mode:"readwrite"}).then(function(p){if(p==="granted")return useDir(h);$("sg-fm").textContent="Zugriff nicht erlaubt."})};
-  if(dirH)return go(dirH);
-  window.showDirectoryPicker({mode:"readwrite"}).then(function(h){idb("readwrite",function(st){return st.put(h,"dir")}).catch(function(){});return useDir(h)},function(){});
- };
- idb("readonly",function(st){return st.get("dir")}).then(function(h){
-  if(!h)return;dirH=h;$("sg-fd").textContent="Ordner „"+h.name+"“ erneut verbinden";
-  h.queryPermission({mode:"readwrite"}).then(function(p){if(p==="granted")useDir(h)});
- }).catch(function(){});
- /* Sicherung per Datei */
- $("sg-fx").onclick=function(){
-  var js=JSON.stringify(PEOPLE,null,1);
-  if(window.AndroidBridge){window.AndroidBridge.save("personen.json","application/json",btoa(unescape(encodeURIComponent(js))));return}
-  var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([js],{type:"application/json"}));a.download="personen.json";a.click();
- };
- $("sg-fi").onclick=function(){
-  var i=document.createElement("input");i.type="file";i.accept=".json,application/json";
-  i.onchange=function(){if(!i.files[0])return;i.files[0].text().then(function(t){var o=JSON.parse(t)||{};Object.keys(o).forEach(function(k){PEOPLE[k]=o[k]});persist();drawDir();$("sg-fm").textContent="Importiert."}).catch(function(){$("sg-fm").textContent="Datei nicht lesbar."})};
-  i.click();
- };
- drawDir();
- window.SG_APPLY=applyCode;
-}
 render();
-loadProducts(function(list){PRODUCTS=list;loading=false;if(window.SG_READER&&$("sg-rc")&&$("sg-rc").value)window.SG_APPLY();else render()});
+loadProducts(function(list){PRODUCTS=list;loading=false;render()});
 })();
 </script>
 </div>
