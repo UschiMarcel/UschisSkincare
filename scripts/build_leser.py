@@ -13,8 +13,21 @@ auto = {}
 ap = os.path.join(pd, '_auto-details.json')
 if os.path.exists(ap): auto = json.load(open(ap, encoding='utf-8'))
 html = open(os.path.join(root, 'index.html'), encoding='utf-8').read()
-inj = '<script>window.SG_READER=1;window.SG_FILES=%s;window.SG_AUTO=%s;</script>\n' % (
-    json.dumps(files, ensure_ascii=False).replace('</', '<\\/'), json.dumps(auto, ensure_ascii=False).replace('</', '<\\/'))
+qp = os.path.join(root, 'scripts', 'bildquellen.json')
+quellen = json.load(open(qp, encoding='utf-8')) if os.path.exists(qp) else {}
+imgurl, seen = {}, {}
+for r in files:
+    for x in (r if isinstance(r, list) else r.get('produkte', [])):
+        l = x.get('link') if isinstance(x, dict) else None
+        if not l or l in seen: continue
+        b = re.sub(r'[^a-z0-9-]+', '-', re.split(r'[?#]', l)[0].rstrip('/').split('/')[-1].lower()).strip('-') or 'produkt'
+        k, n = b, 1
+        while k in seen.values():
+            n += 1; k = '%s-%d' % (b, n)
+        seen[l] = k
+        if l in quellen: imgurl[k] = quellen[l]
+inj = '<script>window.SG_READER=1;window.SG_FILES=%s;window.SG_AUTO=%s;window.SG_IMGURL=%s;</script>\n' % (
+    json.dumps(files, ensure_ascii=False).replace('</', '<\\/'), json.dumps(auto, ensure_ascii=False).replace('</', '<\\/'), json.dumps(imgurl))
 i = html.index('<script>\n(function(){')
 html = html[:i] + inj + html[i:]
 html = html.replace('<title>', '<title>Routine-Leser – ', 1)
@@ -28,7 +41,7 @@ open(os.path.join(ziel, 'LIESMICH.md'), 'w', encoding='utf-8').write(
 
 1. `index.html` per Doppelklick im Browser öffnen (kein Server nötig).
 2. Oben den 6-stelligen Code eingeben. Die Routine erscheint genau wie auf der Seite.
-3. Echte Produktfotos in den Ordner `bilder/` legen, benannt nach der Kennung (z. B. `balea-cleanser-jelly.jpg`; jpg, jpeg, png, webp, avif). Ohne Foto wird der Platzhalter gezeigt. Die Kennung steht in der Adresse eines Produkts (`#produkt=<kennung>`).
+3. Die Produktfotos lädt das Tool beim Öffnen selbst von den Shop-Seiten (Internet nötig). Eigene Fotos haben Vorrang: in den Ordner `bilder/` legen, benannt nach der Kennung (z. B. `balea-cleanser-jelly.jpg`; jpg, jpeg, png, webp, avif). Ohne Foto wird der Platzhalter gezeigt. Die Kennung steht in der Adresse eines Produkts (`#produkt=<kennung>`).
 4. Nach neuen Produkten oder Preisen das Tool neu bauen (`python3 scripts/build_leser.py` im Repo). Weicht der Stand ab, zeigt das Tool einen Hinweis.
 
 Nicht ins öffentliche Repo legen.

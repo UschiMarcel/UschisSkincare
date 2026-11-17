@@ -356,7 +356,9 @@
 #sg .phnote b{color:var(--ink)}
 #sg .codebig{font:800 34px/1 Archivo,Montserrat,sans-serif;letter-spacing:.18em;margin:14px 0 0;user-select:all}
 #sg .rdr{grid-column:1/-1;border:1px solid var(--ink);padding:14px;margin:0 0 20px}
-#sg .rdr input{font:800 22px Archivo,sans-serif;letter-spacing:.18em;text-transform:uppercase;width:9ch;border:1px solid var(--ink);padding:8px 10px;background:var(--paper)}
+#sg.reader .phnote{display:none}
+#sg.reader h2{font-size:clamp(20px,3.2vw,30px);letter-spacing:-.01em;margin-bottom:20px}
+#sg .rdr input{color:var(--ink);-webkit-text-fill-color:var(--ink);font:800 22px Archivo,sans-serif;letter-spacing:.18em;text-transform:uppercase;width:9ch;border:1px solid var(--ink);padding:8px 10px;background:var(--paper)}
 #sg .phnote+.savebar{margin-top:14px}
 @media (prefers-reduced-motion:reduce){#sg *{transition:none!important;animation:none!important}}
 </style>
@@ -582,7 +584,9 @@ function fillImage(box,m){
  if(window.SG_READER){
   /* Routine-Leser: erst eigene Fotos (bilder/<kennung>.jpg usw.), zuletzt die Platzhalter-Illustration */
   var ex=["jpg","jpeg","png","webp","avif"],k=0;
-  im.onerror=function(){if(k<ex.length)im.src="bilder/"+m.slug+"."+ex[k++];else if(k++===ex.length)im.src="bilder/_platzhalter/"+m.slug+".svg";else box.innerHTML=""};
+  var rem=(window.SG_IMGURL||{})[m.slug];
+  im.referrerPolicy="no-referrer";
+  im.onerror=function(){if(k<ex.length)im.src="bilder/"+m.slug+"."+ex[k++];else if(k===ex.length&&rem){k++;im.src=rem}else if(k<=ex.length+1){k=ex.length+2;im.src="bilder/_platzhalter/"+m.slug+".svg"}else box.innerHTML=""};
   im.onerror();box.innerHTML="";box.appendChild(im);return;
  }
  im.onerror=function(){box.innerHTML=""};
@@ -1275,6 +1279,9 @@ applyTheme();
 readHash();
 var unlocked=true;
 if(window.SG_READER){
+ $("sg").classList.add("reader");
+ var h2=document.querySelector("#sg > h2");if(h2)h2.textContent="Mein Skincare-Guide-Auslesetool";
+ document.title="Mein Skincare-Guide-Auslesetool";
  var rp=document.createElement("div");rp.className="rdr";
  rp.innerHTML='<b>Routine-Leser</b> – Code eingeben: <input id="sg-rc" maxlength="8" placeholder="ABC123" autocomplete="off"> <span id="sg-rm" class="savemsg"></span>';
  $("sg").insertBefore(rp,$("sg-tabs"));
