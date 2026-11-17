@@ -880,7 +880,9 @@ function saveBar(){
  b1.onclick=function(){saveImage(area)};
  b2.onclick=function(){saveText(area)};
  b3.onclick=function(){saveCode(area)};
- bar.appendChild(b1);bar.appendChild(b2);bar.appendChild(b3);
+ bar.appendChild(b1);
+ if(window.SG_READER){var b4=document.createElement("button");b4.type="button";b4.className="btn";b4.textContent="Mit Produktbildern exportieren";b4.onclick=function(){saveImage(area,true)};bar.appendChild(b4);bar.appendChild(b2)}
+ else{bar.appendChild(b2);bar.appendChild(b3)}
  var nt=document.createElement("p");nt.className="phnote";
  nt.innerHTML="<b>Warum Platzhalter?</b> Die Flaschen hier sind neutrale Illustrationen. Echte Produktfotos darf ich auf einer öffentlichen Seite nicht einfach zeigen (Bildrechte der Hersteller und Shops). Damit trotzdem nichts verloren geht, kannst du unten einen kurzen Code erzeugen und mir schicken. Ich sehe deine Routine dann bei mir mit den echten Produktbildern und allen Infos.";
  box.appendChild(nt);
@@ -949,13 +951,34 @@ function saveCode(area){
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(code).then(done,fb);else fb();
  };
 }
-function saveImage(area){
+function exportImgs(d,cb){
+ /* Produktbilder für den Export laden: erst Shop-Adresse (mit CORS), dann eigene Datei. Nicht exportierbare Bilder werden ausgelassen. */
+ var jobs=[],res={};
+ ["am","pm"].forEach(function(k){d[k].forEach(function(r){var p=r.x.p;if(!res.hasOwnProperty(p.slug)){res[p.slug]=null;jobs.push(p.slug)}})});
+ var n=jobs.length,c=0;if(!n)return cb(res);
+ jobs.forEach(function(sl){
+  var cand=[],rem=(window.SG_IMGURL||{})[sl];
+  ["jpg","jpeg","png","webp","avif"].forEach(function(e){cand.push("bilder/"+sl+"."+e)});
+  if(rem)cand.push(rem);
+  var i=0;
+  (function next(){
+   if(i>=cand.length){if(++c===n)cb(res);return}
+   var im=new Image();im.crossOrigin="anonymous";im.referrerPolicy="no-referrer";
+   im.onload=function(){
+    try{var t=document.createElement("canvas");t.width=t.height=2;var x=t.getContext("2d");x.drawImage(im,0,0,2,2);x.getImageData(0,0,1,1);res[sl]=im;if(++c===n)cb(res)}catch(e){next()}
+   };
+   im.onerror=next;im.src=cand[i++];
+  })();
+ });
+}
+function saveImage(area,withImgs){
  msg(area,"Bild wird erstellt …");
  var d=buildPlan().d;
  resolveBoth(d,function(){
-  var go=function(){try{drawImage(area,d)}catch(e){msg(area,"Das Bild konnte nicht erstellt werden. Nutze stattdessen „Als Text kopieren“.")}};
+  var go=function(imgs){try{drawImage(area,d,imgs)}catch(e){msg(area,"Das Bild konnte nicht erstellt werden. Nutze stattdessen „Als Text kopieren“.")}};
   var f=["300 54px Montserrat","400 20px Montserrat","500 26px Montserrat"];
-  if(document.fonts&&document.fonts.load)Promise.all(f.map(function(x){return document.fonts.load(x)})).then(go,go);else go();
+  var start=function(){if(withImgs)exportImgs(d,function(im){var ok=Object.keys(im).filter(function(k){return im[k]}).length;go(im);if(!ok){var m=document.createElement("p");m.className="savemsg";m.textContent="Hinweis: Kein Produktbild ließ sich einbetten (Shop-Seite nicht erreichbar oder Browser blockiert lokale Dateien). Das Bild enthält deshalb nur Text.";area.appendChild(m)}});else go(null)};
+  if(document.fonts&&document.fonts.load)Promise.all(f.map(function(x){return document.fonts.load(x)})).then(start,start);else start();
  });
 }
 function wrapText(ctx,text,x,y,maxW,lh,maxLines){
@@ -974,8 +997,9 @@ function wrapText(ctx,text,x,y,maxW,lh,maxLines){
  lines.forEach(function(l,i){ctx.fillText(l,x,y+i*lh)});
  return y+lines.length*lh;
 }
-function drawImage(area,d){
- var W=1080,pad=72,tx=pad+68,maxW=W-pad-tx,F="Montserrat, system-ui, sans-serif";
+function drawImage(area,d,imgs){
+ var UI=!!imgs,IH=190,IW=150;
+ var W=1080,pad=72,tx=pad+68+(UI?IW+16:0),maxW=W-pad-tx,F="Montserrat, system-ui, sans-serif";
  var C={bg:"#f5f4f0",ink:"#1c1c1a",soft:"#77746b",moss:"#1c1c1a",blush:"#f0e3d6",line:"#ddd6c8"};
  var cv=document.createElement("canvas");cv.width=W;cv.height=7000;
  var ctx=cv.getContext("2d");
@@ -1000,6 +1024,7 @@ function drawImage(area,d){
    ctx.fillStyle="#fff";ctx.font="500 18px "+F;ctx.textAlign="center";ctx.textBaseline="middle";
    ctx.fillText(String(i+1),pad+20,top+12);
    ctx.textAlign="left";ctx.textBaseline="alphabetic";
+   if(UI){var pim=imgs[r.x.p.slug];if(pim&&pim.naturalHeight){var sc=Math.min(IH/pim.naturalHeight,IW/pim.naturalWidth),dw=pim.naturalWidth*sc,dh=pim.naturalHeight*sc;ctx.drawImage(pim,pad+56+(IW-dw)/2,top-4+(IH-dh)/2,dw,dh)}}
    ctx.fillStyle=C.moss;ctx.font="500 17px "+F;ctx.fillText(r.s.k,tx,top+16);
    if(r.x.p.price!=null){ctx.textAlign="right";ctx.fillStyle=C.soft;ctx.font="400 17px "+F;ctx.fillText(fmt(r.x.p.price),W-pad,top+16);ctx.textAlign="left"}
    ctx.fillStyle=C.ink;ctx.font="500 26px "+F;
@@ -1042,7 +1067,7 @@ function drawImage(area,d){
    ctx.strokeStyle=C.soft;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(lx,wy+3);ctx.lineTo(W-pad,wy+3);ctx.stroke();
    ctx.lineWidth=1.5;
    bottom=wy+3;
-   y=bottom+30;
+   y=Math.max(bottom+30,UI?top+IH+34:0);
    ctx.strokeStyle=C.line;ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(W-pad,y);ctx.stroke();
    y+=32;
   });
