@@ -145,3 +145,7 @@ Der Schalter oben rechts wechselt zwischen hell und dunkel. Ohne Auswahl folgt d
 - Die Seite enthält Empfehlungen und keine medizinische Beratung.
 - Der Besucher-Zustand (Auswahl, Darkmode) liegt nur im Browser (localStorage).
 - Es gibt keinen Passwortschutz mehr. Das Design ist brutalistisch-editorial: Haarlinien-Raster, eckige Elemente ohne Rundungen, riesige Überschrift und nummerierte Abschnitte (01/ …).
+
+## Code und Routine-Leser
+
+Unter der Routine gibt es neben „Als Bild speichern“ den Button „Code erzeugen“. Der Code (`USK2.…`) enthält alle Angaben der Person (Hauttyp, Themen, Erfahrung, Budget, Routine morgens/abends mit Alternativen, Hinweise, Kosten). Die Seite zeigt nur Platzhalter-Illustrationen, ein Hinweis darüber erklärt warum. Das separate, lokale Tool „Routine-Leser“ (nicht in diesem Repo) liest den Code ein und zeigt die Routine mit echten Produktbildern aus einem lokalen Ordner.

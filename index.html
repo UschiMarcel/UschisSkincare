@@ -352,6 +352,9 @@
 #sg .rowlink>.num{color:rgba(28,28,26,.2)}
 #sg[data-theme="dark"] .rowlink>.num{color:rgba(239,236,228,.2)}
 #sg[data-theme="dark"] .rimg .mk{color:#fff!important}
+#sg .phnote{font-size:12px;line-height:1.55;color:var(--soft);border:1px solid var(--line);padding:12px 14px;margin:32px 0 0;max-width:62ch}
+#sg .phnote b{color:var(--ink)}
+#sg .phnote+.savebar{margin-top:14px}
 @media (prefers-reduced-motion:reduce){#sg *{transition:none!important;animation:none!important}}
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&family=Montserrat:wght@300;400;500;600;700&family=Archivo:wdth,wght@125,800&display=swap">
@@ -854,9 +857,14 @@ function saveBar(){
  var b1=document.createElement("button");b1.type="button";b1.className="btn";
  b1.innerHTML='<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10.5l5 5 5-5M5 20h14"/></svg><span>Als Bild speichern</span>';
  var b2=document.createElement("button");b2.type="button";b2.className="btn ghost";b2.textContent="Als Text kopieren";
+ var b3=document.createElement("button");b3.type="button";b3.className="btn ghost";b3.textContent="Code erzeugen";
  b1.onclick=function(){saveImage(area)};
  b2.onclick=function(){saveText(area)};
- bar.appendChild(b1);bar.appendChild(b2);
+ b3.onclick=function(){saveCode(area)};
+ bar.appendChild(b1);bar.appendChild(b2);bar.appendChild(b3);
+ var nt=document.createElement("p");nt.className="phnote";
+ nt.innerHTML="<b>Warum Platzhalter?</b> Die Flaschen hier sind neutrale Illustrationen. Echte Produktfotos darf ich auf einer öffentlichen Seite nicht einfach zeigen (Bildrechte der Hersteller und Shops). Damit trotzdem nichts verloren geht, kannst du unten einen Code erzeugen und mir schicken. Ich sehe deine Routine dann bei mir mit den echten Produktbildern und allen Infos.";
+ box.appendChild(nt);
  box.appendChild(bar);box.appendChild(area);
  return box;
 }
@@ -884,6 +892,57 @@ function saveText(area){
    var ta=area.querySelector("textarea");ta.value=t;ta.focus();ta.select();
   };
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(done,fallback);else fallback();
+ });
+}
+
+/* ---------- Code: alle Angaben der Routine als Text (wird im lokalen Tool "Routine-Leser" wieder eingelesen) ---------- */
+function b64u(bytes){var b="";for(var i=0;i<bytes.length;i++)b+=String.fromCharCode(bytes[i]);return btoa(b).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")}
+function codePayload(d){
+ var plan=buildPlan(),moves=Object.keys(plan.info.moves).map(function(k){return plan.info.moves[k]});
+ function prod(p,nm){return{u:p.url,sl:p.slug,n:nm||p.name||nameFromUrl(p.url),p:p.price,po:p.old,st:p.step}}
+ var o={v:1,z:new Date().toISOString().slice(0,10),
+  a:{t:selT,tn:TYPES[selT],c:selC,cn:selC.map(function(k){return CONCERNS[k]}),l:lvlRel?selL:null,ln:lvlRel?LEVELS[selL]:null,b:selB,k:hasPrices()?planTotal(d):null},
+  r:retDisclaimer(d)||"",
+  m:moves.map(function(e){return{o:prod(e.orig),n:e.now?prod(e.now):null,w:e.times}}),
+  d:{}};
+ ["am","pm"].forEach(function(k){
+  o.d[k]=d[k].map(function(r,i){
+   var p=r.x.p,cr=conflictRows(d[k],i),sim=similarAlts(d[k],i),pr=prod(p,r.name);
+   pr.s=r.s.k;pr.h=r.x.hit.map(function(c){return CONCERNS[c]});pr.no=p.note||"";pr.i=p.info||"";pr.us=p.use||"";pr.de=p.det||"";pr.ing=p.ing||"";
+   pr.w=cr.length?warnText(cr.map(function(x){return x.name||x.x.p.name||nameFromUrl(x.x.p.url)})):"";
+   pr.a=sim.map(function(q){return prod(q)});
+   if(r.alt)pr.ak=prod(r.alt.p,r.alt.name);
+   pr.hn=(STEPS.filter(function(x){return x.k===r.s.k})[0]||{}).hint||"";
+   return pr;
+  });
+ });
+ return o;
+}
+function encodeCode(o,cb){
+ var raw=new TextEncoder().encode(JSON.stringify(o));
+ if(window.CompressionStream){
+  try{
+   var cs=new CompressionStream("deflate-raw"),w=cs.writable.getWriter();w.write(raw);w.close();
+   new Response(cs.readable).arrayBuffer().then(function(b){cb("USK2."+b64u(new Uint8Array(b)))},function(){cb("USK1."+b64u(raw))});
+   return;
+  }catch(e){}
+ }
+ cb("USK1."+b64u(raw));
+}
+function saveCode(area){
+ msg(area,"Code wird erstellt …");
+ var d=buildPlan().d;
+ resolveBoth(d,function(){
+  var o;try{o=codePayload(d)}catch(e){msg(area,"Der Code konnte nicht erstellt werden.");return}
+  encodeCode(o,function(code){
+   area.innerHTML='<p class="savemsg">Das ist der Code deiner Routine mit allen Angaben (Hauttyp, Themen, Erfahrung, Budget, morgens und abends mit Alternativen). Schick ihn mir, ich lese ihn bei mir ein.</p><textarea class="copybox" readonly></textarea><div class="savebar" style="margin-top:10px"><button type="button" class="btn">Code kopieren</button></div><p class="savemsg codeok" hidden></p>';
+   var ta=area.querySelector("textarea"),ok=area.querySelector(".codeok");ta.value=code;
+   area.querySelector("button").onclick=function(){
+    var done=function(){ok.hidden=false;ok.textContent="Code kopiert."};
+    var fb=function(){ta.focus();ta.select();ok.hidden=false;ok.textContent="Markiert. Kopiere ihn jetzt von Hand."};
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(code).then(done,fb);else fb();
+   };
+  });
  });
 }
 function saveImage(area){
