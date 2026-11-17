@@ -244,8 +244,9 @@ def svg(slug, name, step, vorgabe=None):
 
 # Beschriftungsfläche je Form im Zeichenraster (links, Mitte oben, Breite); wird in Prozent des Bildausschnitts umgerechnet
 VB = (60, 40, 180, 305)
-LABELBOX = {"pump": (106, 248, 88), "dropper": (108, 256, 84), "flip": (106, 244, 88), "spray": (108, 248, 84),
-            "jar": (88, 290, 124), "padjar": (92, 262, 116), "tin": (92, 308, 116), "tube": (108, 198, 86)}
+# Körper je Form: (oben, unten, maximale Beschriftungsbreite). Mitte = Mitte des Körpers, bei Tiegeln nur das Glas unter dem Deckel.
+BODY = {"pump": (160, 330, 66), "dropper": (170, 330, 64), "flip": (150, 330, 66), "spray": (150, 330, 64),
+        "jar": (246, 330, 96), "padjar": (176, 330, 88), "tin": (290, 330, 96), "tube": (150, 270, 66)}
 
 
 def lum(hexcol):
@@ -265,8 +266,11 @@ def textcolor(col, kind):
 
 
 def layout_for(kind, col):
-    x, y, w = LABELBOX[kind]
-    return [round((x - VB[0]) / VB[2] * 100, 1), round((y - VB[1]) / VB[3] * 100, 1), round(w / VB[2] * 100, 1), textcolor(col, kind)]
+    top, bottom, w = BODY[kind]
+    cy = (top + bottom) / 2 - (6 if kind not in ("tube", "tin") else 0)   # Glasboden (dicker Rand) leicht ausklammern
+    wp = round(w / VB[2] * 100, 1)
+    # [links, Mitte oben, Breite, Schriftfarbe] in %; links so, dass die Mitte exakt bei 50 % liegt
+    return [round(50 - wp / 2, 1), round((cy - VB[1]) / VB[3] * 100, 1), wp, textcolor(col, kind)]
 
 
 def main():

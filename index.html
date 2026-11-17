@@ -342,6 +342,16 @@
 #sg .mk{transform:translate(-50%,-50%) rotate(-3deg);transform-origin:center;text-align:center;-webkit-text-stroke:.15px currentColor}
 #sg .mk .ml{margin-left:auto;margin-right:auto}
 @media (max-width:720px){#sg .rowlink{grid-template-columns:96px 1fr}#sg .rowlink>.num{left:48px}#sg .extra,#sg .altmenu{margin-left:110px}}
+/* Microtext: winzig, fester Wert für alle, dünne Linie */
+#sg .mk{-webkit-text-stroke:0;letter-spacing:.07em;line-height:1.1}
+#sg .mk .ml{border-bottom-width:.07em;margin-bottom:.22em}
+/* Routine: Flasche liegt per Multiplizieren über der großen Zahl (Photoshop-Modus), Deckkraft 80 %; Karten und Detail bleiben unberührt */
+#sg .rimg{mix-blend-mode:multiply}
+#sg .rimg img{opacity:.8;animation:none}
+#sg[data-theme="dark"] .rimg{mix-blend-mode:screen}
+#sg .rowlink>.num{color:rgba(28,28,26,.2)}
+#sg[data-theme="dark"] .rowlink>.num{color:rgba(239,236,228,.2)}
+#sg[data-theme="dark"] .rimg .mk{color:#fff!important}
 @media (prefers-reduced-motion:reduce){#sg *{transition:none!important;animation:none!important}}
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&family=Montserrat:wght@300;400;500;600;700&family=Archivo:wdth,wght@125,800&display=swap">
@@ -568,7 +578,7 @@ function fillImage(box,m){
  var ls=String(m.label).split("\n"),mx=0;ls.forEach(function(x){if(x.length>mx)mx=x.length});
  var L=(LAYOUT&&LAYOUT[m.slug])||[22,58,36,"#111111"];
  t.style.color=L[3]||"#111";t.style.left=(L[0]+L[2]/2)+"%";t.style.top=L[1]+"%";t.style.width=L[2]+"%";
- t.style.fontSize=Math.max(2.4,Math.min(4.3,L[2]/(Math.max(mx,3)*.62)*.42)).toFixed(2)+"cqw";t.setAttribute("data-w",L[2]);
+ t.style.fontSize="3.1cqw";t.setAttribute("data-w",L[2]);
  ls.forEach(function(x){var sp=document.createElement("span");sp.className="ml";sp.textContent=x;t.appendChild(sp)});
  w.appendChild(t);
  box.appendChild(w);
