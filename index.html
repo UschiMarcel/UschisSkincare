@@ -358,7 +358,6 @@
 #sg .phnote+.savebar{margin-top:14px}
 @media (prefers-reduced-motion:reduce){#sg *{transition:none!important;animation:none!important}}
 </style>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&family=Montserrat:wght@300;400;500;600;700&family=Archivo:wdth,wght@125,800&display=swap">
 
 <h2>Uschi's <span class="pillw"><svg viewBox="0 0 24 24" width=".62em" height=".62em" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9"/></svg>Skincare</span> Guide</h2>
 <p class="intro"><b>Ich hab hier wat janz Spezielles. Nur für dich &lt;3</b><br>Garantiert ohne L'Oréal, Neutrogena und ähnliche große Kosmetikhäuser</p>
@@ -379,7 +378,9 @@
 <div class="budget" id="sg-budget" hidden></div>
 <div class="tip" id="sg-tip" hidden></div>
 <div id="sg-out"></div>
-<p class="foot"><a href="impressum.html">Impressum</a></p>
+<p class="foot"><a href="impressum.html">Impressum</a> · <a href="datenschutz.html">Datenschutz</a> · <a href="#" id="sg-cs">Cookie-Einstellungen</a></p>
+<script src="consent.js"></script>
+<script>document.getElementById("sg-cs").onclick=function(e){e.preventDefault();window.sgConsent&&window.sgConsent()}</script>
 
 <script>
 (function(){
@@ -778,7 +779,7 @@ function debugBox(plan){
  setBody("Namen werden geladen …");
  var byUrl={},u=[],names={},n=0;
  L.forEach(function(e){[e.orig,e.now].forEach(function(p){if(p&&!byUrl[p.url]){byUrl[p.url]=p;u.push(p.url)}})});
- function link(p){return'<a href="'+esc(p.url)+'" target="_blank" rel="noopener sponsored">'+esc(names[p.url])+'</a>'}
+ function link(p){return'<a href="'+esc(p.url)+'" target="_blank" rel="noopener noreferrer">'+esc(names[p.url])+'</a>'}
  function fill(){
   var h="Wegen deines Budgets (bis "+esc(fmt(selB))+") habe ich Folgendes angepasst:<ul>";
   L.forEach(function(e){
@@ -1153,7 +1154,7 @@ function renderDetail(out,p){
   +(p.use?'<h4 class="dh">Anwendung</h4><p class="dtext">'+esc(p.use)+'</p>':'')
   +(p.ing?'<h4 class="dh">Inhaltsstoffe</h4><p class="dtext">'+esc(p.ing)+'</p>':'')
   +(p.price!=null?'<p class="dnote" style="margin-top:20px">'+priceHtml(p).replace('class="price"','class="price" style="margin-left:0"')+'</p>':'')
-  +'<a class="btn dbtn" href="'+esc(p.url)+'" target="_blank" rel="noopener sponsored">Zum Produkt</a>'
+  +'<a class="btn dbtn" href="'+esc(p.url)+'" target="_blank" rel="noopener noreferrer">Zum Produkt</a>'
   +((p.stand||p.src)?'<p class="dsrc">Angaben'+(p.src?' von '+esc(p.src):'')+(p.stand?', Stand '+esc(p.stand):'')+'. Bitte vor der Anwendung auch die Packungsangaben beachten.</p>':'')
   +'<div id="sg-dsim"></div></div></div>';
  wrap.innerHTML=h;

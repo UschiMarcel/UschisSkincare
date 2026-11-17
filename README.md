@@ -149,3 +149,7 @@ Der Schalter oben rechts wechselt zwischen hell und dunkel. Ohne Auswahl folgt d
 ## Code
 
 Unter der Routine erzeugt „Code erzeugen“ einen 6-stelligen Code mit der Auswahl (Hauttyp, Themen, Erfahrung, Budget). Die Seite zeigt nur Platzhalter-Illustrationen, ein Hinweis erklärt warum.
+
+## Datenschutz
+
+`datenschutz.html` enthält die Datenschutzerklärung, `consent.js` den Hinweis beim ersten Besuch. Google Fonts werden erst nach Zustimmung geladen, sonst gelten Standardschriften. Es gibt keine Cookies, nur funktionalen lokalen Speicher. Die Shop-Links sind keine Affiliate-Links. Die Texte sind keine Rechtsberatung und sollten bei Änderungen der Seite geprüft werden.
