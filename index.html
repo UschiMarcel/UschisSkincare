@@ -383,14 +383,15 @@
 #sg .secbig b{font:500 11px/1 'Montserrat',system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase}
 #sg .secbig p{margin:0;font-size:clamp(18px,2.4vw,24px);font-weight:300;letter-spacing:-.01em}
 #sg .routine{border-top:1px solid var(--ink);margin-top:0}
-#sg .rowlink{grid-template-columns:56px 240px 1fr;gap:0 28px;padding:0;align-items:stretch}
-#sg .rowlink>.num{position:static;transform:none;left:auto;top:auto;font:400 11px/1 'Montserrat',system-ui,sans-serif;font-stretch:normal;letter-spacing:.14em;color:var(--soft);padding:26px 0;text-align:left}
-#sg .rowlink:hover>.num{transform:none}
+#sg .rowlink{grid-template-columns:240px 1fr;gap:0 28px;padding:0;align-items:stretch}
+#sg .rowlink>.num{position:absolute;z-index:0;left:120px;top:50%;transform:translate(-50%,-50%);font-family:"Archivo","Montserrat",system-ui,sans-serif;font-stretch:125%;font-weight:800;font-size:150px;line-height:1;letter-spacing:0;color:rgba(28,28,26,.2);padding:0;text-align:center}
+#sg[data-theme="dark"] .rowlink>.num{color:rgba(239,236,228,.2)}
+#sg .rowlink:hover>.num{transform:translate(-50%,-50%) scale(1.04)}
 #sg .rowlink .rimg{border-left:1px solid var(--line);border-right:1px solid var(--line);min-height:240px;display:flex;align-items:center;justify-content:center;padding:20px 12px}
 #sg .rowlink .rimg img{max-height:200px;width:auto;max-width:100%}
 #sg .rowlink>div:last-child{padding:24px 28px 26px 0}
 #sg .rowlink::after{top:22px;right:0}
-#sg .extra,#sg .altmenu{margin-left:352px}
+#sg .extra,#sg .altmenu{margin-left:268px}
 #sg .tot{display:grid;grid-template-columns:minmax(150px,230px) 1fr;gap:0 24px;align-items:end;padding:34px 0;border-top:1px solid var(--ink);margin-top:0}
 #sg .tot .k{font:500 11px/1.6 'Montserrat',system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase}
 #sg .tot .v{font-weight:300;font-size:clamp(46px,8vw,76px);line-height:1;letter-spacing:-.045em}
@@ -399,7 +400,8 @@
 @media (max-width:720px){
  #sg .hd nav{display:none}
  #sg .secbig,#sg .tot{grid-template-columns:1fr;gap:12px}
- #sg .rowlink{grid-template-columns:30px 112px 1fr;gap:0 12px}
+ #sg .rowlink{grid-template-columns:112px 1fr;gap:0 12px}
+ #sg .rowlink>.num{left:56px;font-size:96px}
  #sg .rowlink .rimg{min-height:170px;padding:12px 6px}
  #sg .rowlink .rimg img{max-height:150px}
  #sg .rowlink>div:last-child{padding:20px 22px 22px 0}
@@ -1107,10 +1109,6 @@ function renderRoutine(out){
  });
  wrap.appendChild(tg);
  var plan=buildPlan(),rows=plan.d[time],covered=[];
- if(rows.length){var tsum=0;rows.forEach(function(r){tsum+=price(r.x.p)});
-  var sh=document.createElement("div");sh.className="secbig";
-  sh.innerHTML='<div class="sbl">'+ICON[time].replace(/width="18" height="18"/,'width="64" height="64"')+'<b>'+TIMES[time]+'</b></div><p>'+rows.length+(rows.length===1?" Schritt":" Schritte")+(hasPrices()?", "+fmt(tsum):"")+'.</p>';
-  wrap.appendChild(sh)}
  CURPLAN=plan.d;
  DROPPED=Object.keys(plan.info.moves).map(function(k){return plan.info.moves[k]}).filter(function(m){return!m.now}).map(function(m){return m.orig.step});
  ["am","pm"].forEach(function(k){plan.d[k].forEach(function(r){covered=covered.concat(r.x.hit)})});
