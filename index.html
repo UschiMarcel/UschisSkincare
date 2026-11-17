@@ -1090,6 +1090,8 @@ function drawImage(area,d,imgs){
  out.getContext("2d").drawImage(cv,0,0);
  var url=out.toDataURL("image/png");
  area.innerHTML='<p class="savemsg">Deine Routine als Bild. Am Handy hältst du das Bild gedrückt und speicherst es, am Computer nutzt du die rechte Maustaste oder den Link darunter.</p><div class="preview"><img alt="'+esc(routineTitle())+'" src="'+url+'"><a href="'+url+'" download="'+esc((window.SG_NAME?window.SG_NAME.toLowerCase()+"-":"")+"skincare-routine")+'.png">Bild herunterladen</a></div>';
+ var dl=area.querySelector(".preview a");
+ if(dl&&window.AndroidBridge)dl.onclick=function(e){e.preventDefault();window.AndroidBridge.save(dl.getAttribute("download"),"image/png",url.split(",")[1])};
 }
 
 /* Tags eines Produkts (Reiter "Alle Produkte"): gewählte Filter sind hervorgehoben, die Erfahrung steht klein dahinter */
@@ -1354,7 +1356,7 @@ if(window.SG_READER){
    var e=PEOPLE[k],row=document.createElement("div");row.className="drow";
    row.innerHTML='<a href="#" class="dn"><b>'+esc(e.n)+'</b> <span class="soft">'+esc(k)+' · '+esc(e.d)+'</span><br><span class="soft">'+esc(e.s||"")+'</span></a><button type="button" class="btn ghost" aria-label="Eintrag löschen">×</button>';
    row.querySelector("a").onclick=function(ev){ev.preventDefault();$("sg-rc").value=k;applyCode();window.scrollTo(0,0)};
-   row.querySelector("button").onclick=function(){if(confirm("„"+e.n+"“ aus dem Verzeichnis entfernen?")){delete PEOPLE[k];persist();drawDir()}};
+   var xb=row.querySelector("button");xb.onclick=function(){if(xb.dataset.ask){delete PEOPLE[k];persist();drawDir();return}xb.dataset.ask=1;xb.textContent="Löschen?";setTimeout(function(){xb.dataset.ask="";xb.textContent="×"},3000)};
    box.appendChild(row);
   });
  };
@@ -1399,7 +1401,9 @@ if(window.SG_READER){
  }).catch(function(){});
  /* Sicherung per Datei */
  $("sg-fx").onclick=function(){
-  var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(PEOPLE,null,1)],{type:"application/json"}));a.download="personen.json";a.click();
+  var js=JSON.stringify(PEOPLE,null,1);
+  if(window.AndroidBridge){window.AndroidBridge.save("personen.json","application/json",btoa(unescape(encodeURIComponent(js))));return}
+  var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([js],{type:"application/json"}));a.download="personen.json";a.click();
  };
  $("sg-fi").onclick=function(){
   var i=document.createElement("input");i.type="file";i.accept=".json,application/json";
